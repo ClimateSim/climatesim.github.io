@@ -1270,34 +1270,26 @@
         ctx.fillText("1958 Keeling", 0, 0);
         ctx.restore();
 
-        // Current Year Indicator Line & Floating Tag (Positioned above the X-axis so it never collides with scale labels)
+        // Current Year Boundary Marker (Vertical dashed line matching the Keeling style with year label running vertically down)
         const curYrX = yrToX(state.year);
         if (curYrX >= tGridLeft && curYrX <= tGridRight) {
-          ctx.strokeStyle = "rgba(0, 229, 255, 0.65)";
-          ctx.setLineDash([2, 2]);
+          ctx.strokeStyle = "rgba(0, 229, 255, 0.70)";
+          ctx.setLineDash([3, 3]);
           ctx.beginPath();
           ctx.moveTo(curYrX, tGridTop);
           ctx.lineTo(curYrX, tGridBottom);
           ctx.stroke();
           ctx.setLineDash([]);
 
-          // Floating badge displaying current year above the bottom axis
-          const curYStr = `${Math.round(state.year)} CE`;
-          ctx.font = "bold 10px ui-monospace, monospace";
-          const badgeWidth = ctx.measureText(curYStr).width + 10;
-          const badgeX = Math.max(tGridLeft + 2, Math.min(tGridRight - badgeWidth - 2, curYrX - badgeWidth / 2));
-          const badgeY = tGridBottom - 26;
-
-          ctx.fillStyle = "rgba(11, 19, 32, 0.90)";
-          ctx.strokeStyle = "rgba(0, 229, 255, 0.75)";
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.roundRect(badgeX, badgeY, badgeWidth, 16, 3);
-          ctx.fill();
-          ctx.stroke();
-
+          // Year number label rotated 90 degrees clockwise running vertically down alongside the dashed line
+          const curYrFontSize = tGridW < 400 ? 10 : 12;
+          ctx.save();
+          ctx.translate(curYrX + (curYrFontSize + 2), tGridTop + 38);
+          ctx.rotate(Math.PI / 2);
           ctx.fillStyle = "#00e5ff";
-          ctx.fillText(curYStr, badgeX + 5, badgeY + 12);
+          ctx.font = `bold ${curYrFontSize}px ui-monospace, monospace`;
+          ctx.fillText(`${Math.round(state.year)}`, 0, 0);
+          ctx.restore();
         }
 
         // Plot Accumulated History (Orange up to 1958 Keeling boundary, Rose thereafter)
