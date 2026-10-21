@@ -2627,11 +2627,12 @@
             cCtx.beginPath(); cCtx.moveTo(mx, padT); cCtx.lineTo(mx, padT + gh); cCtx.stroke();
             cCtx.setLineDash([]);
 
+            // Position rotated label safely below top header and title
             cCtx.save();
-            cCtx.translate(mx + 11, padT + 14);
+            cCtx.translate(mx + 11, padT + 88);
             cCtx.rotate(Math.PI / 2);
             cCtx.fillStyle = "#f59e0b";
-            cCtx.font = "bold 10px ui-monospace, monospace";
+            cCtx.font = "bold 9px ui-monospace, monospace";
             cCtx.fillText(mk.label, 0, 0);
             cCtx.restore();
           });
