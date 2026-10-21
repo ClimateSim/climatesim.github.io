@@ -1069,29 +1069,24 @@
         // 1b. Thermal IR Radiation (Short paths between bubbles; sinusoidal EM waves once escaped)
         irRays.forEach(ray => {
           if (ray.isWave) {
-            // Past radiating layer: propagating sinusoidal electromagnetic wave packet to space
+            // Past radiating layer: propagating pure sinusoidal electromagnetic wave packet to space
             ray.waveY -= 0.38;
             ray.wavePhase += 0.072;
 
             const baseX = ray.waveBaseXFrac * splitX;
-            const waveLen = 28;
+            const waveLen = 32;
 
-            ctx.strokeStyle = "rgba(0, 229, 255, 0.92)";
-            ctx.lineWidth = 1.8;
+            ctx.strokeStyle = "rgba(0, 229, 255, 0.90)";
+            ctx.lineWidth = 1.6;
             ctx.beginPath();
             for (let dy = 0; dy <= waveLen; dy += 2) {
               const wy = ray.waveY + dy;
-              const wx = baseX + 4.5 * Math.sin((wy * 0.32) - ray.wavePhase);
+              // Clean sine wave envelope with smooth tapered edges
+              const envelope = Math.sin((dy / waveLen) * Math.PI);
+              const wx = baseX + 4.5 * envelope * Math.sin((wy * 0.32) - ray.wavePhase);
               if (dy === 0) ctx.moveTo(wx, wy); else ctx.lineTo(wx, wy);
             }
             ctx.stroke();
-
-            // Leading wave crest photon dot
-            const tipX = baseX + 4.5 * Math.sin((ray.waveY * 0.32) - ray.wavePhase);
-            ctx.fillStyle = "#00e5ff";
-            ctx.beginPath();
-            ctx.arc(tipX, ray.waveY, 2.0, 0, Math.PI * 2);
-            ctx.fill();
 
             // Reset upon escaping to space
             if (ray.waveY < 8) {
