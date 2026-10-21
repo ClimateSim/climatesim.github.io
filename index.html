@@ -1194,11 +1194,12 @@
         ctx.fillText(`Earth Surface Ts = ${p.currentTs.toFixed(2)}°C`, 10, atmosH + 17);
 
         // 2. DEDICATED LOWER PANEL: 500-Year ΔT Timeline Curve (No overlap with bubbles!)
+        // Spans across the entire canvas width below the two top charts (in both Simple and Advanced modes)
         const tGridTop = atmosH + groundH + 12; // Starts cleanly below ground bar
-        const tGridBottom = h - 14;
+        const tGridBottom = h - 22;             // Dedicated clearance at bottom for year labels
         const tGridH = tGridBottom - tGridTop;
         const tGridLeft = 24;
-        const tGridRight = isSimple ? (w - 24) : (splitX - 24);
+        const tGridRight = w - 24;              // Full span across entire canvas
         const tGridW = tGridRight - tGridLeft;
 
         ctx.fillStyle = "rgba(11, 19, 32, 0.72)";
@@ -1216,8 +1217,8 @@
         // Scaled to 5.2°C span so +2.5 ppm/yr trajectory comfortably sits in upper chart with head room
         function dtToY(dTemp) { return tGridBottom - ((dTemp - (-0.2)) / 5.2) * tGridH; }
 
-        // 25-Year Interval Marks Along X-Axis (12px year labels)
-        const yearStep = tGridW < 450 ? 100 : 50;
+        // 25-Year Interval Marks Along X-Axis (12px year labels placed OUTSIDE below the axis line)
+        const yearStep = tGridW < 550 ? 50 : 25;
         for (let yr = 1750; yr <= 2250; yr += 25) {
           const x = yrToX(yr);
           const isMajor = yr % yearStep === 0;
@@ -1225,13 +1226,15 @@
           ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.moveTo(x, tGridBottom);
-          ctx.lineTo(x, tGridBottom - (isMajor ? 6 : 3));
+          ctx.lineTo(x, tGridBottom + (isMajor ? 5 : 3));
           ctx.stroke();
 
-          if (isMajor && yr > 1750 && yr < 2250) {
-            ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
-            ctx.font = "12px ui-monospace, monospace";
-            ctx.fillText(yr.toString(), x - 14, tGridBottom - 9);
+          if (isMajor && yr >= 1750 && yr <= 2250) {
+            ctx.fillStyle = "rgba(148, 163, 184, 0.85)";
+            ctx.font = "11px ui-monospace, monospace";
+            ctx.textAlign = "center";
+            ctx.fillText(yr.toString(), x, tGridBottom + 16);
+            ctx.textAlign = "left";
           }
         }
 
@@ -1264,6 +1267,36 @@
         ctx.font = `bold ${keelingFontSize}px ui-monospace, monospace`;
         ctx.fillText("1958 Keeling", 0, 0);
         ctx.restore();
+
+        // Current Year Indicator Line & Floating Tag (Positioned above the X-axis so it never collides with scale labels)
+        const curYrX = yrToX(state.year);
+        if (curYrX >= tGridLeft && curYrX <= tGridRight) {
+          ctx.strokeStyle = "rgba(0, 229, 255, 0.65)";
+          ctx.setLineDash([2, 2]);
+          ctx.beginPath();
+          ctx.moveTo(curYrX, tGridTop);
+          ctx.lineTo(curYrX, tGridBottom);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          // Floating badge displaying current year above the bottom axis
+          const curYStr = `${Math.round(state.year)} CE`;
+          ctx.font = "bold 10px ui-monospace, monospace";
+          const badgeWidth = ctx.measureText(curYStr).width + 10;
+          const badgeX = Math.max(tGridLeft + 2, Math.min(tGridRight - badgeWidth - 2, curYrX - badgeWidth / 2));
+          const badgeY = tGridBottom - 26;
+
+          ctx.fillStyle = "rgba(11, 19, 32, 0.90)";
+          ctx.strokeStyle = "rgba(0, 229, 255, 0.75)";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.roundRect(badgeX, badgeY, badgeWidth, 16, 3);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.fillStyle = "#00e5ff";
+          ctx.fillText(curYStr, badgeX + 5, badgeY + 12);
+        }
 
         // Plot Accumulated History (Orange up to 1958 Keeling boundary, Rose thereafter)
         if (state.history.length > 1) {
