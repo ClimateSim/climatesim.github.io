@@ -1934,6 +1934,45 @@
               ctx.fillText(tooltipText, tipX + 8, tipY - 1);
             }
           }
+
+          // Tooltip on Main Canvas for 1958 Keeling Marker
+          if (mousePos.active && Math.abs(mousePos.x - keelingX) <= 8 && mousePos.y >= tGridTop && mousePos.y <= tGridBottom) {
+            const tipText = "When Charles David Keeling began continuous direct atmospheric CO2 flask sampling at Mauna Loa, transitioning science from ice-core proxy data to direct instrumental monitoring.";
+            ctx.font = "10px system-ui, -apple-system, sans-serif";
+            const maxTipW = 270;
+            const words = tipText.split(" ");
+            let lines = [];
+            let curLine = "";
+            words.forEach(w => {
+              const testLine = curLine ? (curLine + " " + w) : w;
+              if (ctx.measureText(testLine).width > maxTipW) {
+                lines.push(curLine);
+                curLine = w;
+              } else {
+                curLine = testLine;
+              }
+            });
+            if (curLine) lines.push(curLine);
+
+            const boxW = Math.min(maxTipW + 20, 290);
+            const boxH = lines.length * 14 + 14;
+            let tipBx = mousePos.x + 12;
+            let tipBy = Math.max(tGridTop + 10, mousePos.y - boxH / 2);
+            if (tipBx + boxW > w - 10) tipBx = mousePos.x - boxW - 12;
+
+            ctx.fillStyle = "rgba(11, 19, 32, 0.96)";
+            ctx.strokeStyle = "#f59e0b";
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.roundRect(tipBx, tipBy, boxW, boxH, 5);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = "#ffedd5";
+            lines.forEach((l, lIdx) => {
+              ctx.fillText(l, tipBx + 10, tipBy + 15 + lIdx * 14);
+            });
+          }
         }
 
         ctx.restore();
@@ -2417,6 +2456,17 @@
       const paleoOverviewCanvas = document.getElementById("paleoOverviewCanvas");
       const paleoCompareCanvas = document.getElementById("paleoCompareCanvas");
 
+      let paleoMousePos = { x: -1, y: -1, active: false };
+      paleoCompareCanvas.addEventListener("mousemove", e => {
+        const rect = paleoCompareCanvas.getBoundingClientRect();
+        paleoMousePos = { x: e.clientX - rect.left, y: e.clientY - rect.top, active: true };
+        drawPaleoComparator();
+      });
+      paleoCompareCanvas.addEventListener("mouseleave", () => {
+        paleoMousePos.active = false;
+        drawPaleoComparator();
+      });
+
       let paleoStartYrBP = -15000; // Default to Fastest Natural Deglaciation (Termination I)
       let paleoPlotMode = "relative"; // "relative" (rate/slope comparison) or "absolute"
 
@@ -2616,10 +2666,10 @@
           }
           cCtx.textAlign = "left";
 
-          // 1958 Keeling (+208 yr) & 2026 Present (+276 yr) Reference Markers
+          // 1958 Keeling & 2026 Present Reference Markers (Clean labels without "+year" clutter)
           [
-            { off: 208, label: "1958 Keeling (Yr +208)" },
-            { off: 276, label: "2026 Present (Yr +276)" }
+            { off: 208, label: "1958 Keeling", tooltip: "When Charles David Keeling began continuous direct atmospheric CO2 flask sampling at Mauna Loa, transitioning science from ice-core proxy data to direct instrumental monitoring." },
+            { off: 276, label: "2026 Present", tooltip: "Present-day observational benchmark (+1.26°C anomaly, 427 ppm CO2), dividing instrumental history from future warming trajectories." }
           ].forEach(mk => {
             const mx = offsetToX(mk.off);
             cCtx.strokeStyle = "rgba(245, 158, 11, 0.45)";
@@ -2635,6 +2685,46 @@
             cCtx.font = "bold 9px ui-monospace, monospace";
             cCtx.fillText(mk.label, 0, 0);
             cCtx.restore();
+
+            // Hover tooltip over vertical dashed line in pop-out chart
+            if (paleoMousePos && paleoMousePos.active && Math.abs(paleoMousePos.x - mx) <= 8 && paleoMousePos.y >= padT && paleoMousePos.y <= padT + gh) {
+              const tipText = mk.tooltip;
+              cCtx.font = "10px system-ui, -apple-system, sans-serif";
+              const maxTipW = 280;
+              // Wrap text
+              const words = tipText.split(" ");
+              let lines = [];
+              let curLine = "";
+              words.forEach(w => {
+                const testLine = curLine ? (curLine + " " + w) : w;
+                if (cCtx.measureText(testLine).width > maxTipW) {
+                  lines.push(curLine);
+                  curLine = w;
+                } else {
+                  curLine = testLine;
+                }
+              });
+              if (curLine) lines.push(curLine);
+
+              const boxW = Math.min(maxTipW + 20, 300);
+              const boxH = lines.length * 14 + 14;
+              let tipBx = paleoMousePos.x + 12;
+              let tipBy = Math.max(padT + 10, paleoMousePos.y - boxH / 2);
+              if (tipBx + boxW > cw - 10) tipBx = paleoMousePos.x - boxW - 12;
+
+              cCtx.fillStyle = "rgba(11, 19, 32, 0.96)";
+              cCtx.strokeStyle = "#f59e0b";
+              cCtx.lineWidth = 1.2;
+              cCtx.beginPath();
+              cCtx.roundRect(tipBx, tipBy, boxW, boxH, 5);
+              cCtx.fill();
+              cCtx.stroke();
+
+              cCtx.fillStyle = "#ffedd5";
+              lines.forEach((l, lIdx) => {
+                cCtx.fillText(l, tipBx + 10, tipBy + 15 + lIdx * 14);
+              });
+            }
           });
 
           // --- PLOT 1: Modern CO2 Curve (Solid Purple) ---
