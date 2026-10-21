@@ -908,10 +908,10 @@
         running: true, // Launches running from Present Day (2026) into the future
         isHistoricalPreset: false,
         history: [
-          { year: 1750, deltaTs: 0 },
-          { year: 1850, deltaTs: 0.05 },
-          { year: 1958, deltaTs: 0.30 },
-          { year: 2026, deltaTs: 1.26 }
+          { year: 1750, deltaTs: 0, co2: 278.0 },
+          { year: 1850, deltaTs: 0.05, co2: 285.0 },
+          { year: 1958, deltaTs: 0.30, co2: 315.0 },
+          { year: 2026, deltaTs: 1.26, co2: 427.0 }
         ]
       };
 
@@ -1207,9 +1207,40 @@
         ctx.font = `bold ${titleFontSize}px system-ui, -apple-system, sans-serif`;
         ctx.fillText("500-YEAR WARMING TRAJECTORY (1750–2250 CE)", tGridLeft + 8, tGridTop + (titleFontSize + 4));
 
+        // Subtitle legend for Temperature vs CO2
+        ctx.font = "bold 10px system-ui, sans-serif";
+        const subX = tGridLeft + (tGridW < 400 ? 8 : 420);
+        const subY = tGridTop + (tGridW < 400 ? titleFontSize + 20 : titleFontSize + 4);
+        ctx.fillStyle = "#f43f5e";
+        ctx.fillText("■ Surface ΔT (°C)", subX, subY);
+        ctx.fillStyle = "#c084fc";
+        ctx.fillText("■ Atmospheric CO₂ (ppm)", subX + 115, subY);
+
         function yrToX(yr) { return tGridLeft + ((yr - 1750) / 500) * tGridW; }
         // Scaled to 5.2°C span so +2.5 ppm/yr trajectory comfortably sits in upper chart with head room
         function dtToY(dTemp) { return tGridBottom - ((dTemp - (-0.2)) / 5.2) * tGridH; }
+        // CO2 Scale: 250 ppm to 1000 ppm fitted across the 500-Year chart height
+        function co2ToY(c) { return tGridBottom - ((c - 250) / 750) * tGridH; }
+
+        // Right-hand Y-Axis Labels for CO2 in Purple (280, 400, 600, 800, 1000 ppm)
+        [280, 400, 600, 800, 1000].forEach(cVal => {
+          const cy = co2ToY(cVal);
+          if (cy >= tGridTop && cy <= tGridBottom) {
+            ctx.strokeStyle = "rgba(192, 132, 252, 0.22)";
+            ctx.setLineDash([2, 4]);
+            ctx.beginPath();
+            ctx.moveTo(tGridLeft, cy);
+            ctx.lineTo(tGridRight, cy);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = "#c084fc"; // Crisp light purple
+            ctx.font = "bold 9px ui-monospace, monospace";
+            ctx.textAlign = "right";
+            ctx.fillText(`${cVal} ppm`, tGridRight - 4, cy - 3);
+            ctx.textAlign = "left";
+          }
+        });
 
         // 25-Year Interval Marks Along X-Axis (12px year labels placed OUTSIDE below the axis line)
         const yearStep = tGridW < 550 ? 50 : 25;
@@ -1281,8 +1312,23 @@
         ctx.fillText("2026", 0, 0);
         ctx.restore();
 
-        // Plot Accumulated History (Orange up to 1958 Keeling boundary, Rose thereafter)
+        // Plot Accumulated History: Temperature (Orange up to 1958 Keeling, Rose thereafter)
+        // AND Atmospheric CO2 Trajectory in Purple
         if (state.history.length > 1) {
+          // 1. Purple CO2 Trajectory Line
+          ctx.strokeStyle = "#c084fc";
+          ctx.lineWidth = 1.8;
+          ctx.beginPath();
+          for (let i = 0; i < state.history.length; i++) {
+            const pt = state.history[i];
+            const cVal = pt.co2 || (pt.year <= 2026 ? getHistoricalCO2(pt.year) : 427.0);
+            const cx = yrToX(pt.year);
+            const cy = co2ToY(cVal);
+            if (i === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
+          }
+          ctx.stroke();
+
+          // 2. Temperature History Line
           ctx.lineWidth = 2;
           for (let i = 0; i < state.history.length - 1; i++) {
             const p1 = state.history[i];
@@ -1665,7 +1711,7 @@
           state.year = Math.min(2250, state.year + dt);
 
           if (state.history.length === 0 || state.year - state.history[state.history.length - 1].year >= 1.0) {
-            state.history.push({ year: state.year, deltaTs: state.deltaTs });
+            state.history.push({ year: state.year, deltaTs: state.deltaTs, co2: state.co2 });
           }
 
           syncUI();
@@ -1822,10 +1868,10 @@
         state.deltaTd = 0.55;
         state.year = 2026.0;
         state.history = [
-          { year: 1750, deltaTs: 0 },
-          { year: 1850, deltaTs: 0.05 },
-          { year: 1958, deltaTs: 0.30 },
-          { year: 2026, deltaTs: 1.26 }
+          { year: 1750, deltaTs: 0, co2: 278.0 },
+          { year: 1850, deltaTs: 0.05, co2: 285.0 },
+          { year: 1958, deltaTs: 0.30, co2: 315.0 },
+          { year: 2026, deltaTs: 1.26, co2: 427.0 }
         ];
         if (typeof autoRun === "boolean") {
           state.running = autoRun;
@@ -1852,7 +1898,7 @@
         state.deltaTd = 0.0;
         state.year = 1750.0;
         state.isHistoricalPreset = true;
-        state.history = [{ year: 1750.0, deltaTs: 0.0 }];
+        state.history = [{ year: 1750.0, deltaTs: 0.0, co2: 278.0 }];
 
         document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
         document.getElementById("presetPreInd").classList.add("active");
@@ -1875,7 +1921,7 @@
         document.getElementById("presetPreInd").classList.add("active");
         state.isHistoricalPreset = true;
         state.co2 = 278.0; state.rate = 0.0; state.deltaTs = 0.0; state.deltaTd = 0.0; state.year = 1750.0;
-        state.history = [{ year: 1750.0, deltaTs: 0.0 }];
+        state.history = [{ year: 1750.0, deltaTs: 0.0, co2: 278.0 }];
         syncUI();
         draw();
       });
