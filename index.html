@@ -1270,6 +1270,25 @@
         ctx.fillText("1958 Keeling", 0, 0);
         ctx.restore();
 
+        // 2026 Present-Day Static Boundary Marker (Orange vertical dashed line like Keeling)
+        const present2026X = yrToX(2026);
+        ctx.strokeStyle = "rgba(245, 158, 11, 0.55)";
+        ctx.setLineDash([3, 3]);
+        ctx.beginPath();
+        ctx.moveTo(present2026X, tGridTop);
+        ctx.lineTo(present2026X, tGridBottom);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // 2026 Label rotated 90 degrees clockwise running vertically down alongside dashed line
+        ctx.save();
+        ctx.translate(present2026X + (keelingFontSize + 2), tGridTop + 38);
+        ctx.rotate(Math.PI / 2);
+        ctx.fillStyle = "#f59e0b";
+        ctx.font = `bold ${keelingFontSize}px ui-monospace, monospace`;
+        ctx.fillText("2026", 0, 0);
+        ctx.restore();
+
         // Plot Accumulated History (Orange up to 1958 Keeling boundary, Rose thereafter)
         if (state.history.length > 1) {
           ctx.lineWidth = 2;
@@ -1308,45 +1327,34 @@
           }
         }
 
-        // Current Year Boundary Marker & Prominent Badge (Drawn on top of the trajectory curve for total visibility)
+        // Active Simulation Year Playhead Line & Floating Boxed Label (Clear of X-axis)
         const curYrX = yrToX(state.year);
         if (curYrX >= tGridLeft && curYrX <= tGridRight) {
-          // Vertical dashed line
-          ctx.strokeStyle = "#00e5ff";
-          ctx.lineWidth = 1.5;
-          ctx.setLineDash([3, 3]);
+          ctx.strokeStyle = "rgba(0, 229, 255, 0.70)";
+          ctx.setLineDash([2, 2]);
           ctx.beginPath();
           ctx.moveTo(curYrX, tGridTop);
           ctx.lineTo(curYrX, tGridBottom);
           ctx.stroke();
           ctx.setLineDash([]);
 
-          // 1. Vertical rotated year label alongside dashed line (matches 1958 Keeling format)
-          const curYrFontSize = tGridW < 400 ? 10 : 12;
-          ctx.save();
-          ctx.translate(curYrX + (curYrFontSize + 2), tGridTop + 38);
-          ctx.rotate(Math.PI / 2);
-          ctx.fillStyle = "#00e5ff";
-          ctx.font = `bold ${curYrFontSize}px ui-monospace, monospace`;
-          ctx.fillText(`${Math.round(state.year)}`, 0, 0);
-          ctx.restore();
+          // Boxed label displaying the current active simulation year, floating above the bottom X-axis
+          const curYStr = `${Math.round(state.year)} CE`;
+          ctx.font = "bold 10px ui-monospace, monospace";
+          const badgeWidth = ctx.measureText(curYStr).width + 10;
+          const badgeX = Math.max(tGridLeft + 2, Math.min(tGridRight - badgeWidth - 2, curYrX - badgeWidth / 2));
+          const badgeY = tGridBottom - 26;
 
-          // 2. High-visibility solid badge pinned to the top of the dashed line
-          const badgeText = `${Math.round(state.year)}`;
-          ctx.font = "bold 11px ui-monospace, monospace";
-          const tw = ctx.measureText(badgeText).width;
-          const bw = tw + 12;
-          const bh = 18;
-          const bx = Math.max(tGridLeft + 2, Math.min(tGridRight - bw - 2, curYrX - bw / 2));
-          const by = tGridTop + 4;
-
-          ctx.fillStyle = "#00e5ff";
+          ctx.fillStyle = "rgba(11, 19, 32, 0.92)";
+          ctx.strokeStyle = "rgba(0, 229, 255, 0.85)";
+          ctx.lineWidth = 1;
           ctx.beginPath();
-          ctx.roundRect(bx, by, bw, bh, 3);
+          ctx.roundRect(badgeX, badgeY, badgeWidth, 16, 3);
           ctx.fill();
+          ctx.stroke();
 
-          ctx.fillStyle = "#05080f";
-          ctx.fillText(badgeText, bx + 6, by + 13);
+          ctx.fillStyle = "#00e5ff";
+          ctx.fillText(curYStr, badgeX + 5, badgeY + 12);
         }
 
         // 3. RIGHT PANEL: Radiative Profile Chart (Advanced Mode Only, Aligned to MAX_ALT)
