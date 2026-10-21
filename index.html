@@ -1191,9 +1191,6 @@
         // Earth Surface Ground Bar (Separates atmospheric column from the line chart below)
         ctx.fillStyle = "#1e293b";
         ctx.fillRect(0, atmosH, splitX, groundH);
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "bold 10px system-ui";
-        ctx.fillText(`Earth Surface Ts = ${p.currentTs.toFixed(2)}°C`, 10, atmosH + 17);
 
         // 2. DEDICATED LOWER PANEL: 500-Year ΔT Timeline Curve (No overlap with bubbles!)
         // Spans across the entire canvas width below the two top charts (in both Simple and Advanced modes)
