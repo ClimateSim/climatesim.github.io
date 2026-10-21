@@ -331,7 +331,8 @@
     .bubble-popup-card {
       position: absolute;
       display: none;
-      width: 320px;
+      width: 375px;
+      max-width: calc(100% - 40px);
       background: #0b1322;
       border: 1.5px solid var(--cyan);
       border-radius: 10px;
@@ -339,8 +340,8 @@
       z-index: 1000;
       box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85), 0 0 20px rgba(0, 229, 255, 0.25);
       pointer-events: auto;
-      font-size: 0.82rem;
-      line-height: 1.5;
+      font-size: 0.84rem;
+      line-height: 1.55;
       color: #cbd5e1;
     }
     .bubble-header {
@@ -1442,31 +1443,60 @@
       }
 
       // Speech Bubble Sequential Data (1 to 5)
-      const speechData = [
+      // Dynamic content tailored for Reading Age 14 (Simple Intro) vs Scientific Rigor (Advanced Mode)
+      const speechDataIntro = [
+        {
+          pinId: "pin1",
+          title: "Step 1: Sunlight Arrives",
+          text: "Sunlight streams down from space. The atmosphere is clear to visible light, so most of the Sun's energy passes straight through the air without heating it, heading straight down to warm Earth's surface."
+        },
+        {
+          pinId: "pin2",
+          title: "Step 2: Earth Absorbs and Glows with Heat",
+          text: "Bright white surfaces like ice bounce sunlight straight back into space. But dark ground and oceans absorb the sunlight, warm up, and glow with invisible heat energy called thermal infrared."
+        },
+        {
+          pinId: "pin3",
+          title: "Step 3: Greenhouse Molecules Catch the Heat",
+          text: "Greenhouse gas molecules (like CO₂) can absorb this invisible heat. They bump into nearby air molecules, sharing warmth and passing heat photons back and forth like a hot potato, percolating slowly upward."
+        },
+        {
+          pinId: "pin4",
+          title: "Step 4: Thin Air Lets Heat Escape to Space",
+          text: "Near the ground the air is dense, but high up it thins out. Eventually, the air becomes so thin that greenhouse molecules are far apart. Here, heat can finally escape directly out into space as radiation waves."
+        },
+        {
+          pinId: "pin5",
+          title: "Step 5: More CO₂ Lifts the Escape Level and Heats Earth",
+          text: "When we pump more CO₂ into the air, heat is blocked higher up where the air is much colder. Because colder air radiates less heat away, energy builds up below — warming the surface until balance is restored."
+        }
+      ];
+
+      const speechDataAdvanced = [
         {
           pinId: "pin1",
           title: "Step 1: Solar Inflow (Visible / Shortwave)",
-          text: "Solar radiation arrives in all parts of the spectrum. The atmosphere is largely transparent to incoming visible solar energy, allowing ~239 W/m² to reach Earth's planetary surface unimpeded."
+          text: "Solar radiation arrives across the spectrum. The atmosphere is largely transparent to incoming visible solar energy, allowing ~239 W/m² to reach Earth's planetary surface unimpeded."
         },
         {
           pinId: "pin2",
           title: "Step 2: Surface Absorption & Infrared Re-emission",
-          text: "Sunlight reaching the surface is not always absorbed. Solar radiation hitting a white surface, like ice, is all reflected back to space. Solar energy absorbed by dark surfaces, mostly soils and oceans, can only be re-emitted as longwave thermal infrared (~15 µm), matching the molecular bending resonance of carbon dioxide."
+          text: "Sunlight reaching the surface is not always absorbed: bright ice reflects it back to space. Absorbed shortwave energy warms soil and oceans, which re-emit as longwave thermal infrared (~15 µm), matching the molecular bending resonance of CO₂."
         },
         {
           pinId: "pin3",
           title: "Step 3: Molecular Excitation & Thermal Percolation",
-          text: "Thermal IR excites greenhouse molecules, warming the surrounding air through billions of collisions per second. Energy is absorbed and re-emitted repeatedly, slowly percolating upward."
+          text: "Thermal IR excites greenhouse molecules, thermalising local air through billions of collisions per second. Energy is absorbed and re-emitted repeatedly, slowly percolating upward through the troposphere."
         },
         {
           pinId: "pin4",
           title: "Step 4: Density Thinning & Mean Free Path Escape",
-          text: "As altitude increases, air density decreases exponentially. Greenhouse molecules become so sparse that the mean free path approaches infinity; thermal IR is no longer reabsorbed and escapes to space."
+          text: "As altitude increases, air density decreases exponentially. Greenhouse molecules become so sparse that the mean free path reaches space (optical depth τ ≈ 1); thermal IR is no longer reabsorbed and escapes freely."
         },
         {
           pinId: "pin5",
           title: "Step 5: Radiative Choking & Surface Warming",
-          text: "Adding CO₂ forces this emission level higher into colder air. Because colder air radiates less power (σT⁴), less thermal energy escapes to space. Heat is trapped until the layers below warm up to restore balance."
+          text: "Adding CO₂ forces this emission level higher into colder air. Because colder air radiates less power (σT⁴), outgoing thermal energy drops below solar inflow. Heat accumulates until surface warming restores equilibrium."
         }
       ];
 
@@ -1478,7 +1508,9 @@
 
       function showSpeechBubble(index) {
         currentStep = index;
-        const d = speechData[index];
+        const isSimple = document.getElementById("appWrapper").classList.contains("simple-mode");
+        const dataset = isSimple ? speechDataIntro : speechDataAdvanced;
+        const d = dataset[index];
         bubbleTitle.textContent = d.title;
         bubbleContent.textContent = d.text;
         bubbleStepCount.textContent = `Step ${index + 1} of 5`;
@@ -1494,16 +1526,16 @@
         const pinTop = pRect.top - cRect.top;
 
         bubbleCard.style.display = "block";
-        bubbleCard.style.left = (pinLeft + 28) + "px";
+        bubbleCard.style.left = Math.min(pinLeft + 28, cRect.width - 390) + "px";
 
         if (index === 1) { // Surface Pin 2: anchor upward so it doesn't clip off bottom
-          bubbleCard.style.top = (pinTop - 180) + "px";
+          bubbleCard.style.top = Math.max(10, pinTop - 190) + "px";
         } else {
           bubbleCard.style.top = Math.max(10, pinTop - 40) + "px";
         }
       }
 
-      speechData.forEach((d, i) => {
+      speechDataIntro.forEach((d, i) => {
         document.getElementById(d.pinId).addEventListener("click", () => showSpeechBubble(i));
       });
 
