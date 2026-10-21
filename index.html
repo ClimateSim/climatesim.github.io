@@ -621,14 +621,6 @@
       </div>
 
       <div class="canvas-panel">
-        <div style="display: flex; justify-content: flex-end; font-size: 0.75rem; color: var(--text-muted); padding: 0 4px;">
-          <div class="profile-legend" style="display: flex; gap: 12px;">
-            <span class="has-tooltip" data-tooltip="239 W/m²" title="239 W/m²"><span style="color: #eab308;">■</span> Solar</span>
-            <span><span style="color: var(--cyan);">■</span> Upward Flux F↑</span>
-            <span><span style="color: var(--amber);">■</span> Temperature T(z)</span>
-            <span><span style="color: var(--rose);">■</span> Emission Layer (m)</span>
-          </div>
-        </div>
         <div class="canvas-container" id="canvasContainer">
           <canvas id="simCanvas"></canvas>
 
@@ -948,6 +940,15 @@
 
       const canvas = document.getElementById("simCanvas");
       const ctx = canvas.getContext("2d");
+
+      let mousePos = { x: -1, y: -1, active: false };
+      canvas.addEventListener("mousemove", e => {
+        const rect = canvas.getBoundingClientRect();
+        mousePos = { x: e.clientX - rect.left, y: e.clientY - rect.top, active: true };
+      });
+      canvas.addEventListener("mouseleave", () => {
+        mousePos.active = false;
+      });
 
       // Stationary Greenhouse Gas Molecules (Density decreases exponentially with altitude, +100% density)
       const MAX_ALT = 10500;
@@ -1337,7 +1338,7 @@
           }
         }
 
-        // 3. RIGHT PANEL: 4 Measures on Radiative Profile Chart (Advanced Mode Only, Aligned to MAX_ALT)
+        // 3. RIGHT PANEL: Radiative Profile Chart (Advanced Mode Only, Aligned to MAX_ALT)
         if (!isSimple) {
           const chartLeft = splitX + 50;
           const chartRight = w - 24;
@@ -1359,7 +1360,7 @@
             ctx.fillText(`${alt.toLocaleString()} m`, chartLeft - 45, y + 3);
           });
 
-          // Measure 1: ASR 239 Reference Line (Yellow Dashed)
+          // Measure 1: Inbound Solar Reference Line (Yellow Dashed)
           const asrX = chartLeft + ((ASR - 200) / 220) * chartW;
           ctx.strokeStyle = "#eab308";
           ctx.lineWidth = 1.5;
@@ -1371,10 +1372,12 @@
           ctx.strokeStyle = "#f59e0b";
           ctx.lineWidth = 2.5;
           ctx.beginPath();
-          for (let alt = 0; alt <= MAX_ALT; alt += 500) {
+          const tPoints = [];
+          for (let alt = 0; alt <= MAX_ALT; alt += 250) {
             const t = p.currentTs - LAPSE_RATE * alt;
             const x = chartLeft + ((t - (-70)) / 100) * chartW;
             const y = chartBottom - (alt / MAX_ALT) * chartH;
+            tPoints.push({ x, y, val: t });
             if (alt === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
           }
           ctx.stroke();
@@ -1384,11 +1387,13 @@
           ctx.strokeStyle = "#00e5ff";
           ctx.lineWidth = 2.5;
           ctx.beginPath();
-          for (let alt = 0; alt <= MAX_ALT; alt += 500) {
+          const fPoints = [];
+          for (let alt = 0; alt <= MAX_ALT; alt += 250) {
             const sig = 1 / (1 + Math.exp(-((alt - p.zEffM) / 1500.0)));
             const flux = groundFlux - sig * (groundFlux - p.OLR);
             const x = chartLeft + ((flux - 200) / 220) * chartW;
             const y = chartBottom - (alt / MAX_ALT) * chartH;
+            fPoints.push({ x, y, val: flux });
             if (alt === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
           }
           ctx.stroke();
@@ -1400,7 +1405,7 @@
           ctx.beginPath(); ctx.moveTo(chartLeft, rY); ctx.lineTo(chartRight, rY); ctx.stroke();
           ctx.setLineDash([]);
 
-          const badgeW = 205;
+          const badgeW = Math.min(chartW - 12, 190);
           const badgeX = chartRight - badgeW - 6;
           ctx.fillStyle = "rgba(11, 19, 32, 0.92)";
           ctx.strokeStyle = "rgba(244, 63, 94, 0.75)";
@@ -1408,7 +1413,105 @@
           ctx.beginPath(); ctx.roundRect(badgeX, rY - 10, badgeW, 18, 4); ctx.fill(); ctx.stroke();
           ctx.fillStyle = "#fca5a5";
           ctx.font = "bold 9px ui-monospace, monospace";
-          ctx.fillText(`Emission Alt: ${Math.round(p.zEffM).toLocaleString()} m (${p.TeffC.toFixed(1)}°C)`, badgeX + 8, rY + 3);
+          ctx.fillText(`Emission: ${Math.round(p.zEffM).toLocaleString()} m (${p.TeffC.toFixed(1)}°C)`, badgeX + 6, rY + 3);
+
+          // Compact Legend Stacked Neatly Inside Top-Left of the Graph
+          const legX = chartLeft + 10;
+          const legY = chartTop + 10;
+          const legW = 120;
+          const legH = 58;
+
+          ctx.fillStyle = "rgba(11, 19, 32, 0.88)";
+          ctx.strokeStyle = "rgba(51, 65, 85, 0.65)";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.roundRect(legX, legY, legW, legH, 4);
+          ctx.fill();
+          ctx.stroke();
+
+          // Legend Item 1: Solar (Dashed Yellow)
+          ctx.strokeStyle = "#eab308";
+          ctx.lineWidth = 2;
+          ctx.setLineDash([3, 3]);
+          ctx.beginPath();
+          ctx.moveTo(legX + 8, legY + 14);
+          ctx.lineTo(legX + 26, legY + 14);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.fillStyle = "#e2e8f0";
+          ctx.font = "10px system-ui";
+          ctx.fillText("Solar (239 W/m²)", legX + 32, legY + 18);
+
+          // Legend Item 2: Upward Flux F↑ (Cyan Solid)
+          ctx.strokeStyle = "#00e5ff";
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.moveTo(legX + 8, legY + 30);
+          ctx.lineTo(legX + 26, legY + 30);
+          ctx.stroke();
+          ctx.fillStyle = "#e2e8f0";
+          ctx.fillText("Upward Flux F↑", legX + 32, legY + 34);
+
+          // Legend Item 3: Temperature T(z) (Amber Solid)
+          ctx.strokeStyle = "#f59e0b";
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.moveTo(legX + 8, legY + 46);
+          ctx.lineTo(legX + 26, legY + 46);
+          ctx.stroke();
+          ctx.fillStyle = "#e2e8f0";
+          ctx.fillText("Temp T(z)", legX + 32, legY + 50);
+
+          // Interactive Hover Tooltips Over Lines
+          if (mousePos.active && mousePos.x >= chartLeft && mousePos.x <= chartRight && mousePos.y >= chartTop && mousePos.y <= chartBottom) {
+            let tooltipText = "";
+            let tipX = mousePos.x + 12;
+            let tipY = mousePos.y - 12;
+
+            // Check Solar dashed line proximity (within 6px)
+            if (Math.abs(mousePos.x - asrX) <= 6) {
+              tooltipText = `Solar Inflow: 239.0 W/m² (Absorbed solar post-albedo)`;
+            }
+
+            // Check Temperature curve proximity
+            if (!tooltipText) {
+              for (const pt of tPoints) {
+                const dist = Math.hypot(pt.x - mousePos.x, pt.y - mousePos.y);
+                if (dist <= 8) {
+                  tooltipText = `Atmospheric Temp: ${pt.val.toFixed(1)}°C (Lapse rate: -6.5°C/km)`;
+                  break;
+                }
+              }
+            }
+
+            // Check Flux curve proximity
+            if (!tooltipText) {
+              for (const pt of fPoints) {
+                const dist = Math.hypot(pt.x - mousePos.x, pt.y - mousePos.y);
+                if (dist <= 8) {
+                  tooltipText = `Upward Thermal Flux F↑: ${pt.val.toFixed(1)} W/m²`;
+                  break;
+                }
+              }
+            }
+
+            if (tooltipText) {
+              ctx.font = "bold 10px system-ui";
+              const tw = ctx.measureText(tooltipText).width + 16;
+              if (tipX + tw > w - 10) tipX = mousePos.x - tw - 6;
+
+              ctx.fillStyle = "rgba(11, 19, 32, 0.95)";
+              ctx.strokeStyle = "var(--cyan)";
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.roundRect(tipX, tipY - 16, tw, 22, 4);
+              ctx.fill();
+              ctx.stroke();
+
+              ctx.fillStyle = "#ffffff";
+              ctx.fillText(tooltipText, tipX + 8, tipY - 1);
+            }
+          }
         }
 
         ctx.restore();
