@@ -1319,6 +1319,62 @@
           }
         }
 
+        // Helper to find temperature delta at a given year along the history curve
+        function getHistoricalDeltaAt(yr) {
+          if (!state.history || state.history.length === 0) return null;
+          if (yr < state.history[0].year) return null;
+          if (yr > state.history[state.history.length - 1].year) return null;
+          for (let i = 0; i < state.history.length - 1; i++) {
+            const p1 = state.history[i];
+            const p2 = state.history[i + 1];
+            if (yr >= p1.year && yr <= p2.year) {
+              const span = p2.year - p1.year;
+              const frac = span === 0 ? 0 : (yr - p1.year) / span;
+              return p1.deltaTs + frac * (p2.deltaTs - p1.deltaTs);
+            }
+          }
+          return state.history[state.history.length - 1].deltaTs;
+        }
+
+        // Temperature change callout badges at intersections with the orange dashed marker lines
+        [1958, 2026].forEach(targetYr => {
+          const dtVal = getHistoricalDeltaAt(targetYr);
+          if (dtVal !== null) {
+            const ix = yrToX(targetYr);
+            const iy = dtToY(dtVal);
+
+            // Glowing intersection ring point
+            ctx.fillStyle = "#f59e0b";
+            ctx.beginPath();
+            ctx.arc(ix, iy, 4.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(ix, iy, 2.0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Label text: temperature change anomaly
+            const labelStr = `+${dtVal.toFixed(2)}°C`;
+            ctx.font = "bold 10px ui-monospace, monospace";
+            const tw = ctx.measureText(labelStr).width;
+            const bw = tw + 10;
+            const bh = 17;
+            const bx = ix + 7;
+            const by = iy - bh / 2;
+
+            ctx.fillStyle = "rgba(11, 19, 32, 0.92)";
+            ctx.strokeStyle = "#f59e0b";
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.roundRect(bx, by, bw, bh, 3);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = "#f59e0b";
+            ctx.fillText(labelStr, bx + 5, by + 12);
+          }
+        });
+
         // Active Simulation Year Playhead Line & Floating Boxed Label (Clear of X-axis)
         const curYrX = yrToX(state.year);
         if (curYrX >= tGridLeft && curYrX <= tGridRight) {
