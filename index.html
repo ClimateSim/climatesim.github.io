@@ -580,6 +580,9 @@
           <button class="mode-switch-btn active" id="btnModeSimple">Introduction</button>
           <button class="mode-switch-btn" id="btnModeAdvanced">⚙️ Advanced Version</button>
         </div>
+        <button class="btn-modal" id="openPaleoModalTopBtn" style="border-color: var(--emerald); color: var(--emerald); background: rgba(16, 185, 129, 0.12);">
+          🔍 1-Million-Year Rate Comparison
+        </button>
         <button class="btn-modal" id="openModalBtn">📖 Guide, Contents & Proofs</button>
       </div>
     </header>
@@ -2752,6 +2755,13 @@
         paleoModalOverlay.style.display = "flex";
         requestAnimationFrame(drawPaleoComparator);
       });
+      const openPaleoModalTopBtn = document.getElementById("openPaleoModalTopBtn");
+      if (openPaleoModalTopBtn) {
+        openPaleoModalTopBtn.addEventListener("click", () => {
+          paleoModalOverlay.style.display = "flex";
+          requestAnimationFrame(drawPaleoComparator);
+        });
+      }
       closePaleoModalBtn.addEventListener("click", () => {
         paleoModalOverlay.style.display = "none";
       });
