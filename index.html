@@ -1753,7 +1753,7 @@
           const chartRight = w - 24;
           const chartW = chartRight - chartLeft;
           const chartTop = 24;
-          const chartH = atmosH - chartTop - 26; // Room for horizontal X-axis labels at bottom
+          const chartH = atmosH - chartTop - 28; // Room for horizontal X-axis labels at bottom
           const chartBottom = chartTop + chartH;
 
           ctx.strokeStyle = "rgba(51, 65, 85, 0.5)";
@@ -1783,13 +1783,16 @@
               ctx.fillStyle = "#64748b";
               ctx.font = "9px ui-monospace, monospace";
               ctx.textAlign = "center";
-              ctx.fillText(`${flux}`, fx, chartBottom + 14);
+              ctx.fillText(`${flux}`, fx, chartBottom + 12);
               ctx.textAlign = "left";
             }
           });
-          ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
-          ctx.font = "9px system-ui";
-          ctx.fillText("Flux (W/m²)", chartRight - 60, chartBottom + 14);
+          // Centered horizontal axis label beneath tick marks (eliminates collision with 400 tick)
+          ctx.fillStyle = "rgba(148, 163, 184, 0.85)";
+          ctx.font = "9px system-ui, -apple-system, sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText("Radiative Flux (W/m²)", chartLeft + chartW / 2, chartBottom + 24);
+          ctx.textAlign = "left";
 
           // Measure 1: Inbound Solar Reference Line (Yellow Dashed)
           const asrX = chartLeft + ((ASR - 200) / 220) * chartW;
