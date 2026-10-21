@@ -1017,7 +1017,6 @@
         // Upper section split: Atmospheric column takes 2/3 (67%), Right-hand profile takes 1/3 (33%) in Advanced mode
         const splitX = isSimple ? w : w * 0.67;
         const atmosH = 425;
-        const groundH = 26;
 
         // 1. TOP PANEL: Atmospheric Column (Reduced oversized space above radiating layer via MAX_ALT = 10,500m)
         ctx.fillStyle = "#0a1322";
@@ -1188,13 +1187,9 @@
           }
         });
 
-        // Earth Surface Ground Bar (Separates atmospheric column from the line chart below)
-        ctx.fillStyle = "#1e293b";
-        ctx.fillRect(0, atmosH, splitX, groundH);
-
         // 2. DEDICATED LOWER PANEL: 500-Year ΔT Timeline Curve (No overlap with bubbles!)
         // Spans across the entire canvas width below the two top charts (in both Simple and Advanced modes)
-        const tGridTop = atmosH + groundH + 12; // Starts cleanly below ground bar
+        const tGridTop = atmosH + 14;           // Starts cleanly below the atmospheric column
         const tGridBottom = h - 22;             // Dedicated clearance at bottom for year labels
         const tGridH = tGridBottom - tGridTop;
         const tGridLeft = 24;
@@ -1360,13 +1355,13 @@
           const chartRight = w - 24;
           const chartW = chartRight - chartLeft;
           const chartTop = 24;
-          const chartH = atmosH - chartTop - 8;
+          const chartH = atmosH - chartTop - 26; // Room for horizontal X-axis labels at bottom
           const chartBottom = chartTop + chartH;
 
           ctx.strokeStyle = "rgba(51, 65, 85, 0.5)";
           ctx.strokeRect(chartLeft, chartTop, chartW, chartH);
 
-          // Metric Ticks
+          // Metric Ticks (Vertical Altitude Scale)
           [0, 2000, 4000, 6000, 8000, 10000].forEach(alt => {
             const y = chartBottom - (alt / MAX_ALT) * chartH;
             ctx.strokeStyle = "rgba(51, 65, 85, 0.25)";
@@ -1375,6 +1370,28 @@
             ctx.font = "9px ui-monospace, monospace";
             ctx.fillText(`${alt.toLocaleString()} m`, chartLeft - 45, y + 3);
           });
+
+          // Horizontal Scale (Flux & Energy in W/m² along bottom X-axis)
+          const fluxTicks = [200, 250, 300, 350, 400];
+          fluxTicks.forEach(flux => {
+            const fx = chartLeft + ((flux - 200) / 220) * chartW;
+            if (fx >= chartLeft && fx <= chartRight) {
+              ctx.strokeStyle = "rgba(51, 65, 85, 0.35)";
+              ctx.beginPath();
+              ctx.moveTo(fx, chartBottom);
+              ctx.lineTo(fx, chartBottom + 4);
+              ctx.stroke();
+
+              ctx.fillStyle = "#64748b";
+              ctx.font = "9px ui-monospace, monospace";
+              ctx.textAlign = "center";
+              ctx.fillText(`${flux}`, fx, chartBottom + 14);
+              ctx.textAlign = "left";
+            }
+          });
+          ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
+          ctx.font = "9px system-ui";
+          ctx.fillText("Flux (W/m²)", chartRight - 60, chartBottom + 14);
 
           // Measure 1: Inbound Solar Reference Line (Yellow Dashed)
           const asrX = chartLeft + ((ASR - 200) / 220) * chartW;
