@@ -9224,36 +9224,27 @@
 
         // Helper to find temperature delta at a given year along the static historical curve (relative to 1850–1900 baseline)
         function getHistoricalDeltaAt(yr) {
-          if (yr <= 2026) {
-            const pt = STATIC_HISTORICAL_RUN.find(p => Math.abs(p.year - yr) < 0.6);
-            if (pt) return pt.deltaTs - OFFSET_1850_1900;
-            for (let i = 0; i < STATIC_HISTORICAL_RUN.length - 1; i++) {
-              const p1 = STATIC_HISTORICAL_RUN[i];
-              const p2 = STATIC_HISTORICAL_RUN[i + 1];
-              if (yr >= p1.year && yr <= p2.year) {
-                const span = p2.year - p1.year;
-                const frac = span === 0 ? 0 : (yr - p1.year) / span;
-                return (p1.deltaTs + frac * (p2.deltaTs - p1.deltaTs)) - OFFSET_1850_1900;
-              }
-            }
-          }
-          if (!state.history || state.history.length === 0) return null;
-          for (let i = 0; i < state.history.length - 1; i++) {
-            const p1 = state.history[i];
-            const p2 = state.history[i + 1];
+          if (yr < 1750 || yr > 2026) return null;
+          const pt = STATIC_HISTORICAL_RUN.find(p => Math.abs(p.year - yr) < 0.6);
+          if (pt) return pt.deltaTs - OFFSET_1850_1900;
+          for (let i = 0; i < STATIC_HISTORICAL_RUN.length - 1; i++) {
+            const p1 = STATIC_HISTORICAL_RUN[i];
+            const p2 = STATIC_HISTORICAL_RUN[i + 1];
             if (yr >= p1.year && yr <= p2.year) {
               const span = p2.year - p1.year;
               const frac = span === 0 ? 0 : (yr - p1.year) / span;
               return (p1.deltaTs + frac * (p2.deltaTs - p1.deltaTs)) - OFFSET_1850_1900;
             }
           }
-          return state.history[state.history.length - 1].deltaTs - OFFSET_1850_1900;
+          return null;
         }
 
-        // Helper to find simulated temperature delta at a given year (1958 onwards)
+        // Helper to find simulated temperature delta at a given year (1958 onwards up to current simulation head)
         function getSimulatedDeltaAt(yr) {
           if (!state.history || state.history.length === 0 || yr < 1958) return null;
-          if (yr > state.history[state.history.length - 1].year) return null;
+          const maxSimYr = state.history[state.history.length - 1].year;
+          if (yr > maxSimYr) return null;
+          if (state.isZoomed && yr > 2026) return null;
           for (let i = 0; i < state.history.length - 1; i++) {
             const p1 = state.history[i];
             const p2 = state.history[i + 1];
@@ -9263,13 +9254,19 @@
               return (p1.deltaTs + frac * (p2.deltaTs - p1.deltaTs)) - OFFSET_1850_1900;
             }
           }
-          return state.history[state.history.length - 1].deltaTs - OFFSET_1850_1900;
+          if (Math.abs(yr - state.history[0].year) < 0.6) {
+            return state.history[0].deltaTs - OFFSET_1850_1900;
+          }
+          return null;
         }
 
         // Helper to find atmospheric CO2 (ppm) at a given year along the history curve
         function getHistoricalCO2At(yr) {
+          if (yr < 1750) return null;
           if (yr <= 2026) return getHistoricalCO2(yr);
-          if (!state.history || state.history.length === 0) return 427.0;
+          if (state.isZoomed || !state.history || state.history.length === 0 || state.year <= 2026) return null;
+          const maxSimYr = state.history[state.history.length - 1].year;
+          if (yr > maxSimYr) return null;
           for (let i = 0; i < state.history.length - 1; i++) {
             const p1 = state.history[i];
             const p2 = state.history[i + 1];
@@ -9281,7 +9278,7 @@
               return c1 + frac * (c2 - c1);
             }
           }
-          return state.history[state.history.length - 1].co2 || 427.0;
+          return null;
         }
 
         // 1. Prepare temperature change callout badges with Error annotations
@@ -9546,26 +9543,37 @@
 
           // Check proximity to the Temperature (ΔT) and CO2 (ppm) trajectory lines at the cursor's year
           const hoverYr = yrStart + ((mousePos.x - tGridLeft) / tGridW) * yrSpan;
-          const measDt = getMeasuredObservedDeltaAt(hoverYr);
-          const hoverDt = measDt !== null ? measDt : getHistoricalDeltaAt(hoverYr);
-          const simDt = getSimulatedDeltaAt(hoverYr) !== null ? getSimulatedDeltaAt(hoverYr) : getHistoricalDeltaAt(hoverYr);
+          const maxSimYr = (state.history && state.history.length > 0) ? state.history[state.history.length - 1].year : 1958;
+          const measDt = (hoverYr >= 1850 && hoverYr <= 2026) ? getMeasuredObservedDeltaAt(hoverYr) : null;
+          const histDt = getHistoricalDeltaAt(hoverYr);
+          const simDt = getSimulatedDeltaAt(hoverYr);
+          const hoverDt = measDt !== null ? measDt : histDt;
           const hoverCo2 = getHistoricalCO2At(hoverYr);
-          const tempLineY = (simDt !== null && hoverYr >= 1958) ? dtToY(simDt) : (hoverDt !== null ? dtToY(hoverDt) : -999);
-          const measLineY = (measDt !== null && hoverYr >= 1958) ? dtToY(measDt) : tempLineY;
-          const co2LineY = hoverCo2 !== null ? co2ToY(hoverCo2) : -999;
-          const curDeltaTs = (simDt !== null && hoverYr >= 1958) ? (simDt + OFFSET_1850_1900) : ((hoverDt !== null) ? (hoverDt + OFFSET_1850_1900) : 0);
-          const hoverZeff = getEmissionsAltitudeM(hoverYr, curDeltaTs, hoverCo2);
-          const zeffLineY = zEffToY(hoverZeff);
-          const distZeff = (!state.isZoomed || hoverYr >= 1958) ? Math.abs(mousePos.y - zeffLineY) : 999;
-          const distMeas = (measDt !== null && hoverYr >= 1958 && hoverYr <= 2026) ? Math.abs(mousePos.y - measLineY) : 999;
-          const distSim = (simDt !== null && hoverYr >= 1958) ? Math.abs(mousePos.y - tempLineY) : 999;
-          const distTemp = Math.min(distMeas, distSim, (hoverDt !== null ? Math.abs(mousePos.y - dtToY(hoverDt)) : 999));
-          const distCo2 = Math.abs(mousePos.y - co2LineY);
 
-          isOverZeffLine = distZeff <= 16 && distZeff < distTemp && distZeff < distCo2;
-          isOverMeasLine = (measDt !== null && hoverYr >= 1958 && hoverYr <= 2026 && distMeas <= 14 && distMeas <= distCo2 && distMeas <= distZeff);
-          const isOverTempLine = (hoverDt !== null || simDt !== null) && distTemp <= 14 && distTemp <= distCo2 && distTemp <= distZeff;
-          const isOverCo2Line = hoverCo2 !== null && distCo2 <= 10 && distCo2 < distTemp && distCo2 < distZeff;
+          // Only compute line Y coordinates if the corresponding line is actually drawn at hoverYr
+          const tempLineY = (hoverYr > 2026)
+            ? (simDt !== null ? dtToY(simDt) : -999)
+            : (simDt !== null && hoverYr >= 1958) ? dtToY(simDt) : (hoverDt !== null ? dtToY(hoverDt) : -999);
+
+          const measLineY = (measDt !== null && hoverYr >= 1958 && hoverYr <= 2026) ? dtToY(measDt) : -999;
+          const co2LineY = hoverCo2 !== null ? co2ToY(hoverCo2) : -999;
+
+          // Emissions Altitude (z_eff) is drawn up to 2026, and beyond 2026 only if sim has reached hoverYr
+          const hasZeffLine = (!state.isZoomed || hoverYr >= 1958) && (hoverYr <= 2026 || (state.year > 2026 && hoverYr <= maxSimYr));
+          const curDeltaTs = (simDt !== null) ? (simDt + OFFSET_1850_1900) : ((hoverDt !== null) ? (hoverDt + OFFSET_1850_1900) : 0);
+          const hoverZeff = hasZeffLine ? getEmissionsAltitudeM(hoverYr, curDeltaTs, hoverCo2 || 427.0) : null;
+          const zeffLineY = hoverZeff !== null ? zEffToY(hoverZeff) : -999;
+
+          const distZeff = zeffLineY !== -999 ? Math.abs(mousePos.y - zeffLineY) : 999;
+          const distMeas = measLineY !== -999 ? Math.abs(mousePos.y - measLineY) : 999;
+          const distSim = tempLineY !== -999 ? Math.abs(mousePos.y - tempLineY) : 999;
+          const distTemp = Math.min(distMeas, distSim);
+          const distCo2 = co2LineY !== -999 ? Math.abs(mousePos.y - co2LineY) : 999;
+
+          isOverZeffLine = zeffLineY !== -999 && distZeff <= 16 && distZeff < distTemp && distZeff < distCo2;
+          isOverMeasLine = measLineY !== -999 && distMeas <= 14 && distMeas <= distCo2 && distMeas <= distZeff;
+          const isOverTempLine = (tempLineY !== -999 || measLineY !== -999) && distTemp <= 14 && distTemp <= distCo2 && distTemp <= distZeff;
+          const isOverCo2Line = co2LineY !== -999 && distCo2 <= 10 && distCo2 < distTemp && distCo2 < distZeff;
 
           // Check 1958 Keeling (dashed line, rotated orange label "1958 Keeling", or left-side orange +0.26°C badge)
           const isOverKeeling = (
@@ -9685,16 +9693,22 @@
             if (hoverYr > 2026 && simDt !== null) {
               tipText = `${Math.round(hoverYr)} CE · Projected ΔT: +${simDt.toFixed(2)}°C`;
               tipStroke = "#f43f5e";
-            } else {
+            } else if (hoverDt !== null) {
               tipText = `${Math.round(hoverYr)} CE · Observed ΔT: +${hoverDt.toFixed(2)}°C`;
               tipStroke = "#f59e0b";
+            } else if (simDt !== null) {
+              tipText = `${Math.round(hoverYr)} CE · Projected ΔT: +${simDt.toFixed(2)}°C`;
+              tipStroke = "#f43f5e";
             }
+            const bestPointY = (measLineY !== -999 && tempLineY !== -999)
+              ? (Math.abs(mousePos.y - measLineY) < Math.abs(mousePos.y - tempLineY) ? measLineY : tempLineY)
+              : (tempLineY !== -999 ? tempLineY : measLineY);
             activeTip = {
               text: tipText,
               stroke: tipStroke,
               compact: true,
               pointX: mousePos.x,
-              pointY: Math.min(tempLineY, measLineY)
+              pointY: bestPointY
             };
           } else if (isOverCo2Line) {
             scheduleHideMeasTempPopover(120);
