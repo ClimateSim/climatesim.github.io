@@ -340,7 +340,101 @@
       }
     }
 
-    /* Sector Explorer Styles (OWID) */
+    /* Sector Explorer Pie Chart & Popover Styles (OWID) */
+    .sources-pie-layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 24px;
+      align-items: center;
+      margin: 12px 0 14px 0;
+    }
+    @media (max-width: 860px) {
+      .sources-pie-layout {
+        grid-template-columns: 1fr;
+        justify-items: center;
+      }
+    }
+    .sources-pie-chart-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 320px;
+      position: relative;
+    }
+    .sources-pie-svg {
+      width: 100%;
+      height: auto;
+      max-width: 310px;
+      max-height: 310px;
+      overflow: visible;
+      filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.45));
+    }
+    .pie-slice {
+      cursor: pointer;
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease, opacity 0.2s ease;
+      transform-origin: 170px 170px;
+    }
+    .pie-slice:hover,
+    .pie-slice.highlighted {
+      filter: brightness(1.25) drop-shadow(0 0 10px currentColor);
+      transform: scale(1.045);
+    }
+    .sources-pie-legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 10px;
+      width: 100%;
+    }
+    .sources-legend-card {
+      background: #0b1322;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+    }
+    .sources-legend-card:hover,
+    .sources-legend-card.active {
+      border-color: var(--sec-color, var(--cyan));
+      background: rgba(15, 23, 42, 0.95);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 12px rgba(0, 229, 255, 0.15);
+    }
+    .sources-sector-popover {
+      position: fixed;
+      z-index: 9999;
+      width: 540px;
+      max-width: calc(100vw - 32px);
+      max-height: 85vh;
+      overflow-y: auto;
+      background: rgba(11, 19, 35, 0.97);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(0, 229, 255, 0.4);
+      border-radius: 10px;
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.75), 0 0 24px rgba(0, 229, 255, 0.18);
+      padding: 16px 18px;
+      pointer-events: auto;
+      transition: opacity 0.18s ease;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 229, 255, 0.4) transparent;
+    }
+    .fossil-playbook-split {
+      display: grid;
+      grid-template-columns: minmax(320px, 420px) 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .fossil-playbook-split {
+        grid-template-columns: 1fr;
+      }
+    }
     .sector-card {
       background: #0b1322;
       border: 1px solid var(--border);
@@ -2341,7 +2435,7 @@
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <div class="brand-title" id="headerTitle">Earth's Energy Imbalance</div>
-              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v2.2</span>
+              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v2.3</span>
             </div>
             <div style="font-size: 0.75rem; color: var(--text-muted);" id="headerSubtitle">How greenhouse gases trap heat and warm the planet</div>
           </div>
@@ -2858,72 +2952,90 @@
         </div>
       </div>
 
-      <!-- Main Sources Layout Grid -->
-      <div class="budgets-grid">
+      <!-- Stacked Sources Layout: Sector Breakdown Pie Chart Placed Above Fossil Fuel Breakdown -->
 
-        <!-- Left Column: Interactive Sector Breakdown & Accordions -->
-        <div class="card" style="margin-bottom: 0;">
-          <div class="card-title-row" style="flex-direction: column; align-items: flex-start; gap: 8px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-              <div class="card-title" style="display: flex; align-items: center; gap: 8px;">
-                <span>🏭</span> Global Emissions by Economic Sector (Our World in Data)
-              </div>
-              <span class="badge badge-cyan" id="srcBadgeActiveFilter">All GHGs (54.6 Gt)</span>
+      <!-- 1. Interactive Sector Breakdown Pie Chart Card (Full Width) -->
+      <div class="card" id="sourcesSectorCard" style="margin-bottom: 16px;">
+        <div class="card-title-row" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <div class="card-title" style="display: flex; align-items: center; gap: 8px;">
+              <span>🏭</span> Global Emissions by Economic Sector (Our World in Data)
             </div>
-            <div style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.4;">
-              Based on empirical synthesis from Climate Watch, WRI & the Global Carbon Project (Ritchie & Roser, Our World in Data). Click any sector to expand or collapse subsector activities and mitigation levers.
-            </div>
+            <span class="badge badge-cyan" id="srcBadgeActiveFilter">All GHGs (54.6 Gt)</span>
           </div>
-
-          <!-- Filter Toggle: All GHGs vs CO2 Only -->
-          <div class="budget-preset-group" style="margin: 10px 0 12px 0;">
-            <button class="budget-preset-btn active" id="btnFilterAllGhg">All Greenhouse Gases (54.6 Gt CO₂e)</button>
-            <button class="budget-preset-btn" id="btnFilterCo2Only">CO₂ Only (40.9 Gt CO₂)</button>
-          </div>
-
-          <!-- Proportional Visual Bar -->
-          <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Global Sector Proportions:</div>
-          <div class="proportions-bar-wrap" id="sourcesProportionsBar">
-            <div class="proportions-bar-seg" style="width: 73.2%; background: #00e5ff;" title="Energy: 73.2% (40.0 Gt CO₂e)">⚡ Energy 73.2%</div>
-            <div class="proportions-bar-seg" style="width: 18.4%; background: #10b981;" title="AFOLU: 18.4% (10.0 Gt CO₂e)">🌾 AFOLU 18.4%</div>
-            <div class="proportions-bar-seg" style="width: 5.2%; background: #f59e0b;" title="Direct Industrial Processes: 5.2% (2.8 Gt CO₂e)">🏭 5.2%</div>
-            <div class="proportions-bar-seg" style="width: 3.2%; background: #ec4899;" title="Waste: 3.2% (1.7 Gt CO₂e)">🗑️ 3.2%</div>
-          </div>
-
-          <!-- Sector Accordions Container -->
-          <div id="sourcesSectorContainer">
-            <!-- Rendered dynamically by updateSourcesView() -->
-          </div>
-
-          <div style="margin-top: 10px; font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; border-top: 1px solid var(--border); padding-top: 8px;">
-            <em>Source:</em> Climate Watch, World Resources Institute (2023) and Global Carbon Project (Friedlingstein et al. 2023), visualized by Our World in Data.
+          <div style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.4;">
+            Based on empirical synthesis from Climate Watch, WRI &amp; the Global Carbon Project (Ritchie &amp; Roser, Our World in Data). Hover over any pie slice or sector card below to inspect detailed subsectors, clean abatement solutions, and deep dives.
           </div>
         </div>
 
-        <!-- Right Column: Fossil Commodities & Abatement Playbook -->
-        <div class="card" style="margin-bottom: 0;">
-          <div class="card-title-row">
-            <div class="card-title" style="display: flex; align-items: center; gap: 8px;">
-              <span>🛢️</span> Fossil Fuel Breakdown & What Replaces It
-            </div>
-            <span class="badge badge-amber">40.9 Gt Baseline</span>
+        <!-- Filter Toggle: All GHGs vs CO2 Only -->
+        <div class="budget-preset-group" style="margin: 10px 0 14px 0;">
+          <button class="budget-preset-btn active" id="btnFilterAllGhg">All Greenhouse Gases (54.6 Gt CO₂e)</button>
+          <button class="budget-preset-btn" id="btnFilterCo2Only">CO₂ Only (40.9 Gt CO₂)</button>
+        </div>
+
+        <!-- Pie Chart & Interactive Sector Legend Layout -->
+        <div class="sources-pie-layout">
+          <!-- Left: SVG Donut Chart with Interactive Center Display -->
+          <div class="sources-pie-chart-wrap">
+            <svg id="sourcesPieSvg" viewBox="0 0 340 340" class="sources-pie-svg" aria-label="Global Emissions by Economic Sector Donut Chart">
+              <defs>
+                <filter id="pieGlow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3.5" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+              </defs>
+              <g id="sourcesPieSlicesGroup"></g>
+              <!-- Center Donut Text Readout -->
+              <circle cx="170" cy="170" r="76" fill="#080e1a" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1.5" />
+              <text id="sourcesPieCenterVal" x="170" y="160" text-anchor="middle" font-size="22" font-weight="800" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif">54.6 Gt</text>
+              <text id="sourcesPieCenterSub" x="170" y="179" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8" font-family="system-ui, -apple-system, sans-serif">ALL GHGs / YR</text>
+              <text id="sourcesPieCenterPrompt" x="170" y="196" text-anchor="middle" font-size="9" font-weight="700" fill="#00e5ff" font-family="system-ui, -apple-system, sans-serif">Hover for detail</text>
+            </svg>
           </div>
 
+          <!-- Right: Interactive Sector Legend Cards -->
+          <div class="sources-pie-legend" id="sourcesPieLegend">
+            <!-- Rendered dynamically by updateSourcesView() -->
+          </div>
+        </div>
+
+        <!-- Rich Hover Popover (fixed/floating) -->
+        <div id="sourcesSectorPopover" class="sources-sector-popover" style="display: none;" role="tooltip">
+          <!-- Populated dynamically on hover -->
+        </div>
+
+        <div style="margin-top: 12px; font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; border-top: 1px solid var(--border); padding-top: 8px;">
+          <em>Source:</em> Climate Watch, World Resources Institute (2023) and Global Carbon Project (Friedlingstein et al. 2023), visualized by Our World in Data.
+        </div>
+      </div>
+
+      <!-- 2. Fossil Fuel Breakdown & What Replaces It (Full Width, Placed Below) -->
+      <div class="card" id="sourcesFossilCard" style="margin-bottom: 0;">
+        <div class="card-title-row">
+          <div class="card-title" style="display: flex; align-items: center; gap: 8px;">
+            <span>🛢️</span> Fossil Fuel Breakdown &amp; What Replaces It
+          </div>
+          <span class="badge badge-amber">40.9 Gt Baseline</span>
+        </div>
+
+        <!-- 2-Column Split: Fossil Commodities on Left, Playbook on Right -->
+        <div class="fossil-playbook-split">
           <!-- Fossil Commodity Shares -->
-          <div style="margin-bottom: 16px;">
+          <div style="margin-bottom: 12px;">
             <div style="font-size: 0.8rem; font-weight: 700; color: #fff; margin-bottom: 8px;">Fossil CO₂ by Primary Source (~37.4 Gt Combustion + 3.5 Gt LUC):</div>
             <div style="display: flex; flex-direction: column; gap: 8px;">
               <div class="subsector-item">
                 <div>
                   <strong style="color: #94a3b8;">1. Coal Combustion (41.0%)</strong>
-                  <div style="font-size: 0.72rem; color: var(--text-muted);">Electricity generation & metallurgical coke for blast furnaces</div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted);">Electricity generation &amp; metallurgical coke for blast furnaces</div>
                 </div>
                 <div style="text-align: right; font-family: ui-monospace, monospace; color: var(--cyan); font-weight: 700;">15.3 Gt CO₂/yr</div>
               </div>
               <div class="subsector-item">
                 <div>
                   <strong style="color: #eab308;">2. Crude Oil / Petroleum (32.6%)</strong>
-                  <div style="font-size: 0.72rem; color: var(--text-muted);">Road gasoline & diesel (24%), aviation jet fuel (4%), marine fuel (3%), heating oil</div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted);">Road gasoline &amp; diesel (24%), aviation jet fuel (4%), marine fuel (3%), heating oil</div>
                 </div>
                 <div style="text-align: right; font-family: ui-monospace, monospace; color: var(--amber); font-weight: 700;">12.2 Gt CO₂/yr</div>
               </div>
@@ -2936,7 +3048,7 @@
               </div>
               <div class="subsector-item">
                 <div>
-                  <strong style="color: #f43f5e;">4. Cement Calcination & Flaring (5.3%)</strong>
+                  <strong style="color: #f43f5e;">4. Cement Calcination &amp; Flaring (5.3%)</strong>
                   <div style="font-size: 0.72rem; color: var(--text-muted);">Chemical limestone decarbonation (CaCO₃ → CaO + CO₂) and gas flaring</div>
                 </div>
                 <div style="text-align: right; font-family: ui-monospace, monospace; color: var(--rose); font-weight: 700;">2.0 Gt CO₂/yr</div>
@@ -2945,7 +3057,7 @@
           </div>
 
           <!-- What Directly Replaces Each Emission Source? (The Electrification & Abatement Playbook) -->
-          <div class="playbook-card">
+          <div class="playbook-card" style="margin-bottom: 0;">
             <div class="playbook-top-row">
               <div class="playbook-main-title">💡 The Electrification &amp; Abatement Playbook</div>
               <button type="button" class="playbook-expand-all-btn" id="playbookExpandAllBtn" title="Expand all abatement measures">Expand All</button>
@@ -3058,21 +3170,20 @@
 
             </div>
           </div>
-
-          <!-- Bottom Navigation Bar -->
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 8px;">
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <button class="btn btn-secondary" id="btnBackToSimFromSources" style="font-size: 0.78rem; padding: 6px 14px;">◀ Back to Simulator</button>
-              <button class="btn btn-secondary" id="btnJumpToBudgetsFromSources" style="font-size: 0.78rem; padding: 6px 14px;">🛢️ View Carbon Budgets</button>
-              <button class="btn btn-secondary" onclick="setViewMode('dunkel');" style="font-size: 0.78rem; padding: 6px 14px; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);">🇬🇧 UK Dünkelflaute &amp; Storage &rarr;</button>
-            </div>
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <button class="btn btn-modal" id="btnOpenGuideFromSources" style="font-size: 0.78rem; padding: 6px 14px;">📖 Open Sources & Methane Guide →</button>
-              <button class="btn btn-start" id="btnJumpToSolutionsFromSources" style="font-size: 0.78rem; padding: 6px 14px;">💡 How to Replace 41 Gt/yr (Solutions) →</button>
-            </div>
-          </div>
         </div>
 
+        <!-- Bottom Navigation Bar -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 8px;">
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn btn-secondary" id="btnBackToSimFromSources" style="font-size: 0.78rem; padding: 6px 14px;">◀ Back to Simulator</button>
+            <button class="btn btn-secondary" id="btnJumpToBudgetsFromSources" style="font-size: 0.78rem; padding: 6px 14px;">🛢️ View Carbon Budgets</button>
+            <button class="btn btn-secondary" onclick="setViewMode('dunkel');" style="font-size: 0.78rem; padding: 6px 14px; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);">🇬🇧 UK Dünkelflaute &amp; Storage &rarr;</button>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn btn-modal" id="btnOpenGuideFromSources" style="font-size: 0.78rem; padding: 6px 14px;">📖 Open Sources & Methane Guide →</button>
+            <button class="btn btn-start" id="btnJumpToSolutionsFromSources" style="font-size: 0.78rem; padding: 6px 14px;">💡 How to Replace 41 Gt/yr (Solutions) →</button>
+          </div>
+        </div>
       </div>
 
 
@@ -3838,7 +3949,7 @@
         <span>·</span>
         <button type="button" id="btnFeedbackFooter" onclick="openFeedbackModal()" style="background: rgba(56, 189, 248, 0.12); color: var(--cyan); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 6px; padding: 2px 10px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">💬 Send Feedback</button>
         <span>·</span>
-        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v2.2</span>
+        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v2.3</span>
       </div>
       <div style="font-size: 0.76rem; color: #64748b; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
         <span>&copy; 2026 Earth Energy Balance Simulator Project</span>
@@ -4195,7 +4306,7 @@
           <div class="toc-card">
             <h3 style="margin-top: 0; border: none; color: #fff; display: flex; align-items: center; justify-content: space-between;">
               <span>Documentation Overview</span>
-              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v2.2</span>
+              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v2.3</span>
             </h3>
             
             <!-- User Commentary & Context Note -->
@@ -11205,8 +11316,209 @@
         ]
       };
 
-      // Track expanded sector accordions (initially all collapsed)
-      const expandedSectorIds = new Set();
+      // Active popover state and timeouts
+      let sourcesPopoverHideTimeout = null;
+      let sourcesActiveSectorId = null;
+
+      function hideSourcesPopover() {
+        const popover = document.getElementById("sourcesSectorPopover");
+        if (popover) {
+          popover.style.display = "none";
+        }
+        sourcesActiveSectorId = null;
+        resetSourcesPieCenterText();
+        document.querySelectorAll(".pie-slice.highlighted").forEach(el => el.classList.remove("highlighted"));
+        document.querySelectorAll(".sources-legend-card.active").forEach(el => el.classList.remove("active"));
+      }
+
+      function resetSourcesPieCenterText() {
+        const isCo2Only = OWID_EMISSIONS.filterMode === "co2";
+        const totalVal = isCo2Only ? OWID_EMISSIONS.totalCo2Gt : OWID_EMISSIONS.totalGhgGt;
+        const centerVal = document.getElementById("sourcesPieCenterVal");
+        const centerSub = document.getElementById("sourcesPieCenterSub");
+        const centerPrompt = document.getElementById("sourcesPieCenterPrompt");
+        if (centerVal) {
+          centerVal.textContent = `${totalVal} Gt`;
+          centerVal.setAttribute("fill", "#ffffff");
+        }
+        if (centerSub) {
+          centerSub.textContent = isCo2Only ? "CO₂ ONLY / YR" : "ALL GHGs / YR";
+        }
+        if (centerPrompt) {
+          centerPrompt.textContent = "Hover for detail";
+          centerPrompt.setAttribute("fill", "var(--cyan)");
+        }
+      }
+
+      function showSourcesPopover(sec, pctStr, valStr, anchorEl, mouseEvent) {
+        if (sourcesPopoverHideTimeout) {
+          clearTimeout(sourcesPopoverHideTimeout);
+          sourcesPopoverHideTimeout = null;
+        }
+        sourcesActiveSectorId = sec.id;
+
+        // Update SVG Center Readout
+        const centerVal = document.getElementById("sourcesPieCenterVal");
+        const centerSub = document.getElementById("sourcesPieCenterSub");
+        const centerPrompt = document.getElementById("sourcesPieCenterPrompt");
+        if (centerVal) {
+          centerVal.textContent = `${pctStr}%`;
+          centerVal.setAttribute("fill", sec.color);
+        }
+        if (centerSub) {
+          centerSub.textContent = `${valStr} Gt`;
+        }
+        if (centerPrompt) {
+          centerPrompt.textContent = sec.id.toUpperCase();
+          centerPrompt.setAttribute("fill", sec.color);
+        }
+
+        // Highlight matching slice & legend card
+        document.querySelectorAll(".pie-slice").forEach(el => {
+          if (el.getAttribute("data-sector-id") === sec.id) el.classList.add("highlighted");
+          else el.classList.remove("highlighted");
+        });
+        document.querySelectorAll(".sources-legend-card").forEach(el => {
+          if (el.getAttribute("data-sector-id") === sec.id) el.classList.add("active");
+          else el.classList.remove("active");
+        });
+
+        const popover = document.getElementById("sourcesSectorPopover");
+        if (!popover) return;
+
+        popover.style.borderColor = sec.color;
+        popover.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 1.3rem;">${sec.icon}</span>
+              <strong style="color: ${sec.color}; font-size: 1.05rem;">${sec.name}</strong>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="badge" style="background: ${sec.color}; color: #000; font-weight: 800; font-size: 0.8rem;">${pctStr}% · ${valStr} Gt</span>
+              <button type="button" class="popover-close-btn" style="background: none; border: none; color: #94a3b8; font-size: 1.3rem; cursor: pointer; padding: 0 4px; line-height: 1;" title="Close pop-up">&times;</button>
+            </div>
+          </div>
+          <div style="font-size: 0.8rem; color: #cbd5e1; margin-bottom: 10px; line-height: 1.45;">
+            ${sec.desc}
+          </div>
+          <div style="font-size: 0.73rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
+            Subsector Breakdown (${sec.subsectors.length} Categories):
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px;">
+            ${sec.subsectors.map(sub => `
+              <div class="subsector-item" style="padding: 6px 10px;">
+                <div>
+                  <strong style="color: #f1f5f9; font-size: 0.79rem;">${sub.name} (${sub.pct}%)</strong>
+                  <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 2px;">${sub.detail}</div>
+                </div>
+                <div style="font-family: ui-monospace, monospace; color: ${sec.color}; font-weight: 700; font-size: 0.8rem; white-space: nowrap;">
+                  ${sub.gt} Gt
+                </div>
+              </div>
+            `).join("")}
+          </div>
+          <div style="background: rgba(0, 229, 255, 0.04); border-left: 3px solid ${sec.color}; padding: 8px 12px; border-radius: 4px; font-size: 0.78rem; line-height: 1.4; color: #cbd5e1; margin-bottom: 10px;">
+            <strong style="color: ${sec.color};">Clean Abatement Solutions:</strong> ${sec.cleanSolution}
+          </div>
+          ${sec.deepDives ? sec.deepDives.map(dd => `
+            <div style="background: ${dd.bg || 'rgba(0, 229, 255, 0.05)'}; border: 1px solid ${dd.border || 'rgba(0, 229, 255, 0.25)'}; border-left: 3px solid ${dd.color || 'var(--cyan)'}; border-radius: 6px; padding: 10px 12px; font-size: 0.77rem; line-height: 1.45; color: #cbd5e1; margin-bottom: 8px;">
+              <div style="font-weight: 700; color: ${dd.color || 'var(--cyan)'}; margin-bottom: 5px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span>${dd.icon}</span> <span>${dd.title}</span>
+                </div>
+                ${dd.badge ? `<span class="badge" style="background: rgba(255,255,255,0.08); color: ${dd.color}; font-size: 0.7rem;">${dd.badge}</span>` : ""}
+              </div>
+              <div>${dd.content}</div>
+            </div>
+          `).join("") : ""}
+          ${sec.specialNote ? `
+            <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-left: 3px solid var(--emerald); border-radius: 6px; padding: 10px 12px; font-size: 0.77rem; line-height: 1.45; color: #cbd5e1; margin-bottom: 6px;">
+              <div style="font-weight: 700; color: var(--emerald); margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                <span>💡</span> <span>The 10:1 Trophic Calorie Inefficiency & Carbon Opportunity Cost</span>
+              </div>
+              ${sec.specialNote}
+            </div>
+          ` : ""}
+        `;
+
+        const closeBtn = popover.querySelector(".popover-close-btn");
+        if (closeBtn) {
+          closeBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            hideSourcesPopover();
+          });
+        }
+
+        popover.style.display = "block";
+
+        // Positioning logic
+        const popW = Math.min(540, window.innerWidth - 32);
+        const popH = popover.offsetHeight || 420;
+
+        let left, top;
+        if (mouseEvent && mouseEvent.clientX) {
+          left = mouseEvent.clientX + 16;
+          top = mouseEvent.clientY - 40;
+        } else if (anchorEl) {
+          const rect = anchorEl.getBoundingClientRect();
+          left = rect.right + 12;
+          top = rect.top;
+        } else {
+          left = (window.innerWidth - popW) / 2;
+          top = 100;
+        }
+
+        // Viewport clamping
+        if (left + popW > window.innerWidth - 16) {
+          if (mouseEvent && mouseEvent.clientX) {
+            left = mouseEvent.clientX - popW - 16;
+          } else if (anchorEl) {
+            const rect = anchorEl.getBoundingClientRect();
+            left = rect.left - popW - 12;
+          }
+        }
+        if (left < 16) left = 16;
+
+        if (top + popH > window.innerHeight - 16) {
+          top = window.innerHeight - popH - 16;
+        }
+        if (top < 16) top = 16;
+
+        popover.style.left = `${Math.round(left)}px`;
+        popover.style.top = `${Math.round(top)}px`;
+      }
+
+      function positionSourcesPopover(mouseEvent) {
+        const popover = document.getElementById("sourcesSectorPopover");
+        if (!popover || popover.style.display === "none") return;
+        if (!mouseEvent || !mouseEvent.clientX) return;
+
+        const popW = Math.min(540, window.innerWidth - 32);
+        const popH = popover.offsetHeight || 420;
+
+        let left = mouseEvent.clientX + 16;
+        let top = mouseEvent.clientY - 40;
+
+        if (left + popW > window.innerWidth - 16) {
+          left = mouseEvent.clientX - popW - 16;
+        }
+        if (left < 16) left = 16;
+
+        if (top + popH > window.innerHeight - 16) {
+          top = window.innerHeight - popH - 16;
+        }
+        if (top < 16) top = 16;
+
+        popover.style.left = `${Math.round(left)}px`;
+        popover.style.top = `${Math.round(top)}px`;
+      }
+
+      function scheduleSourcesHidePopover() {
+        if (sourcesPopoverHideTimeout) clearTimeout(sourcesPopoverHideTimeout);
+        sourcesPopoverHideTimeout = setTimeout(() => {
+          hideSourcesPopover();
+        }, 220);
+      }
 
       function updateSourcesView() {
         const isCo2Only = OWID_EMISSIONS.filterMode === "co2";
@@ -11215,107 +11527,130 @@
           badgeFilter.textContent = isCo2Only ? "CO₂ Only (40.9 Gt)" : "All GHGs (54.6 Gt CO₂e)";
         }
 
-        const barWrap = document.getElementById("sourcesProportionsBar");
-        if (barWrap) {
-          barWrap.innerHTML = "";
-          let totalBase = isCo2Only ? OWID_EMISSIONS.totalCo2Gt : OWID_EMISSIONS.totalGhgGt;
-          OWID_EMISSIONS.sectors.forEach(sec => {
-            const val = isCo2Only ? sec.co2Gt : sec.ghgGt;
-            const pct = isCo2Only ? ((val / totalBase) * 100).toFixed(1) : sec.ghgPct.toFixed(1);
-            const seg = document.createElement("div");
-            seg.className = "proportions-bar-seg";
-            seg.style.width = `${pct}%`;
-            seg.style.background = sec.color;
-            seg.title = `${sec.name}: ${pct}% (${val} Gt)`;
-            seg.textContent = `${sec.icon} ${pct}%`;
-            barWrap.appendChild(seg);
+        // Attach mouseenter/mouseleave to popover element once
+        const popover = document.getElementById("sourcesSectorPopover");
+        if (popover && !popover.dataset.popoverBound) {
+          popover.dataset.popoverBound = "true";
+          popover.addEventListener("mouseenter", () => {
+            if (sourcesPopoverHideTimeout) {
+              clearTimeout(sourcesPopoverHideTimeout);
+              sourcesPopoverHideTimeout = null;
+            }
+          });
+          popover.addEventListener("mouseleave", () => {
+            scheduleSourcesHidePopover();
           });
         }
 
-        const container = document.getElementById("sourcesSectorContainer");
-        if (container) {
-          container.innerHTML = "";
+        // Calculate proportions and totals
+        const totalBase = isCo2Only ? OWID_EMISSIONS.totalCo2Gt : OWID_EMISSIONS.totalGhgGt;
+        const totalSectorVal = OWID_EMISSIONS.sectors.reduce((sum, s) => sum + (isCo2Only ? s.co2Gt : s.ghgGt), 0);
+
+        // Reset center readout to default total
+        resetSourcesPieCenterText();
+
+        // 1. Render SVG Donut Slices
+        const slicesGroup = document.getElementById("sourcesPieSlicesGroup");
+        if (slicesGroup) {
+          slicesGroup.innerHTML = "";
+          const cx = 170, cy = 170, R = 142, r = 82;
+          let currentAngle = -Math.PI / 2; // start at 12 o'clock
+
           OWID_EMISSIONS.sectors.forEach((sec, idx) => {
             const val = isCo2Only ? sec.co2Gt : sec.ghgGt;
-            const totalBase = isCo2Only ? OWID_EMISSIONS.totalCo2Gt : OWID_EMISSIONS.totalGhgGt;
             const pct = isCo2Only ? ((val / totalBase) * 100).toFixed(1) : sec.ghgPct.toFixed(1);
-            const isExpanded = expandedSectorIds.has(sec.id);
+            const sliceFraction = (val / totalSectorVal);
+            const deltaAngle = sliceFraction * 2 * Math.PI;
+            const a0 = currentAngle;
+            const a1 = currentAngle + deltaAngle;
+            currentAngle = a1;
+
+            const x1 = cx + R * Math.cos(a0);
+            const y1 = cy + R * Math.sin(a0);
+            const x2 = cx + R * Math.cos(a1);
+            const y2 = cy + R * Math.sin(a1);
+            const x3 = cx + r * Math.cos(a1);
+            const y3 = cy + r * Math.sin(a1);
+            const x4 = cx + r * Math.cos(a0);
+            const y4 = cy + r * Math.sin(a0);
+
+            const largeArc = deltaAngle > Math.PI ? 1 : 0;
+            const pathD = `M ${x1.toFixed(2)} ${y1.toFixed(2)} A ${R} ${R} 0 ${largeArc} 1 ${x2.toFixed(2)} ${y2.toFixed(2)} L ${x3.toFixed(2)} ${y3.toFixed(2)} A ${r} ${r} 0 ${largeArc} 0 ${x4.toFixed(2)} ${y4.toFixed(2)} Z`;
+
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("d", pathD);
+            path.setAttribute("fill", sec.color);
+            path.setAttribute("stroke", "#080e1a");
+            path.setAttribute("stroke-width", "3");
+            path.setAttribute("class", "pie-slice");
+            path.setAttribute("data-sector-id", sec.id);
+            path.setAttribute("data-idx", idx);
+
+            const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
+            title.textContent = `${sec.name}: ${pct}% (${val} Gt)`;
+            path.appendChild(title);
+
+            path.addEventListener("mouseenter", (e) => {
+              showSourcesPopover(sec, pct, val, path, e);
+            });
+            path.addEventListener("mousemove", (e) => {
+              positionSourcesPopover(e);
+            });
+            path.addEventListener("mouseleave", () => {
+              scheduleSourcesHidePopover();
+            });
+            path.addEventListener("click", (e) => {
+              showSourcesPopover(sec, pct, val, path, e);
+            });
+
+            slicesGroup.appendChild(path);
+          });
+        }
+
+        // 2. Render Sector Legend Cards
+        const legendContainer = document.getElementById("sourcesPieLegend");
+        if (legendContainer) {
+          legendContainer.innerHTML = "";
+          OWID_EMISSIONS.sectors.forEach((sec, idx) => {
+            const val = isCo2Only ? sec.co2Gt : sec.ghgGt;
+            const pct = isCo2Only ? ((val / totalBase) * 100).toFixed(1) : sec.ghgPct.toFixed(1);
 
             const card = document.createElement("div");
-            card.className = "sector-card";
+            card.className = "sources-legend-card";
+            card.setAttribute("data-sector-id", sec.id);
+            card.setAttribute("data-idx", idx);
+            card.style.setProperty("--sec-color", sec.color);
             card.innerHTML = `
-              <div class="sector-header" data-idx="${idx}" title="Click to ${isExpanded ? 'collapse' : 'expand'} ${sec.name}">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                  <span style="font-size: 1.1rem;">${sec.icon}</span>
-                  <strong style="color: ${sec.color};">${sec.name}</strong>
+                  <span style="font-size: 1.2rem;">${sec.icon}</span>
+                  <strong style="color: ${sec.color}; font-size: 0.88rem;">${sec.name.split("(")[0].trim()}</strong>
                 </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                  <span style="font-family: ui-monospace, monospace; font-weight: 700; color: #fff;">${pct}%</span>
-                  <span class="badge" style="background: rgba(255,255,255,0.06); color: var(--text-muted);">${val} Gt</span>
-                  <span class="sector-toggle-arrow" style="color: var(--cyan); font-size: 0.8rem;">${isExpanded ? '▼' : '▶'}</span>
-                </div>
+                <span class="badge" style="background: rgba(255,255,255,0.08); color: #fff; font-family: ui-monospace, monospace; font-weight: 700;">${pct}% · ${val} Gt</span>
               </div>
-              <div class="sector-body" id="sectorBody${idx}" style="display: ${isExpanded ? 'flex' : 'none'};">
-                <div style="color: var(--text-muted);">${sec.desc}</div>
-                <div style="display: flex; flex-direction: column; gap: 6px; margin: 4px 0;">
-                  ${sec.subsectors.map(sub => `
-                    <div class="subsector-item">
-                      <div>
-                        <strong style="color: #cbd5e1;">${sub.name} (${sub.pct}%)</strong>
-                        <div style="font-size: 0.72rem; color: var(--text-muted);">${sub.detail}</div>
-                      </div>
-                      <div style="font-family: ui-monospace, monospace; color: var(--cyan); font-weight: 700; white-space: nowrap;">
-                        ${sub.gt} Gt
-                      </div>
-                    </div>
-                  `).join("")}
-                </div>
-                <div style="background: rgba(0, 229, 255, 0.04); border-left: 3px solid ${sec.color}; padding: 8px 12px; border-radius: 4px; font-size: 0.78rem; line-height: 1.4; color: #cbd5e1;">
-                  <strong style="color: ${sec.color};">Clean Abatement Solutions:</strong> ${sec.cleanSolution}
-                </div>
-                ${sec.deepDives ? sec.deepDives.map(dd => `
-                  <div style="background: ${dd.bg || 'rgba(0, 229, 255, 0.05)'}; border: 1px solid ${dd.border || 'rgba(0, 229, 255, 0.25)'}; border-left: 3px solid ${dd.color || 'var(--cyan)'}; border-radius: 6px; padding: 10px 12px; font-size: 0.77rem; line-height: 1.45; color: #cbd5e1; margin-top: 8px;">
-                    <div style="font-weight: 700; color: ${dd.color || 'var(--cyan)'}; margin-bottom: 5px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
-                      <div style="display: flex; align-items: center; gap: 6px;">
-                        <span>${dd.icon}</span> <span>${dd.title}</span>
-                      </div>
-                      ${dd.badge ? `<span class="badge" style="background: rgba(255,255,255,0.08); color: ${dd.color}; font-size: 0.7rem;">${dd.badge}</span>` : ""}
-                    </div>
-                    <div>${dd.content}</div>
-                  </div>
-                `).join("") : ""}
-                ${sec.specialNote ? `
-                  <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-left: 3px solid var(--emerald); border-radius: 6px; padding: 10px 12px; font-size: 0.77rem; line-height: 1.45; color: #cbd5e1; margin-top: 6px;">
-                    <div style="font-weight: 700; color: var(--emerald); margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
-                      <span>💡</span> <span>The 10:1 Trophic Calorie Inefficiency & Carbon Opportunity Cost</span>
-                    </div>
-                    ${sec.specialNote}
-                  </div>
-                ` : ""}
+              <div style="font-size: 0.73rem; color: var(--text-muted); line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                ${sec.desc}
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2px;">
+                <span style="font-size: 0.7rem; color: ${sec.color}; font-weight: 600;">Hover for subsectors &amp; deep dive ℹ️</span>
+                <span style="font-size: 0.7rem; color: var(--text-muted); font-family: ui-monospace, monospace;">${sec.subsectors.length} categories</span>
               </div>
             `;
-            container.appendChild(card);
-          });
 
-          // Header toggle accordions
-          container.querySelectorAll(".sector-header").forEach(header => {
-            header.addEventListener("click", () => {
-              const idx = parseInt(header.getAttribute("data-idx"), 10);
-              const sec = OWID_EMISSIONS.sectors[idx];
-              const body = header.nextElementSibling;
-              const arrow = header.querySelector(".sector-toggle-arrow");
-              if (expandedSectorIds.has(sec.id)) {
-                expandedSectorIds.delete(sec.id);
-                body.style.display = "none";
-                if (arrow) arrow.textContent = "▶";
-                header.title = `Click to expand ${sec.name}`;
-              } else {
-                expandedSectorIds.add(sec.id);
-                body.style.display = "flex";
-                if (arrow) arrow.textContent = "▼";
-                header.title = `Click to collapse ${sec.name}`;
-              }
+            card.addEventListener("mouseenter", (e) => {
+              showSourcesPopover(sec, pct, val, card, e);
             });
+            card.addEventListener("mousemove", (e) => {
+              positionSourcesPopover(e);
+            });
+            card.addEventListener("mouseleave", () => {
+              scheduleSourcesHidePopover();
+            });
+            card.addEventListener("click", (e) => {
+              showSourcesPopover(sec, pct, val, card, e);
+            });
+
+            legendContainer.appendChild(card);
           });
         }
       }
