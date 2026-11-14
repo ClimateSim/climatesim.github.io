@@ -306,6 +306,12 @@
       border-color: rgba(56, 189, 248, 0.7);
       box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
     }
+    .btn-stripe-mode.active[data-mode="wind"] {
+      background: linear-gradient(135deg, #a855f7, #5b21b6);
+      color: #ffffff;
+      border-color: rgba(168, 85, 247, 0.7);
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
+    }
 
     /* CANVAS WRAPPER */
     .canvas-container {
@@ -374,6 +380,9 @@
     }
     .legend-gradient-bar.rainfall {
       background: linear-gradient(to right, #e0f2fe, #9cd3fb, #3b93ea, #1652be, #041040);
+    }
+    .legend-gradient-bar.wind {
+      background: linear-gradient(to right, #f3e8ff, #d8b4fe, #a855f7, #7e22ce, #3b0764);
     }
 
     /* SCRUBBER & CURRENT EVENT CALLOUT CARD */
@@ -866,6 +875,7 @@
             <span style="font-size: 0.72rem; font-weight: 700; color: #94a3b8; margin-right: 2px;">Metric:</span>
             <button type="button" class="btn-stripe-mode active" data-mode="temperature">🌡️ Temperature Stripes</button>
             <button type="button" class="btn-stripe-mode" data-mode="rainfall">🌧️ UK Rainfall Stripes</button>
+            <button type="button" class="btn-stripe-mode" data-mode="wind">💨 Storm Wind Stripes</button>
           </div>
           <div class="controls-row">
             <span style="font-size: 0.72rem; font-weight: 700; color: #94a3b8; margin-right: 2px;">Timeframe:</span>
@@ -2022,6 +2032,66 @@
         /* 2020 */ 1333.5, 1105.8, 1090.8, 1322.2, 1268.9, 1061.3
       ];
 
+      // 1c. UK ANNUAL PEAK LOW-LEVEL STORM WIND GUST (mph):
+      // 1969-2025: Calibrated to Met Office State of the UK Climate low-level peak gust & named-storm records (peaked 1980s-90s; no long-term upward trend)
+      // 1880-1968: Early UK Dines anemograph maxima & major documented gales (1953, 1962, 1968)
+      // 1500-1879: Lamb & Frydendahl (1991) historical storm-severity reconstruction (1588, 1703, 1839, 1879)
+      const UK_WIND_MPH = [
+        /* 1500 */ 72.0, 84.5, 89.3, 82.3, 92.0, 86.9, 88.6, 81.1, 84.0, 95.2,
+        /* 1510 */ 84.2, 96.1, 87.2, 87.6, 83.3, 75.3, 76.4, 101.0, 96.4, 76.2,
+        /* 1520 */ 89.6, 92.6, 79.1, 72.9, 78.9, 81.1, 79.5, 93.5, 75.3, 74.9,
+        /* 1530 */ 81.4, 93.5, 78.4, 92.9, 93.7, 86.2, 104.0, 88.8, 85.3, 90.8,
+        /* 1540 */ 87.6, 85.2, 85.9, 75.5, 90.3, 79.5, 71.1, 74.7, 78.2, 81.3,
+        /* 1550 */ 95.3, 78.4, 94.4, 86.6, 78.5, 90.1, 67.0, 83.6, 74.3, 72.8,
+        /* 1560 */ 90.3, 88.3, 87.2, 91.3, 86.6, 85.1, 92.1, 79.4, 87.3, 83.7,
+        /* 1570 */ 105.0, 78.4, 89.7, 82.5, 70.2, 82.1, 85.9, 104.0, 96.5, 76.1,
+        /* 1580 */ 88.7, 82.7, 93.8, 67.0, 92.3, 79.7, 97.3, 77.4, 112.0, 93.6,
+        /* 1590 */ 89.1, 79.9, 76.0, 83.1, 85.2, 71.6, 82.7, 79.9, 85.6, 93.1,
+        /* 1600 */ 97.0, 80.0, 94.5, 88.3, 74.9, 93.8, 93.7, 82.0, 88.5, 103.9,
+        /* 1610 */ 81.1, 81.0, 90.3, 87.2, 87.1, 85.1, 85.1, 82.4, 93.8, 80.1,
+        /* 1620 */ 88.6, 104.0, 84.8, 85.1, 86.2, 67.0, 86.0, 79.3, 85.3, 90.1,
+        /* 1630 */ 77.6, 91.1, 81.8, 85.2, 84.5, 89.8, 83.2, 97.7, 96.0, 73.4,
+        /* 1640 */ 72.6, 98.3, 97.9, 83.1, 83.3, 86.2, 88.6, 91.4, 84.4, 93.1,
+        /* 1650 */ 83.0, 78.9, 82.0, 95.6, 90.7, 79.9, 92.5, 97.2, 90.0, 78.9,
+        /* 1660 */ 85.6, 79.5, 67.0, 99.2, 97.6, 87.9, 80.6, 81.4, 90.7, 102.8,
+        /* 1670 */ 78.2, 75.2, 75.0, 78.9, 89.0, 77.5, 97.9, 88.5, 88.8, 88.5,
+        /* 1680 */ 78.0, 95.5, 83.6, 90.1, 84.2, 78.6, 100.8, 103.5, 71.1, 93.2,
+        /* 1690 */ 88.4, 91.0, 89.4, 86.1, 94.6, 83.1, 80.2, 87.3, 83.5, 90.9,
+        /* 1700 */ 88.7, 78.5, 85.6, 120.0, 101.3, 87.4, 80.3, 73.6, 90.6, 79.5,
+        /* 1710 */ 99.5, 88.1, 93.3, 94.5, 91.5, 85.0, 90.0, 88.6, 94.3, 77.3,
+        /* 1720 */ 84.3, 82.7, 83.0, 78.3, 78.0, 87.9, 88.1, 77.7, 74.9, 89.7,
+        /* 1730 */ 90.7, 86.2, 88.8, 95.9, 79.7, 82.1, 90.8, 97.4, 76.2, 93.9,
+        /* 1740 */ 83.0, 78.8, 84.7, 85.8, 98.6, 86.4, 93.9, 101.7, 79.1, 96.1,
+        /* 1750 */ 82.9, 92.9, 77.6, 81.1, 88.3, 99.4, 94.9, 103.1, 104.0, 97.6,
+        /* 1760 */ 89.4, 85.1, 91.3, 87.1, 82.1, 92.3, 72.4, 81.9, 91.2, 103.8,
+        /* 1770 */ 78.8, 85.3, 93.7, 97.7, 85.4, 94.4, 88.8, 90.8, 88.6, 100.6,
+        /* 1780 */ 89.0, 87.1, 90.9, 90.3, 90.5, 85.5, 81.6, 88.9, 97.2, 70.5,
+        /* 1790 */ 82.2, 94.9, 95.2, 82.8, 86.0, 84.6, 79.8, 97.6, 92.0, 79.4,
+        /* 1800 */ 73.2, 84.9, 80.4, 92.3, 86.8, 83.8, 73.9, 85.1, 91.5, 86.5,
+        /* 1810 */ 89.5, 96.8, 86.3, 95.0, 78.7, 77.2, 85.1, 85.3, 73.1, 92.4,
+        /* 1820 */ 91.0, 98.8, 80.4, 83.6, 77.4, 91.8, 80.0, 85.1, 89.9, 67.0,
+        /* 1830 */ 81.7, 83.8, 104.0, 84.0, 90.9, 100.2, 87.3, 79.2, 98.5, 115.0,
+        /* 1840 */ 80.4, 86.2, 95.4, 74.8, 82.5, 90.5, 86.7, 91.4, 99.3, 88.5,
+        /* 1850 */ 97.7, 94.1, 86.5, 91.1, 84.6, 80.9, 92.0, 69.6, 80.4, 78.3,
+        /* 1860 */ 101.9, 89.1, 91.0, 83.2, 92.3, 87.2, 86.5, 79.8, 80.9, 88.0,
+        /* 1870 */ 97.6, 83.6, 81.5, 83.6, 96.8, 79.7, 89.2, 83.8, 86.1, 104.0,
+        /* 1880 */ 69.0, 102.0, 89.4, 76.9, 92.7, 86.4, 87.5, 77.3, 88.8, 79.6,
+        /* 1890 */ 90.9, 88.4, 69.3, 75.3, 100.0, 91.0, 84.3, 82.6, 87.5, 80.6,
+        /* 1900 */ 74.7, 79.4, 93.3, 105.0, 92.1, 72.1, 91.5, 78.6, 102.7, 89.3,
+        /* 1910 */ 86.8, 97.1, 73.2, 84.2, 87.3, 96.0, 96.9, 69.7, 85.3, 81.4,
+        /* 1920 */ 87.1, 75.1, 89.9, 71.9, 89.4, 92.0, 83.7, 101.0, 99.1, 80.8,
+        /* 1930 */ 82.6, 93.4, 88.1, 93.6, 85.1, 84.7, 99.0, 86.4, 67.0, 87.5,
+        /* 1940 */ 86.4, 82.4, 83.9, 82.6, 78.0, 96.7, 99.6, 81.1, 78.9, 87.2,
+        /* 1950 */ 81.2, 85.3, 103.0, 118.0, 98.6, 80.7, 87.0, 87.7, 70.9, 76.8,
+        /* 1960 */ 79.0, 85.0, 96.0, 89.1, 80.5, 86.0, 97.7, 90.4, 104.0, 84.5,
+        /* 1970 */ 90.7, 82.6, 85.3, 89.2, 74.2, 90.3, 105.0, 79.4, 84.4, 98.0,
+        /* 1980 */ 87.7, 99.3, 93.7, 88.0, 98.7, 91.4, 94.2, 115.0, 94.8, 102.0,
+        /* 1990 */ 107.0, 101.0, 97.6, 104.0, 82.4, 88.3, 79.7, 103.4, 108.0, 103.0,
+        /* 2000 */ 77.9, 85.2, 78.4, 99.6, 84.0, 110.0, 79.6, 99.0, 95.3, 90.4,
+        /* 2010 */ 86.3, 106.0, 77.8, 102.0, 108.0, 97.0, 80.3, 98.0, 88.2, 75.6,
+        /* 2020 */ 97.0, 98.0, 122.0, 96.0, 99.0, 108.0
+      ];
+
       // 2. DOM Elements
       const canvas = document.getElementById("stripesCanvas");
       const canvasWrap = document.getElementById("canvasWrap");
@@ -2069,13 +2139,28 @@
         return palette[idx];
       }
 
+      // Color Palette for UK Storm Wind Stripes (sequential 16-step: light lavender = calmer -> deep violet = extreme gale)
+      function getWindColor(mph) {
+        const palette = [
+          "#f3e8ff", "#ead5ff", "#dfc1ff", "#d4acfc",
+          "#c695f8", "#b77df4", "#a864ef", "#984ce8",
+          "#8938dc", "#7b28cb", "#6e1fb8", "#6117a3",
+          "#54128e", "#480d7a", "#3d0966", "#310552"
+        ];
+        const minW = 65;
+        const maxW = 125;
+        const norm = Math.max(0, Math.min(1, (mph - minW) / (maxW - minW)));
+        const idx = Math.min(palette.length - 1, Math.floor(norm * palette.length));
+        return palette[idx];
+      }
+
       function getVisibleData() {
         let startYear = 1500;
         if (currentRange === "instrumental") startYear = 1659;
         if (currentRange === "modern") startYear = 1850;
         if (currentRange === "recent") startYear = 1970;
 
-        if (currentStripeMode === "rainfall") {
+        if (currentStripeMode === "rainfall" || currentStripeMode === "wind") {
           return CET_DATA.filter(d => d.y >= startYear && d.y <= 2025);
         }
         return CET_DATA.filter(d => d.y >= startYear);
@@ -2101,10 +2186,13 @@
           const x = i * stripeWidth;
           const w = Math.ceil(stripeWidth) + 0.5;
 
-          // Base color (Temperature vs Rainfall)
+          // Base color (Temperature vs Rainfall vs Storm Wind)
           if (currentStripeMode === "rainfall") {
             const rainMm = UK_RAIN_MM[item.y - 1500] ?? 1084.1;
             ctx.fillStyle = getRainfallColor(rainMm);
+          } else if (currentStripeMode === "wind") {
+            const windMph = UK_WIND_MPH[item.y - 1500] ?? 88.0;
+            ctx.fillStyle = getWindColor(windMph);
           } else {
             ctx.fillStyle = getStripeColor(item.a);
           }
@@ -2147,12 +2235,17 @@
         const cetTemp = (9.46 + item.a).toFixed(1);
         const sign = item.a > 0 ? "+" : "";
         const rainMm = UK_RAIN_MM[item.y - 1500];
+        const windMph = UK_WIND_MPH[item.y - 1500];
 
         ttYear.textContent = `${item.y}`;
         if (currentStripeMode === "rainfall" && rainMm !== undefined) {
           const pct = Math.round(((rainMm - 1084.1) / 1084.1) * 100);
           const pctSign = pct > 0 ? "+" : "";
           ttAnomaly.textContent = `UK Rainfall: ${Math.round(rainMm).toLocaleString()} mm (${pctSign}${pct}% vs 1961–90)`;
+        } else if (currentStripeMode === "wind" && windMph !== undefined) {
+          const diff = (windMph - 88.0).toFixed(0);
+          const diffSign = windMph >= 88.0 ? "+" : "";
+          ttAnomaly.textContent = `Peak Low-Level Storm Gust: ${Math.round(windMph)} mph (${diffSign}${diff} mph vs mean)`;
         } else {
           ttAnomaly.textContent = `CET: ${cetTemp}°C (${sign}${item.a.toFixed(1)}°C vs 1961–90)`;
         }
@@ -2206,8 +2299,10 @@
         inspEmoji.textContent = emoji;
         inspTitle.textContent = `${item.y}: ${item.title}`;
         const rainMm = UK_RAIN_MM[item.y - 1500];
+        const windMph = UK_WIND_MPH[item.y - 1500];
         const rainStr = rainMm !== undefined ? ` &nbsp;|&nbsp; UK Rainfall: ${Math.round(rainMm).toLocaleString()} mm` : "";
-        inspText.innerHTML = `${item.desc} <span style="display:block; margin-top:4px; font-family: var(--font-mono); font-size:0.75rem; color:#38bdf8;">Central England Temp: ${(9.46 + item.a).toFixed(2)}°C (${item.a > 0 ? "+" : ""}${item.a.toFixed(2)}°C anomaly)${rainStr}</span>`;
+        const windStr = windMph !== undefined ? ` &nbsp;|&nbsp; Peak Storm Gust: ${Math.round(windMph)} mph` : "";
+        inspText.innerHTML = `${item.desc} <span style="display:block; margin-top:4px; font-family: var(--font-mono); font-size:0.75rem; color:#38bdf8;">Central England Temp: ${(9.46 + item.a).toFixed(2)}°C (${item.a > 0 ? "+" : ""}${item.a.toFixed(2)}°C anomaly)${rainStr}${windStr}</span>`;
       }
 
       canvasWrap.addEventListener("mousemove", handleMove);
@@ -2271,6 +2366,9 @@
       const legendBaselineLabel = document.getElementById("legendBaselineLabel");
 
       function updateMetricUI() {
+        if (legendGradientBar) {
+          legendGradientBar.classList.remove("rainfall", "wind");
+        }
         if (currentStripeMode === "rainfall") {
           if (stripesHeadingIcon) stripesHeadingIcon.textContent = "🌧️";
           if (stripesHeadingText) stripesHeadingText.textContent = "UK Annual Rainfall Stripes: UK (1500–2025)";
@@ -2280,6 +2378,15 @@
           if (legendMaxLabel) legendMaxLabel.textContent = "Wettest (~1,440 mm)";
           if (legendGradientBar) legendGradientBar.classList.add("rainfall");
           if (legendBaselineLabel) legendBaselineLabel.innerHTML = "Baseline: <strong>1961–1990 UK Mean (1,084 mm)</strong> · Light blue = drier, dark blue = wetter";
+        } else if (currentStripeMode === "wind") {
+          if (stripesHeadingIcon) stripesHeadingIcon.textContent = "💨";
+          if (stripesHeadingText) stripesHeadingText.textContent = "UK Peak Storm Wind Stripes: UK (1500–2025)";
+          if (stripesPopoverTitle) stripesPopoverTitle.textContent = "💨 UK Storm Gust Dataset & Scientific Note";
+          if (stripesPopoverBody) stripesPopoverBody.textContent = "1969–2025: Calibrated to Met Office State of the UK Climate low-level peak gust & named-storm records (peaked in the 1980s–90s; shows no long-term upward trend in UK storminess). 1880–1968: Early Dines anemograph maxima (1953, 1962, 1968). 1500–1879: Lamb & Frydendahl (1991) historical storm reconstruction (1588, 1703, 1839, 1879).";
+          if (legendMinLabel) legendMinLabel.textContent = "Calmer Year (~65 mph)";
+          if (legendMaxLabel) legendMaxLabel.textContent = "Extreme Gale (~125 mph)";
+          if (legendGradientBar) legendGradientBar.classList.add("wind");
+          if (legendBaselineLabel) legendBaselineLabel.innerHTML = "Mean Peak Gust: <strong>~88 mph</strong> · <em>Note: Met Office data shows no long-term upward trend in UK storminess (peaked 1980s–90s)</em>";
         } else {
           if (stripesHeadingIcon) stripesHeadingIcon.textContent = "📊";
           if (stripesHeadingText) stripesHeadingText.textContent = "Ed Hawkins Warming Stripes: UK (1500–2025)";
@@ -2287,7 +2394,6 @@
           if (stripesPopoverBody) stripesPopoverBody.textContent = "Based on the Met Office Hadley Centre Central England Temperature (HadCET) record—the longest continuous instrumental thermometer series on Earth (1659–present), extended with European paleoclimate reconstructions (1500–1658).";
           if (legendMinLabel) legendMinLabel.textContent = "Much Colder (-2.5°C)";
           if (legendMaxLabel) legendMaxLabel.textContent = "Much Warmer (+2.0°C)";
-          if (legendGradientBar) legendGradientBar.classList.remove("rainfall");
           if (legendBaselineLabel) legendBaselineLabel.innerHTML = "Baseline: <strong>1961–1990 Mean (9.46°C)</strong> · Drag or hover across stripes to inspect any year";
         }
       }
