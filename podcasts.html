@@ -6,7 +6,8 @@
   <title>Redirecting to Climate Podcasts...</title>
   <link rel="canonical" href="climate_podcasts.html">
   <script>
-    window.location.replace("climate_podcasts.html");
+    const hash = window.location.hash || "";
+    window.location.replace("climate_podcasts.html" + hash);
   </script>
 </head>
 <body style="background:#070d17; color:#94a3b8; font-family:sans-serif; text-align:center; padding-top:20vh;">
