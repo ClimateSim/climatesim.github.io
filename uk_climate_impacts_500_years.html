@@ -2160,7 +2160,12 @@
         if (currentRange === "modern") startYear = 1850;
         if (currentRange === "recent") startYear = 1970;
 
-        if (currentStripeMode === "rainfall" || currentStripeMode === "wind") {
+        if (currentStripeMode === "rainfall") {
+          startYear = Math.max(1766, startYear);
+          return CET_DATA.filter(d => d.y >= startYear && d.y <= 2025);
+        }
+        if (currentStripeMode === "wind") {
+          startYear = Math.max(1969, startYear);
           return CET_DATA.filter(d => d.y >= startYear && d.y <= 2025);
         }
         return CET_DATA.filter(d => d.y >= startYear);
@@ -2220,7 +2225,7 @@
           }
         }
 
-        // Overlay 5-Year Rolling Mean Trend Line for Rainfall & Storm Wind (Instrumental Era Only)
+        // Overlay 5-Year Rolling Mean Trend Line for Rainfall & Storm Wind (Empirical Instrumental Record)
         if (currentStripeMode === "rainfall" || currentStripeMode === "wind") {
           const arr = currentStripeMode === "rainfall" ? UK_RAIN_MM : UK_WIND_MPH;
           const instStartYear = currentStripeMode === "rainfall" ? 1766 : 1969;
@@ -2232,37 +2237,6 @@
           const padBot = 18;
           const plotH = Math.max(40, rect.height - padTop - padBot);
           const valToY = (v) => padTop + plotH * (1 - Math.max(0, Math.min(1, (v - yMinVal) / (yMaxVal - yMinVal))));
-
-          // 0. Vertical boundary line where instrumental record begins (if visible)
-          const instVisIdx = data.findIndex(d => d.y >= instStartYear);
-          if (instVisIdx > 0) {
-            const bx = instVisIdx * stripeWidth;
-            ctx.save();
-            ctx.setLineDash([4, 4]);
-            ctx.strokeStyle = "rgba(255, 255, 255, 0.75)";
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.moveTo(bx, 0);
-            ctx.lineTo(bx, rect.height);
-            ctx.stroke();
-            ctx.restore();
-
-            const boundText = currentStripeMode === "rainfall"
-              ? "1766 Instrumental (HadEWP) ▶"
-              : "1969 Anemometer Record ▶";
-            ctx.font = "700 10px ui-monospace, SFMono-Regular, Menlo, monospace";
-            const bw = ctx.measureText(boundText).width + 12;
-            const badgeX = Math.min(rect.width - bw - 8, bx + 6);
-            ctx.fillStyle = "rgba(9, 14, 23, 0.85)";
-            ctx.strokeStyle = "rgba(255, 255, 255, 0.35)";
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.roundRect(badgeX, rect.height - 26, bw, 18, 4);
-            ctx.fill();
-            ctx.stroke();
-            ctx.fillStyle = "#f8fafc";
-            ctx.fillText(boundText, badgeX + 6, rect.height - 13);
-          }
 
           // 1. Dashed baseline reference line
           const baseY = valToY(baseVal);
@@ -2287,10 +2261,9 @@
           ctx.fillStyle = "rgba(226, 232, 240, 0.9)";
           ctx.fillText(baseLabel, 14, baseY - 7);
 
-          // 2. Compute 5-year centered rolling mean points over the instrumental era only
+          // 2. Compute 5-year centered rolling mean points
           const pts = [];
           for (let i = 0; i < n; i++) {
-            if (data[i].y < instStartYear) continue;
             const yrIdx = data[i].y - 1500;
             const m5 = getRollingMean5(arr, yrIdx, minInstIdx);
             if (m5 !== null) {
@@ -2332,9 +2305,7 @@
           }
 
           // 3. Top-right legend pill for 5-year rolling mean
-          const trendLabel = currentStripeMode === "rainfall"
-            ? "━━ 5-Yr Mean (1766–2025)"
-            : "━━ 5-Yr Mean (1969–2025)";
+          const trendLabel = "━━ 5-Yr Rolling Mean";
           ctx.font = "700 10.5px system-ui, -apple-system, sans-serif";
           const tW = ctx.measureText(trendLabel).width + 14;
           ctx.fillStyle = "rgba(9, 14, 23, 0.82)";
@@ -2382,23 +2353,15 @@
         if (currentStripeMode === "rainfall" && rainMm !== undefined) {
           const pct = Math.round(((rainMm - 1084.1) / 1084.1) * 100);
           const pctSign = pct > 0 ? "+" : "";
-          if (item.y >= 1766) {
-            const r5 = getRollingMean5(UK_RAIN_MM, yrIdx, 1766 - 1500);
-            const r5Str = r5 !== null ? ` · 5-yr mean: ${Math.round(r5).toLocaleString()} mm` : "";
-            ttAnomaly.textContent = `UK Rainfall: ${Math.round(rainMm).toLocaleString()} mm (${pctSign}${pct}% vs 1961–90)${r5Str}`;
-          } else {
-            ttAnomaly.textContent = `UK Rainfall (Pre-1766 Proxy): ${Math.round(rainMm).toLocaleString()} mm (${pctSign}${pct}%)`;
-          }
+          const r5 = getRollingMean5(UK_RAIN_MM, yrIdx, 1766 - 1500);
+          const r5Str = r5 !== null ? ` · 5-yr mean: ${Math.round(r5).toLocaleString()} mm` : "";
+          ttAnomaly.textContent = `UK Rainfall: ${Math.round(rainMm).toLocaleString()} mm (${pctSign}${pct}% vs 1961–90)${r5Str}`;
         } else if (currentStripeMode === "wind" && windMph !== undefined) {
           const diff = (windMph - 88.0).toFixed(0);
           const diffSign = windMph >= 88.0 ? "+" : "";
-          if (item.y >= 1969) {
-            const w5 = getRollingMean5(UK_WIND_MPH, yrIdx, 1969 - 1500);
-            const w5Str = w5 !== null ? ` · 5-yr mean: ${Math.round(w5)} mph` : "";
-            ttAnomaly.textContent = `Peak Low-Level Storm Gust: ${Math.round(windMph)} mph (${diffSign}${diff} mph vs mean)${w5Str}`;
-          } else {
-            ttAnomaly.textContent = `Historical Storm Gust (Pre-1969 Est.): ${Math.round(windMph)} mph`;
-          }
+          const w5 = getRollingMean5(UK_WIND_MPH, yrIdx, 1969 - 1500);
+          const w5Str = w5 !== null ? ` · 5-yr mean: ${Math.round(w5)} mph` : "";
+          ttAnomaly.textContent = `Peak Low-Level Storm Gust: ${Math.round(windMph)} mph (${diffSign}${diff} mph vs mean)${w5Str}`;
         } else {
           ttAnomaly.textContent = `CET: ${cetTemp}°C (${sign}${item.a.toFixed(1)}°C vs 1961–90)`;
         }
@@ -2519,27 +2482,48 @@
       const legendBaselineLabel = document.getElementById("legendBaselineLabel");
 
       function updateMetricUI() {
+        const btnAll = document.querySelector('.btn-timeframe[data-range="500"]');
+        const btnInst = document.querySelector('.btn-timeframe[data-range="instrumental"]');
+        const btnMod = document.querySelector('.btn-timeframe[data-range="modern"]');
+        const btnRec = document.querySelector('.btn-timeframe[data-range="recent"]');
+
         if (legendGradientBar) {
           legendGradientBar.classList.remove("rainfall", "wind");
         }
         if (currentStripeMode === "rainfall") {
           if (stripesHeadingIcon) stripesHeadingIcon.textContent = "🌧️";
-          if (stripesHeadingText) stripesHeadingText.textContent = "UK Annual Rainfall Stripes: UK (1500–2025)";
-          if (stripesPopoverTitle) stripesPopoverTitle.textContent = "🌧️ UK Rainfall Dataset & Reconstruction";
-          if (stripesPopoverBody) stripesPopoverBody.textContent = "1836–2025: Official Met Office HadUK-Grid UK National Annual Rainfall (mm). 1766–1835: Met Office HadEWP England & Wales Precipitation scaled by the UK/EWP ratio (1.1582). 1500–1765: Documentary & proxy hydroclimate reconstruction anchored to historical UK droughts and floods.";
+          if (stripesHeadingText) stripesHeadingText.textContent = "UK Annual Rainfall Stripes: UK (1766–2025)";
+          if (stripesPopoverTitle) stripesPopoverTitle.textContent = "🌧️ UK Instrumental Rainfall Record (1766–2025)";
+          if (stripesPopoverBody) stripesPopoverBody.textContent = "1836–2025: Official Met Office HadUK-Grid UK National Annual Rainfall (mm). 1766–1835: Official Met Office HadEWP (England & Wales Precipitation, the world's longest instrumental rainfall series) scaled by the empirical UK/EWP ratio (1.1582).";
           if (legendMinLabel) legendMinLabel.textContent = "Driest (~780 mm)";
           if (legendMaxLabel) legendMaxLabel.textContent = "Wettest (~1,440 mm)";
           if (legendGradientBar) legendGradientBar.classList.add("rainfall");
           if (legendBaselineLabel) legendBaselineLabel.innerHTML = "Baseline: <strong>1961–1990 UK Mean (1,084 mm)</strong> · Light blue = drier, dark blue = wetter";
+          if (btnAll) btnAll.textContent = "Full Instrumental (1766–2025)";
+          if (btnInst) btnInst.style.display = "none";
+          if (btnMod) btnMod.style.display = "";
+          if (btnRec) btnRec.style.display = "";
+          if (currentRange === "instrumental") {
+            currentRange = "500";
+            document.querySelectorAll(".btn-timeframe").forEach(b => b.classList.toggle("active", b.dataset.range === "500"));
+          }
         } else if (currentStripeMode === "wind") {
           if (stripesHeadingIcon) stripesHeadingIcon.textContent = "💨";
-          if (stripesHeadingText) stripesHeadingText.textContent = "UK Peak Storm Wind Stripes: UK (1500–2025)";
-          if (stripesPopoverTitle) stripesPopoverTitle.textContent = "💨 UK Storm Gust Dataset & Scientific Note";
-          if (stripesPopoverBody) stripesPopoverBody.textContent = "1969–2025: Calibrated to Met Office State of the UK Climate low-level peak gust & named-storm records (peaked in the 1980s–90s; shows no long-term upward trend in UK storminess). 1880–1968: Early Dines anemograph maxima (1953, 1962, 1968). 1500–1879: Lamb & Frydendahl (1991) historical storm reconstruction (1588, 1703, 1839, 1879).";
+          if (stripesHeadingText) stripesHeadingText.textContent = "UK Peak Storm Wind Stripes: UK (1969–2025)";
+          if (stripesPopoverTitle) stripesPopoverTitle.textContent = "💨 UK Anemometer Storm Gust Record (1969–2025)";
+          if (stripesPopoverBody) stripesPopoverBody.textContent = "Calibrated to the Met Office State of the UK Climate standardized low-level peak wind gust & named-storm record (1969–2025), highlighting that UK storminess peaked in the 1980s–90s and shows no long-term upward trend.";
           if (legendMinLabel) legendMinLabel.textContent = "Calmer Year (~65 mph)";
           if (legendMaxLabel) legendMaxLabel.textContent = "Extreme Gale (~125 mph)";
           if (legendGradientBar) legendGradientBar.classList.add("wind");
           if (legendBaselineLabel) legendBaselineLabel.innerHTML = "Mean Peak Gust: <strong>~88 mph</strong> · <em>Note: Met Office data shows no long-term upward trend in UK storminess (peaked 1980s–90s)</em>";
+          if (btnAll) btnAll.textContent = "Full Anemometer Era (1969–2025)";
+          if (btnInst) btnInst.style.display = "none";
+          if (btnMod) btnMod.style.display = "none";
+          if (btnRec) btnRec.style.display = "";
+          if (currentRange === "instrumental" || currentRange === "modern") {
+            currentRange = "500";
+            document.querySelectorAll(".btn-timeframe").forEach(b => b.classList.toggle("active", b.dataset.range === "500"));
+          }
         } else {
           if (stripesHeadingIcon) stripesHeadingIcon.textContent = "📊";
           if (stripesHeadingText) stripesHeadingText.textContent = "Ed Hawkins Warming Stripes: UK (1500–2025)";
@@ -2548,6 +2532,10 @@
           if (legendMinLabel) legendMinLabel.textContent = "Much Colder (-2.5°C)";
           if (legendMaxLabel) legendMaxLabel.textContent = "Much Warmer (+2.0°C)";
           if (legendBaselineLabel) legendBaselineLabel.innerHTML = "Baseline: <strong>1961–1990 Mean (9.46°C)</strong> · Drag or hover across stripes to inspect any year";
+          if (btnAll) btnAll.textContent = "Full 500 Years (1500–2025)";
+          if (btnInst) btnInst.style.display = "";
+          if (btnMod) btnMod.style.display = "";
+          if (btnRec) btnRec.style.display = "";
         }
       }
 
