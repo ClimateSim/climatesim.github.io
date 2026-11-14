@@ -244,6 +244,30 @@
     }
 
     /* VIEW CONTROLS & FILTER BUTTONS */
+    .stripes-controls-grid {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      gap: 8px 12px;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    }
+    .stripes-control-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #94a3b8;
+      white-space: nowrap;
+    }
+    @media (max-width: 640px) {
+      .stripes-controls-grid {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+      .stripes-control-label {
+        margin-top: 4px;
+      }
+    }
     .controls-row {
       display: flex;
       gap: 6px;
@@ -869,34 +893,34 @@
             <div id="stripesPopoverBody">Based on the Met Office Hadley Centre Central England Temperature (HadCET) record—the longest continuous instrumental thermometer series on Earth (1659–present), extended with European paleoclimate reconstructions (1500–1658).</div>
           </div>
         </div>
-
-        <!-- METRIC SWITCH & TIMEFRAME SELECTOR -->
-        <div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
-          <div class="controls-row" role="group" aria-label="Climate Metric Switch">
-            <span style="font-size: 0.72rem; font-weight: 700; color: #94a3b8; margin-right: 2px;">Metric:</span>
-            <button type="button" class="btn-stripe-mode active" data-mode="temperature">🌡️ Temperature Stripes</button>
-            <button type="button" class="btn-stripe-mode" data-mode="rainfall">🌧️ UK Rainfall Stripes</button>
-            <button type="button" class="btn-stripe-mode" data-mode="wind">💨 Storm Wind Stripes</button>
-          </div>
-          <div class="controls-row">
-            <span style="font-size: 0.72rem; font-weight: 700; color: #94a3b8; margin-right: 2px;">Timeframe:</span>
-            <button type="button" class="btn-timeframe active" data-range="500">Full 500 Years (1500–2025)</button>
-            <button type="button" class="btn-timeframe" data-range="instrumental">Instrumental Era (1659–2025)</button>
-            <button type="button" class="btn-timeframe" data-range="modern">Industrial Era (1850–2025)</button>
-            <button type="button" class="btn-timeframe" data-range="recent">Satellite &amp; High-Warming (1970–2025)</button>
-          </div>
-        </div>
       </div>
 
-      <!-- FILTER BY IMPACT TYPE -->
-      <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed rgba(255, 255, 255, 0.1);">
-        <span style="font-size: 0.72rem; font-weight: 700; color: #fbbf24; margin-right: 2px;">Highlight Impact Events:</span>
-        <button type="button" class="btn-impact-filter active" data-cat="all">All Climate Events</button>
-        <button type="button" class="btn-impact-filter" data-cat="heat">🔥 Wildfires &amp; Heatwaves</button>
-        <button type="button" class="btn-impact-filter" data-cat="flood">🌊 Floods &amp; Storm Surges</button>
-        <button type="button" class="btn-impact-filter" data-cat="drought">☀️ Droughts &amp; Dry Spells</button>
-        <button type="button" class="btn-impact-filter" data-cat="harvest">🌾 Harvest Collapses &amp; Famines</button>
-        <button type="button" class="btn-impact-filter" data-cat="frost">❄️ Frost Fairs &amp; Big Freezes</button>
+      <!-- METRIC SWITCH, TIMEFRAME SELECTOR & IMPACT FILTER (ALIGNED GRID) -->
+      <div class="stripes-controls-grid">
+        <span class="stripes-control-label">Metric:</span>
+        <div class="controls-row" role="group" aria-label="Climate Metric Switch">
+          <button type="button" class="btn-stripe-mode active" data-mode="temperature">🌡️ Temperature Stripes</button>
+          <button type="button" class="btn-stripe-mode" data-mode="rainfall">🌧️ UK Rainfall Stripes</button>
+          <button type="button" class="btn-stripe-mode" data-mode="wind">💨 Storm Wind Stripes</button>
+        </div>
+
+        <span class="stripes-control-label">Timeframe:</span>
+        <div class="controls-row" role="group" aria-label="Timeframe Selector">
+          <button type="button" class="btn-timeframe active" data-range="500">Full 500 Years (1500–2025)</button>
+          <button type="button" class="btn-timeframe" data-range="instrumental">Instrumental Era (1659–2025)</button>
+          <button type="button" class="btn-timeframe" data-range="modern">Industrial Era (1850–2025)</button>
+          <button type="button" class="btn-timeframe" data-range="recent">Satellite &amp; High-Warming (1970–2025)</button>
+        </div>
+
+        <span class="stripes-control-label" style="color: #fbbf24;">Highlight Impact Events:</span>
+        <div class="controls-row" role="group" aria-label="Filter by Impact Type">
+          <button type="button" class="btn-impact-filter active" data-cat="all">All Climate Events</button>
+          <button type="button" class="btn-impact-filter" data-cat="heat">🔥 Wildfires &amp; Heatwaves</button>
+          <button type="button" class="btn-impact-filter" data-cat="flood">🌊 Floods &amp; Storm Surges</button>
+          <button type="button" class="btn-impact-filter" data-cat="drought">☀️ Droughts &amp; Dry Spells</button>
+          <button type="button" class="btn-impact-filter" data-cat="harvest">🌾 Harvest Collapses &amp; Famines</button>
+          <button type="button" class="btn-impact-filter" data-cat="frost">❄️ Frost Fairs &amp; Big Freezes</button>
+        </div>
       </div>
 
       <!-- KEYBOARD HINT ROW -->
