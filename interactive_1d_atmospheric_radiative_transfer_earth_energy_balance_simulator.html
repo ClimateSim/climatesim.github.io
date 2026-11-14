@@ -3329,7 +3329,7 @@
       <!-- Top Real-Time Metrics Strip -->
       <div class="top-stats-strip" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 0;">
         <div class="stat-card">
-          <div class="stat-header"><span>Clean Useful Energy Generated</span><span class="badge badge-cyan" id="solBadgeGoal">Goal: 75,000 TWh</span></div>
+          <div class="stat-header"><span>Clean Useful Energy Generated</span><span class="badge badge-cyan" id="solBadgeGoal" onclick="openWhy75kModal()" style="cursor: pointer;" title="Click to explain why the goal is 75,000 TWh">Goal: 75,000 TWh ⓘ</span></div>
           <div class="stat-value" id="solStatGenVal" style="color: var(--cyan);">11,650 <span style="font-size: 0.8rem; color: var(--text-muted);">TWh/yr</span></div>
           <div class="stat-sub" id="solStatGenSub">15.5% of fossil energy replaced (2026 fleet)</div>
         </div>
@@ -3359,11 +3359,11 @@
             <div class="card-title" style="display: flex; align-items: center; gap: 8px;">
               <span>⚡</span> Clean Energy Generation Mix
             </div>
-            <span class="badge badge-cyan">Useful TWh Goal: 75,000</span>
+            <span class="badge badge-cyan" onclick="openWhy75kModal()" style="cursor: pointer;" title="Click to explain why the goal is 75,000 TWh">Useful TWh Goal: 75,000 ⓘ</span>
           </div>
 
           <p style="font-size: 0.77rem; color: var(--text-muted); line-height: 1.4; margin-top: 2px; margin-bottom: 12px;">
-            Due to the <strong>Electrification Efficiency Dividend</strong> (electric motors & heat pumps are 3×–4× more efficient than combustion), replacing 135,000 TWh of fossil primary energy only requires <strong>~75,000 TWh/yr</strong> of clean electricity and clean fuels.
+            Due to the <strong>Electrification Efficiency Dividend</strong> (electric motors &amp; heat pumps are 3×–4× more efficient than combustion), replacing 135,000 TWh of fossil primary energy only requires <strong>~75,000 TWh/yr</strong> of clean electricity and clean fuels. <a href="javascript:void(0)" onclick="openWhy75kModal()" style="color: var(--cyan); text-decoration: underline; font-weight: 700; margin-left: 4px;">Why 75,000 TWh? [Explain ⓘ]</a>
           </p>
 
           <!-- Presets Bar -->
@@ -4188,6 +4188,118 @@
       <div style="padding: 12px 20px; background: #080e1a; border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: space-between; align-items: center; font-size: 0.76rem; color: #94a3b8;">
         <div>Sources: <strong>Global Carbon Project (GCP)</strong>, <strong>EDGAR</strong>, CDIAC &amp; <strong>Our World in Data (OWID)</strong></div>
         <button type="button" class="btn btn-secondary" onclick="closeEmissionsExplanationModal()" style="font-size: 0.78rem; padding: 5px 14px;">Close Window</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: WHY IS THE CLEAN ENERGY GOAL 75,000 TWh? (ELECTRIFICATION EFFICIENCY DIVIDEND) -->
+  <div class="modal-overlay" id="modalWhy75k" style="display: none; align-items: center; justify-content: center; z-index: 10000; position: fixed; inset: 0; background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(8px);" onclick="if(event.target === this) closeWhy75kModal();">
+    <div class="rest-world-modal-card" style="max-width: 820px; width: 95%;">
+      <div class="modal-header" style="padding: 16px 20px; background: #080e1a; border-bottom: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 1.15rem; font-weight: 700; color: #fff;">
+            <span>⚡</span> Why is the Global Clean Energy Goal 75,000 TWh/yr?
+          </div>
+          <div style="font-size: 0.76rem; color: #94a3b8; margin-top: 2px;">
+            The Electrification Efficiency Dividend: Replacing 135,000 TWh of Fossil Primary Energy with Useful Clean Power
+          </div>
+        </div>
+        <button type="button" class="btn-modal-close" onclick="closeWhy75kModal()" aria-label="Close modal" style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; width: 32px; height: 32px; border-radius: 6px; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center;">&times;</button>
+      </div>
+
+      <div style="padding: 20px 22px; overflow-y: auto; max-height: 68vh; display: flex; flex-direction: column; gap: 14px; font-size: 0.84rem; line-height: 1.6; color: #cbd5e1;">
+        
+        <!-- The Core Paradox -->
+        <div style="background: rgba(0, 229, 255, 0.05); border: 1px solid rgba(0, 229, 255, 0.25); border-left: 3px solid var(--cyan); border-radius: 6px; padding: 12px 14px;">
+          <strong style="color: var(--cyan); font-size: 0.92rem; display: block; margin-bottom: 4px;">
+            The Core Question:
+          </strong>
+          Human civilization currently burns approximately <strong>135,000 to 140,000 TWh of fossil fuels</strong> (coal, oil, gas) each year. So why does replacing that fossil energy system only require generating <strong>~75,000 TWh/yr</strong> of clean electricity and clean fuels?
+        </div>
+
+        <!-- 2-Box Energy Flow Comparison -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; margin: 4px 0;">
+          <div style="background: rgba(244, 63, 94, 0.06); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: 8px; padding: 12px 14px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+              <strong style="color: #f43f5e; font-size: 0.9rem;">❌ Today's Fossil System</strong>
+              <span class="badge" style="background: rgba(244, 63, 94, 0.15); color: #fda4af;">~135,000 TWh Primary Energy</span>
+            </div>
+            <div style="font-size: 0.78rem; line-height: 1.5; color: #cbd5e1;">
+              • <strong>>60,000 TWh is pure waste heat:</strong> Due to thermodynamic Carnot limits, over 45% of all fossil fuel energy burned is discarded out of exhaust pipes, radiators, and power plant cooling towers.<br>
+              • Emits <strong>~41 Gt CO₂/yr</strong> directly into the atmosphere, causing global thermal imbalance.
+            </div>
+          </div>
+
+          <div style="background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 12px 14px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+              <strong style="color: #34d399; font-size: 0.9rem;">✅ Fully Electrified System</strong>
+              <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">~75,000 TWh Useful Clean Power</span>
+            </div>
+            <div style="font-size: 0.78rem; line-height: 1.5; color: #cbd5e1;">
+              • <strong>Direct, ultra-efficient electron delivery:</strong> Electric motors and heat pumps deliver the <em>exact same useful work, heating, mobility, and industrial products</em> with a fraction of the primary energy input.<br>
+              • Emits <strong>0 Gt CO₂/yr</strong>, halting the accumulation of planetary heat.
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Physical Mechanisms -->
+        <div>
+          <strong style="color: #fff; font-size: 0.88rem; display: block; margin-bottom: 8px;">
+            Where the 60,000 TWh Efficiency Dividend Comes From:
+          </strong>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 6px; padding: 10px 12px;">
+              <div style="color: var(--cyan); font-weight: 700; margin-bottom: 2px;">
+                🚗 1. Road Transport: 3× to 4× Less Energy Needed
+              </div>
+              <div style="font-size: 0.78rem; color: #cbd5e1; line-height: 1.45;">
+                Internal combustion engine (ICE) cars and diesel trucks only convert <strong>20% to 25%</strong> of fuel energy into wheel motion; ~75% is rejected as heat through radiators and exhaust. Battery Electric Vehicles (BEVs) convert <strong>85% to 90%</strong> of electrical energy directly into motion. Electrifying all global road transport reduces energy demand from ~32,000 TWh of oil down to ~8,500 TWh of electricity.
+              </div>
+            </div>
+
+            <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 6px; padding: 10px 12px;">
+              <div style="color: var(--emerald); font-weight: 700; margin-bottom: 2px;">
+                🏠 2. Building Heating: Heat Pumps Deliver 300% to 400% Efficiency
+              </div>
+              <div style="font-size: 0.78rem; color: #cbd5e1; line-height: 1.45;">
+                Gas and oil boilers burn fuel at 80%–90% thermal efficiency (1 kWh gas = 0.85 kWh heat). Electric heat pumps do not create heat; they pump existing ambient heat from the outside air or ground with a Coefficient of Performance (COP) of <strong>3.0 to 4.0</strong>. Thus, 1 kWh of electricity delivers <strong>3 to 4 kWh of heat</strong>, cutting space-heating energy demand by ~65% to 75%.
+              </div>
+            </div>
+
+            <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 6px; padding: 10px 12px;">
+              <div style="color: var(--amber); font-weight: 700; margin-bottom: 2px;">
+                ⚡ 3. Electricity Generation: Zero Thermal Carnot Losses
+              </div>
+              <div style="font-size: 0.78rem; color: #cbd5e1; line-height: 1.45;">
+                Coal and gas power plants burn fuel to boil water to spin a steam turbine, wasting <strong>55% to 65% of chemical energy</strong> into cooling towers and rivers. Solar PV, wind turbines, and hydro generators convert sunlight, wind kinetics, and gravitational water head directly into electricity without thermal Carnot smokestack waste.
+              </div>
+            </div>
+
+            <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 6px; padding: 10px 12px;">
+              <div style="color: #c084fc; font-weight: 700; margin-bottom: 2px;">
+                🏭 4. Industry, Shipping &amp; Aviation Feedstocks
+              </div>
+              <div style="font-size: 0.78rem; color: #cbd5e1; line-height: 1.45;">
+                Direct electrification via Electric Arc Furnaces (EAF) and industrial heat pumps, combined with green hydrogen (H₂-DRI) for steel and SAF e-kerosene for long-haul aviation, replaces fossil combustion with high-efficiency electrochemical pathways.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Authoritative Sources -->
+        <div style="border-top: 1px dashed rgba(255, 255, 255, 0.1); padding-top: 10px; font-size: 0.78rem; color: #94a3b8; line-height: 1.5;">
+          <strong>Consensus Across Major Energy Transition Models:</strong><br>
+          • <strong>International Energy Agency (IEA):</strong> The <em>Net Zero by 2050 Roadmap (2021, 2023)</em> projects global total final energy consumption falls by ~20% even as the global economy doubles, requiring ~75,000–80,000 TWh of clean power.<br>
+          • <strong>Saul Griffith &amp; Rewiring America (<em>Electrify</em>, MIT Press):</strong> Rigorous thermodynamic accounting demonstrates that full electrification eliminates ~50% of raw primary energy needs.<br>
+          • <strong>Stanford University (Prof. Mark Z. Jacobson et al.):</strong> Global 100% renewable energy roadmap shows full electrification reduces worldwide end-use power demand by <strong>~56%</strong> across 145 countries.
+        </div>
+
+      </div>
+
+      <div style="padding: 12px 20px; background: #080e1a; border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: space-between; align-items: center; font-size: 0.76rem; color: #94a3b8; flex-wrap: wrap; gap: 8px;">
+        <div>Benchmark: <strong>75,000 TWh/yr Useful Clean Generation</strong> (Goal replaces 41 Gt CO₂/yr)</div>
+        <button type="button" class="btn btn-secondary" onclick="closeWhy75kModal()" style="font-size: 0.78rem; padding: 5px 14px;">Got It / Close</button>
       </div>
     </div>
   </div>
@@ -5982,6 +6094,9 @@
           </div>
           <p>
             <strong>The Bottom Line:</strong> Because electrified devices waste far less energy, fully replacing 135,000 TWh of fossil primary energy requires only <strong>~70,000 to ~80,000 TWh/yr of clean useful electricity</strong> (we adopt <strong>75,000 TWh/yr</strong> as the central planetary benchmark).
+            <button type="button" class="btn btn-secondary" onclick="openWhy75kModal()" style="font-size: 0.74rem; padding: 3px 10px; margin-left: 8px; color: var(--cyan); border-color: rgba(0, 229, 255, 0.4); display: inline-flex; align-items: center; gap: 4px; vertical-align: middle;">
+              ⚡ Open 75,000 TWh Explainer Popup ⓘ
+            </button>
           </p>
 
           <h4>2. Clean Generation Technologies, Costs & Capacities</h4>
@@ -14018,8 +14133,22 @@
           hideRestOfWorldPopover(true);
           closeRestOfWorldModal();
           closeEmissionsExplanationModal();
+          closeWhy75kModal();
         }
       });
+
+      function openWhy75kModal() {
+        const modal = document.getElementById("modalWhy75k");
+        if (modal) modal.style.display = "flex";
+      }
+
+      function closeWhy75kModal() {
+        const modal = document.getElementById("modalWhy75k");
+        if (modal) modal.style.display = "none";
+      }
+
+      window.openWhy75kModal = openWhy75kModal;
+      window.closeWhy75kModal = closeWhy75kModal;
 
       // =====================================================================
       // EMISSIONS METRIC EXPLANATION MODAL (ALL THREE SCOPES)
