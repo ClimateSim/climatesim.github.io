@@ -2219,6 +2219,110 @@
             ctx.strokeRect(x, 0, w, rect.height);
           }
         }
+
+        // Overlay 5-Year Rolling Mean Trend Line for Rainfall & Storm Wind
+        if (currentStripeMode === "rainfall" || currentStripeMode === "wind") {
+          const arr = currentStripeMode === "rainfall" ? UK_RAIN_MM : UK_WIND_MPH;
+          const yMinVal = currentStripeMode === "rainfall" ? 840 : 74;
+          const yMaxVal = currentStripeMode === "rainfall" ? 1300 : 110;
+          const baseVal = currentStripeMode === "rainfall" ? 1084.1 : 88.0;
+          const padTop = 22;
+          const padBot = 18;
+          const plotH = Math.max(40, rect.height - padTop - padBot);
+          const valToY = (v) => padTop + plotH * (1 - Math.max(0, Math.min(1, (v - yMinVal) / (yMaxVal - yMinVal))));
+
+          // 1. Dashed baseline reference line
+          const baseY = valToY(baseVal);
+          ctx.save();
+          ctx.setLineDash([5, 5]);
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.45)";
+          ctx.lineWidth = 1.25;
+          ctx.beginPath();
+          ctx.moveTo(0, baseY);
+          ctx.lineTo(rect.width, baseY);
+          ctx.stroke();
+          ctx.restore();
+
+          // Baseline label pill on left
+          const baseLabel = currentStripeMode === "rainfall" ? "1961–90 Mean: 1,084 mm" : "Mean Gust: ~88 mph";
+          ctx.font = "700 10px ui-monospace, SFMono-Regular, Menlo, monospace";
+          const bW = ctx.measureText(baseLabel).width + 12;
+          ctx.fillStyle = "rgba(9, 14, 23, 0.78)";
+          ctx.beginPath();
+          ctx.roundRect(8, baseY - 19, bW, 16, 4);
+          ctx.fill();
+          ctx.fillStyle = "rgba(226, 232, 240, 0.9)";
+          ctx.fillText(baseLabel, 14, baseY - 7);
+
+          // 2. Compute 5-year centered rolling mean points across visible range
+          const pts = [];
+          for (let i = 0; i < n; i++) {
+            const yrIdx = data[i].y - 1500;
+            const m5 = getRollingMean5(arr, yrIdx);
+            if (m5 !== null) {
+              pts.push({ x: (i + 0.5) * stripeWidth, y: valToY(m5), i: i });
+            }
+          }
+
+          if (pts.length > 1) {
+            // Outer dark halo for contrast over both light and dark stripes
+            ctx.save();
+            ctx.lineJoin = "round";
+            ctx.lineCap = "round";
+            ctx.beginPath();
+            ctx.moveTo(pts[0].x, pts[0].y);
+            for (let k = 1; k < pts.length; k++) ctx.lineTo(pts[k].x, pts[k].y);
+            ctx.strokeStyle = "rgba(9, 14, 23, 0.85)";
+            ctx.lineWidth = 5;
+            ctx.stroke();
+
+            // Inner warm amber-gold trend stroke
+            ctx.strokeStyle = "#fbbf24";
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+            ctx.restore();
+
+            // Active hover point dot on the 5-year mean line
+            if (activeHoverIndex !== null) {
+              const hp = pts.find(p => p.i === activeHoverIndex);
+              if (hp) {
+                ctx.beginPath();
+                ctx.arc(hp.x, hp.y, 5, 0, Math.PI * 2);
+                ctx.fillStyle = "#fbbf24";
+                ctx.fill();
+                ctx.strokeStyle = "#090e17";
+                ctx.lineWidth = 2;
+                ctx.stroke();
+              }
+            }
+          }
+
+          // 3. Top-right legend pill for 5-year rolling mean
+          const trendLabel = "━━ 5-Yr Rolling Mean";
+          ctx.font = "700 10.5px system-ui, -apple-system, sans-serif";
+          const tW = ctx.measureText(trendLabel).width + 14;
+          ctx.fillStyle = "rgba(9, 14, 23, 0.82)";
+          ctx.strokeStyle = "rgba(251, 191, 36, 0.55)";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.roundRect(rect.width - tW - 10, 10, tW, 20, 5);
+          ctx.fill();
+          ctx.stroke();
+          ctx.fillStyle = "#fbbf24";
+          ctx.fillText(trendLabel, rect.width - tW - 3, 24);
+        }
+      }
+
+      function getRollingMean5(arr, idx) {
+        if (idx < 0 || idx >= arr.length) return null;
+        let sum = 0, count = 0;
+        for (let k = Math.max(0, idx - 2); k <= Math.min(arr.length - 1, idx + 2); k++) {
+          if (arr[k] !== undefined) {
+            sum += arr[k];
+            count++;
+          }
+        }
+        return count > 0 ? sum / count : null;
       }
 
       // Select Index with Tooltip & Inspector sync (supports mouse, touch & cursor keys)
@@ -2234,18 +2338,23 @@
         const item = data[idx];
         const cetTemp = (9.46 + item.a).toFixed(1);
         const sign = item.a > 0 ? "+" : "";
-        const rainMm = UK_RAIN_MM[item.y - 1500];
-        const windMph = UK_WIND_MPH[item.y - 1500];
+        const yrIdx = item.y - 1500;
+        const rainMm = UK_RAIN_MM[yrIdx];
+        const windMph = UK_WIND_MPH[yrIdx];
 
         ttYear.textContent = `${item.y}`;
         if (currentStripeMode === "rainfall" && rainMm !== undefined) {
           const pct = Math.round(((rainMm - 1084.1) / 1084.1) * 100);
           const pctSign = pct > 0 ? "+" : "";
-          ttAnomaly.textContent = `UK Rainfall: ${Math.round(rainMm).toLocaleString()} mm (${pctSign}${pct}% vs 1961–90)`;
+          const r5 = getRollingMean5(UK_RAIN_MM, yrIdx);
+          const r5Str = r5 !== null ? ` · 5-yr mean: ${Math.round(r5).toLocaleString()} mm` : "";
+          ttAnomaly.textContent = `UK Rainfall: ${Math.round(rainMm).toLocaleString()} mm (${pctSign}${pct}% vs 1961–90)${r5Str}`;
         } else if (currentStripeMode === "wind" && windMph !== undefined) {
           const diff = (windMph - 88.0).toFixed(0);
           const diffSign = windMph >= 88.0 ? "+" : "";
-          ttAnomaly.textContent = `Peak Low-Level Storm Gust: ${Math.round(windMph)} mph (${diffSign}${diff} mph vs mean)`;
+          const w5 = getRollingMean5(UK_WIND_MPH, yrIdx);
+          const w5Str = w5 !== null ? ` · 5-yr mean: ${Math.round(w5)} mph` : "";
+          ttAnomaly.textContent = `Peak Low-Level Storm Gust: ${Math.round(windMph)} mph (${diffSign}${diff} mph vs mean)${w5Str}`;
         } else {
           ttAnomaly.textContent = `CET: ${cetTemp}°C (${sign}${item.a.toFixed(1)}°C vs 1961–90)`;
         }
