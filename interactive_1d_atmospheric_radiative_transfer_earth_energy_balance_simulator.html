@@ -3580,24 +3580,15 @@
               On 30 September 2024, Britain permanently closed its last coal-fired generator (Ratcliffe-on-Soar), becoming the first G7 nation to eliminate coal electricity. On windy days, domestic renewables and clean power now routinely supply over 70% of British electricity.
             </div>
             <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 4px; font-size: 0.78rem;">
-              <span style="color: #94a3b8;">Track real-time generation in your browser:</span>
+              <span style="color: #94a3b8;">Track real-time generation &amp; demand in your browser:</span>
               <a href="https://grid.iamkate.com/" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; font-weight: 700; text-decoration: underline;">📊 National Grid Live (iamkate) ↗</a>
               <span>·</span>
               <a href="https://www.gridwatch.templar.co.uk/" target="_blank" rel="noopener noreferrer" style="color: #fbbf24; font-weight: 700; text-decoration: underline;">⚡ G.B. Gridwatch (Templar) ↗</a>
               <span>·</span>
+              <a href="https://grid-demand.uk/" target="_blank" rel="noopener noreferrer" style="color: #a78bfa; font-weight: 700; text-decoration: underline;">📈 GB Grid Demand (grid-demand.uk) ↗</a>
+              <span>·</span>
               <a href="https://renewables-map.robinhawkes.com/#5/55/-3.2" target="_blank" rel="noopener noreferrer" style="color: #34d399; font-weight: 700; text-decoration: underline;">🗺️ UK Renewables Map (Robin Hawkes) ↗</a>
             </div>
-          </div>
-
-          <!-- Bottom Navigation Bar -->
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 8px;">
-            
-<div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <button class="btn btn-secondary" id="btnBackToSimFromSolutions" style="font-size: 0.78rem; padding: 6px 14px;">◀ Back to Simulator</button>
-              <button class="btn btn-secondary" id="btnJumpToSourcesFromSolutions" style="font-size: 0.78rem; padding: 6px 14px;">🏭 Review Greenhouse Gas Sources</button>
-              <button class="btn btn-secondary" id="btnJumpToDunkelFromSolutions" style="font-size: 0.78rem; padding: 6px 14px; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);">🇬🇧 UK Dünkelflaute &amp; Storage &rarr;</button>
-            </div>
-            <button class="btn btn-modal" id="btnOpenGuideFromSolutions" style="font-size: 0.78rem; padding: 6px 14px;">📖 Open Solutions & Storage Guide →</button>
           </div>
 
         </div>
@@ -6094,10 +6085,12 @@
               On 30 September 2024, Britain permanently closed its last coal-fired generator (Ratcliffe-on-Soar), becoming the first G7 nation to eliminate coal electricity. On windy days, domestic renewables and clean power now routinely supply over 70% of British electricity.
             </div>
             <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 4px; font-size: 0.78rem;">
-              <span style="color: #94a3b8;">Track real-time generation in your browser:</span>
+              <span style="color: #94a3b8;">Track real-time generation &amp; demand in your browser:</span>
               <a href="https://grid.iamkate.com/" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; font-weight: 700; text-decoration: underline;">📊 National Grid Live (iamkate) ↗</a>
               <span>·</span>
               <a href="https://www.gridwatch.templar.co.uk/" target="_blank" rel="noopener noreferrer" style="color: #fbbf24; font-weight: 700; text-decoration: underline;">⚡ G.B. Gridwatch (Templar) ↗</a>
+              <span>·</span>
+              <a href="https://grid-demand.uk/" target="_blank" rel="noopener noreferrer" style="color: #a78bfa; font-weight: 700; text-decoration: underline;">📈 GB Grid Demand (grid-demand.uk) ↗</a>
               <span>·</span>
               <a href="https://renewables-map.robinhawkes.com/#5/55/-3.2" target="_blank" rel="noopener noreferrer" style="color: #34d399; font-weight: 700; text-decoration: underline;">🗺️ UK Renewables Map (Robin Hawkes) ↗</a>
             </div>
@@ -6547,6 +6540,19 @@
                   Open renewables-map.robinhawkes.com ↗
                 </a>
               </div>
+
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 12px 14px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                  <strong style="color: #a78bfa; font-size: 0.88rem;">📈 GB Electricity Demand (grid-demand.uk)</strong>
+                  <span style="font-size: 0.68rem; color: #94a3b8; font-family: ui-monospace, monospace;">grid-demand.uk</span>
+                </div>
+                <p style="font-size: 0.78rem; color: #94a3b8; margin: 0 0 10px 0; line-height: 1.45;">
+                  Live and historical telemetry tracking Great Britain's gross transmission demand, embedded solar &amp; wind generation offsets, daily peak/trough load profiles, and seasonal demand trajectories.
+                </p>
+                <a href="https://grid-demand.uk/" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.78rem; color: #a78bfa; font-weight: 700; text-decoration: underline;">
+                  Open grid-demand.uk ↗
+                </a>
+              </div>
             </div>
             <div style="margin-top: 10px; font-size: 0.74rem; color: #94a3b8; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 8px;">
               💡 <em>This simulator's turn-by-turn carbon footprint footer also directly queries the official <strong>NESO Carbon Intensity API</strong> (<code>https://api.carbonintensity.org.uk/</code>) for live GB grid emissions factors.</em>
@@ -6767,6 +6773,11 @@
               <strong>UK Renewable Energy Map (Robin Hawkes):</strong><br>
               <em>Interactive geospatial directory mapping operational, consented, and planned wind, solar, hydro, and battery sites across Great Britain.</em><br>
               <a href="https://renewables-map.robinhawkes.com/#5/55/-3.2" target="_blank" rel="noopener noreferrer" style="color: var(--emerald);">https://renewables-map.robinhawkes.com/ ↗</a>
+            </li>
+            <li>
+              <strong>GB Electricity Demand Tracker (grid-demand.uk):</strong><br>
+              <em>Live telemetry and historical tracking of national transmission system demand, embedded generation offsets, and daily load profiles.</em><br>
+              <a href="https://grid-demand.uk/" target="_blank" rel="noopener noreferrer" style="color: #a78bfa;">https://grid-demand.uk/ ↗</a>
             </li>
             <li>
               <strong>National Energy System Operator (NESO, 2024):</strong><br>
