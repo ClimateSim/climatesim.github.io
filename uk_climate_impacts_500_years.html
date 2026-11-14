@@ -854,7 +854,7 @@
     </header>
 
     <!-- ED HAWKINS WARMING STRIPES HERO SECTION -->
-    <section class="stripes-hero-card" aria-label="Ed Hawkins Warming Stripes Visualizer">
+    <section id="climate-stripes" class="stripes-hero-card" aria-label="Ed Hawkins Warming Stripes Visualizer">
       <div class="stripes-header">
         <div class="stripes-title-box" tabindex="0" aria-describedby="stripesDataPopover">
           <h2>
@@ -2552,15 +2552,53 @@
         }
       }
 
+      const STRIPE_HASH_MAP = {
+        "temperature": "temperature-stripes",
+        "rainfall": "rainfall-stripes",
+        "wind": "storm-wind-stripes"
+      };
+
+      function activateStripeMode(mode, updateHash = false, scrollToChart = false) {
+        if (!STRIPE_HASH_MAP[mode]) return;
+        document.querySelectorAll(".btn-stripe-mode").forEach(b => {
+          b.classList.toggle("active", b.dataset.mode === mode);
+        });
+        currentStripeMode = mode;
+        updateMetricUI();
+        hideTooltip();
+        if (updateHash && window.location.hash !== `#${STRIPE_HASH_MAP[mode]}`) {
+          history.replaceState(null, "", `#${STRIPE_HASH_MAP[mode]}`);
+        }
+        if (scrollToChart) {
+          const hero = document.getElementById("climate-stripes");
+          if (hero) hero.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+
+      function applyMetricFromUrl(scrollToChart = false) {
+        const hash = window.location.hash.replace(/^#/, "").toLowerCase();
+        const param = (new URLSearchParams(window.location.search).get("metric") || "").toLowerCase();
+        const token = hash || param;
+        if (token === "rainfall-stripes" || token === "rainfall") {
+          activateStripeMode("rainfall", false, scrollToChart);
+          return true;
+        } else if (token === "storm-wind-stripes" || token === "wind-stripes" || token === "wind") {
+          activateStripeMode("wind", false, scrollToChart);
+          return true;
+        } else if (token === "temperature-stripes" || token === "temperature") {
+          activateStripeMode("temperature", false, scrollToChart);
+          return true;
+        }
+        return false;
+      }
+
       document.querySelectorAll(".btn-stripe-mode").forEach(btn => {
         btn.addEventListener("click", () => {
-          document.querySelectorAll(".btn-stripe-mode").forEach(b => b.classList.remove("active"));
-          btn.classList.add("active");
-          currentStripeMode = btn.dataset.mode;
-          updateMetricUI();
-          hideTooltip();
+          activateStripeMode(btn.dataset.mode, true, false);
         });
       });
+
+      window.addEventListener("hashchange", () => applyMetricFromUrl(true));
 
       // Range Selector Buttons
       document.querySelectorAll(".btn-timeframe").forEach(btn => {
@@ -2610,7 +2648,8 @@
 
       window.addEventListener("resize", drawStripes);
 
-      // Initial Draw
+      // Initial Draw (respecting direct #rainfall-stripes / #storm-wind-stripes / #temperature-stripes links)
+      applyMetricFromUrl(true);
       drawStripes();
     })();
   </script>
