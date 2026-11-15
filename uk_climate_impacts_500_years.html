@@ -1176,7 +1176,7 @@
         <ul class="event-chronology">
           <li class="event-item" style="border-left-color: var(--emerald);">
             <span class="event-year" style="color: var(--emerald-light);">1683–1684: The Great Thames Frost Fair</span>
-            <p>The coldest winter in the CET series (annual mean 7.38°C). The River Thames froze solid to a depth of 11 inches. A street of timber shops, pubs, bull-baiting rings, coaches, and printing presses operated directly on the ice between London Bridge and Westminster for two months.</p>
+            <p>The coldest winter in the <span class="cet-abbr-badge" tabindex="0">CET</span> series (annual mean 7.38°C). The River Thames froze solid to a depth of 11 inches. A street of timber shops, pubs, bull-baiting rings, coaches, and printing presses operated directly on the ice between London Bridge and Westminster for two months.</p>
             <div class="eyewitness-quote">
               "Coaches plied from Westminster to the Temple, and from several other stairs, to and fro, as in the streets... a whole town on the ice." — John Evelyn, Diary, January 1684
             </div>
@@ -1737,14 +1737,14 @@
             <td><strong>2022</strong></td>
             <td class="num-col">11.0°C</td>
             <td class="num-col" style="color: #a50f15; font-weight: 800;">+1.6°C</td>
-            <td>Warmest Year in 364 Years of CET Record</td>
-            <td>First time CET averaged &gt;11°C; 40.3°C Coningsby record; Wennington wildfire; drought declarations.</td>
+            <td>Warmest Year in 364 Years of <span class="cet-abbr-badge" tabindex="0">CET</span> Record</td>
+            <td>First time <span class="cet-abbr-badge" tabindex="0">CET</span> averaged &gt;11°C; 40.3°C Coningsby record; Wennington wildfire; drought declarations.</td>
           </tr>
           <tr>
             <td><strong>2023</strong></td>
             <td class="num-col">11.0°C</td>
             <td class="num-col" style="color: #a50f15; font-weight: 800;">+1.5°C</td>
-            <td>Second Warmest Year in CET Record</td>
+            <td>Second Warmest Year in <span class="cet-abbr-badge" tabindex="0">CET</span> Record</td>
             <td>Record-breaking June heatwave; North Sea marine heatwave; Storm Babet severe flooding.</td>
           </tr>
           <tr>
@@ -2646,12 +2646,11 @@
         });
       });
 
-      // CET Benchmark Tooltip (Body-level positioning, immune to table overflow)
-      const cetAbbr = document.getElementById("cetAbbr");
+      // CET Benchmark Tooltip (Body-level positioning, delegated across all .cet-abbr-badge elements)
       const cetTooltip = document.getElementById("cetGlobalTooltip");
-      if (cetAbbr && cetTooltip) {
-        function showCetTooltip() {
-          const rect = cetAbbr.getBoundingClientRect();
+      if (cetTooltip) {
+        function showCetTooltip(targetEl) {
+          const rect = targetEl.getBoundingClientRect();
           cetTooltip.style.display = "block";
           cetTooltip.style.opacity = "1";
           const ttW = cetTooltip.offsetWidth || 280;
@@ -2666,10 +2665,25 @@
           cetTooltip.style.display = "none";
           cetTooltip.style.opacity = "0";
         }
-        cetAbbr.addEventListener("mouseenter", showCetTooltip);
-        cetAbbr.addEventListener("mouseleave", hideCetTooltip);
-        cetAbbr.addEventListener("focus", showCetTooltip);
-        cetAbbr.addEventListener("blur", hideCetTooltip);
+        document.addEventListener("mouseover", e => {
+          const badge = e.target && e.target.closest ? e.target.closest(".cet-abbr-badge") : null;
+          if (badge) showCetTooltip(badge);
+        });
+        document.addEventListener("mouseout", e => {
+          const badge = e.target && e.target.closest ? e.target.closest(".cet-abbr-badge") : null;
+          if (badge) {
+            const rel = e.relatedTarget && e.relatedTarget.closest ? e.relatedTarget.closest(".cet-abbr-badge") : null;
+            if (!rel) hideCetTooltip();
+          }
+        });
+        document.addEventListener("focusin", e => {
+          const badge = e.target && e.target.closest ? e.target.closest(".cet-abbr-badge") : null;
+          if (badge) showCetTooltip(badge);
+        });
+        document.addEventListener("focusout", e => {
+          const badge = e.target && e.target.closest ? e.target.closest(".cet-abbr-badge") : null;
+          if (badge) hideCetTooltip();
+        });
       }
 
       window.addEventListener("resize", drawStripes);
