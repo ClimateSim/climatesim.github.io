@@ -117,6 +117,13 @@
       desc: "Historical and instrumental UK storm peak wind-gust stripes with 5-year rolling mean."
     },
     {
+      title: "October 2024 Valencia Flash Floods (DANA) & WWA Attribution",
+      page: "UK Impacts",
+      url: "uk_climate_impacts_500_years.html#valencia-floods",
+      tags: "valencia floods dana chiva spain 491mm world weather attribution wwa imperial grantham frederike otto",
+      desc: "Imperial / World Weather Attribution analysis: human-driven warming made the 491 mm/8 hr Chiva downpour 2× more likely and ~12% heavier."
+    },
+    {
       title: "National Emergency Briefing on Climate & Nature",
       page: "Briefing",
       url: "national_emergency_briefing.html",
