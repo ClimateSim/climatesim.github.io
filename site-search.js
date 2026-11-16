@@ -427,8 +427,15 @@
     btn.innerHTML = `<span>🔍</span><span>Search</span><span class="cs-search-kbd">/</span>`;
     btn.addEventListener("click", openSearch);
 
-    const navTarget = document.querySelector(".mode-switch, .header-nav, .nav-links, header nav");
-    if (navTarget) {
+    const guideBtn = document.getElementById("openModalBtn");
+    const navTarget = document.querySelector(".mode-switch-group, .mode-switch, .header-nav, .nav-links, header nav");
+    if (guideBtn && guideBtn.parentElement) {
+      guideBtn.parentElement.style.display = "flex";
+      guideBtn.parentElement.style.alignItems = "center";
+      guideBtn.parentElement.style.gap = "8px";
+      guideBtn.parentElement.style.flexWrap = "wrap";
+      guideBtn.parentElement.insertBefore(btn, guideBtn);
+    } else if (navTarget) {
       navTarget.appendChild(btn);
     } else {
       btn.classList.add("cs-search-floating");
