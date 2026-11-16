@@ -1116,7 +1116,7 @@
     .emitter-dropdown-menu {
       display: none;
       position: absolute;
-      right: 0;
+      left: 0;
       top: calc(100% + 6px);
       width: min(440px, 90vw);
       background: #0c1322;
@@ -3238,16 +3238,8 @@
               <option value="Rest of World">🌐 Rest of World (170+)</option>
             </select>
 
-            <div class="treemap-search-box">
-              <span style="font-size: 0.75rem; opacity: 0.6;">🔎</span>
-              <input type="text" id="inputTreemapSearch" class="treemap-search-input" placeholder="Search country or code..." oninput="handleTreemapSearch(this.value)">
-              <button type="button" id="btnClearTreemapSearch" style="background: transparent; border: none; color: #94a3b8; cursor: pointer; font-size: 0.75rem; display: none;" onclick="clearTreemapSearch()">&times;</button>
-            </div>
-          </div>
-
-          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <div class="emitter-dropdown-wrap" id="treemapEmitterFilterWrap">
-              <button type="button" class="btn btn-modal" id="btnToggleEmitterFilter" onclick="toggleEmitterDropdown(event)" style="font-size: 0.75rem; padding: 5px 14px; background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.4); color: #c084fc; font-weight: 700;">🌐 Filter: All Emitters ▾</button>
+              <button type="button" class="treemap-scope-select" id="btnToggleEmitterFilter" onclick="toggleEmitterDropdown(event)" style="background: rgba(15, 23, 42, 0.95); color: #ffffff; border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 6px; padding: 5px 12px; font-size: 0.76rem; font-weight: 700; cursor: pointer; outline: none; box-shadow: 0 0 10px rgba(56, 189, 248, 0.15);">🌐 Filter: All Emitters ▾</button>
               <div class="emitter-dropdown-menu" id="treemapEmitterDropdown" onclick="event.stopPropagation()">
                 <div class="emitter-dropdown-modes">
                   <button type="button" class="emitter-mode-btn active" id="btnEmitterModeAll" onclick="setEmitterDropdownMode('all')">🌐 All Emitters</button>
@@ -3260,6 +3252,12 @@
                 </div>
                 <div class="emitter-dropdown-grid" id="emitterExclusionGrid"></div>
               </div>
+            </div>
+
+            <div class="treemap-search-box">
+              <span style="font-size: 0.75rem; opacity: 0.6;">🔎</span>
+              <input type="text" id="inputTreemapSearch" class="treemap-search-input" placeholder="Search country or code..." oninput="handleTreemapSearch(this.value)">
+              <button type="button" id="btnClearTreemapSearch" style="background: transparent; border: none; color: #94a3b8; cursor: pointer; font-size: 0.75rem; display: none;" onclick="clearTreemapSearch()">&times;</button>
             </div>
           </div>
         </div>
