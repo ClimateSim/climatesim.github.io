@@ -48,6 +48,7 @@
       --emerald: #10b981;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { overflow-x: clip; max-width: 100%; }
     body {
       font-family: system-ui, -apple-system, sans-serif;
       background-color: var(--bg);
@@ -57,6 +58,8 @@
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
+      max-width: 100%;
+      overflow-x: clip;
       box-sizing: border-box;
     }
     .app-wrapper {
@@ -719,7 +722,7 @@
       border: 1.5px solid #38bdf8;
       border-radius: 8px;
       padding: 10px 14px;
-      max-width: 340px;
+      max-width: min(340px, calc(100vw - 24px));
       width: max-content;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85), 0 0 15px rgba(56, 189, 248, 0.22);
       font-family: system-ui, -apple-system, sans-serif;
@@ -1051,14 +1054,23 @@
       top: 3vh;
       left: 50%;
       transform: translateX(-50%);
-      width: min(1240px, 95vw);
+      width: min(1240px, calc(100vw - 20px));
       max-height: 94vh;
       overflow-y: auto;
+      overflow-x: hidden;
       z-index: 9990;
       margin: 0 !important;
       background: #0b1220;
       border: 1.5px solid rgba(56, 189, 248, 0.5);
       box-shadow: 0 24px 70px rgba(0, 0, 0, 0.88);
+    }
+    @media (max-width: 600px) {
+      .sources-collapsible-card.is-modal-expanded {
+        top: 8px;
+        width: calc(100vw - 16px);
+        max-height: calc(100vh - 16px);
+        padding: 12px;
+      }
     }
     .sources-collapsible-card.is-modal-expanded .sources-collapsible-body {
       display: block;
@@ -1112,19 +1124,23 @@
     .emitter-dropdown-wrap {
       position: relative;
       display: inline-block;
+      max-width: 100%;
     }
     .emitter-dropdown-menu {
       display: none;
-      position: absolute;
-      left: 0;
-      top: calc(100% + 6px);
-      width: min(510px, 92vw);
+      position: fixed;
+      left: 12px;
+      top: 60px;
+      width: min(510px, calc(100vw - 24px));
+      max-height: calc(100vh - 24px);
+      overflow-y: auto;
       background: #0c1322;
       border: 1.5px solid rgba(168, 85, 247, 0.45);
       border-radius: 10px;
       padding: 12px;
-      z-index: 10010;
+      z-index: 10050;
       box-shadow: 0 18px 45px rgba(0, 0, 0, 0.85);
+      box-sizing: border-box;
     }
     .emitter-dropdown-menu.open {
       display: block;
@@ -1156,9 +1172,14 @@
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 5px 10px;
-      max-height: 240px;
+      max-height: min(240px, 42vh);
       overflow-y: auto;
       padding-right: 4px;
+    }
+    @media (max-width: 560px) {
+      .emitter-dropdown-grid {
+        grid-template-columns: 1fr;
+      }
     }
     .emitter-check-item {
       display: flex;
@@ -3179,7 +3200,7 @@
             <label for="selectEmissionsMetric" style="font-size: 0.86rem; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 6px; letter-spacing: -0.01em; white-space: nowrap;">
               <span>📊</span> Plot &amp; Sort Chart By:
             </label>
-            <select id="selectEmissionsMetric" class="treemap-scope-select" onchange="setEmissionsScope(this.value)" style="background: #090d16; color: #ffffff; border: 1.5px solid #38bdf8; border-radius: 6px; padding: 7px 14px; font-size: 0.84rem; font-weight: 700; cursor: pointer; outline: none; box-shadow: 0 0 14px rgba(56, 189, 248, 0.25); flex: 1; min-width: 280px;">
+            <select id="selectEmissionsMetric" class="treemap-scope-select" onchange="setEmissionsScope(this.value)" style="background: #090d16; color: #ffffff; border: 1.5px solid #38bdf8; border-radius: 6px; padding: 7px 14px; font-size: 0.84rem; font-weight: 700; cursor: pointer; outline: none; box-shadow: 0 0 14px rgba(56, 189, 248, 0.25); flex: 1; min-width: 0; max-width: 100%; width: 100%;">
               <option value="annual">📅 Current Annual Emissions (2023 · Gt CO₂/yr) — China #1 (30.5%), US #2 (12.6%), UK #17 (0.88%)</option>
               <option value="historical">⏳ Cumulative Historical Contribution (1750–2023 · Total Gt CO₂) — US #1 (23.9%), UK #5 (4.40%)</option>
               <option value="percapita">👤 Per-Capita Emissions (2023 · Tonnes CO₂/person/yr) — Gulf &amp; Western Heavyweights</option>
@@ -13178,6 +13199,29 @@
         updateEmitterDropdownLabel();
       }
 
+      function positionEmitterDropdown() {
+        const btn = document.getElementById("btnToggleEmitterFilter");
+        const menu = document.getElementById("treemapEmitterDropdown");
+        if (!btn || !menu || !menu.classList.contains("open")) return;
+        const rect = btn.getBoundingClientRect();
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const menuW = Math.min(510, vw - 24);
+        menu.style.width = `${menuW}px`;
+        let left = rect.left;
+        if (left + menuW > vw - 12) left = vw - menuW - 12;
+        if (left < 12) left = 12;
+        const estH = Math.min(menu.scrollHeight || 360, vh - 24);
+        let top = rect.bottom + 6;
+        if (top + estH > vh - 12 && rect.top - estH - 6 >= 12) {
+          top = rect.top - estH - 6;
+        } else if (top + estH > vh - 12) {
+          top = Math.max(12, vh - estH - 12);
+        }
+        menu.style.left = `${Math.round(left)}px`;
+        menu.style.top = `${Math.round(top)}px`;
+      }
+
       function toggleEmitterDropdown(e) {
         if (e) e.stopPropagation();
         const menu = document.getElementById("treemapEmitterDropdown");
@@ -13185,7 +13229,9 @@
         const willOpen = !menu.classList.contains("open");
         if (willOpen) buildEmitterExclusionCheckboxes();
         menu.classList.toggle("open", willOpen);
+        if (willOpen) positionEmitterDropdown();
       }
+      window.addEventListener("resize", positionEmitterDropdown);
 
       function closeEmitterDropdown() {
         const menu = document.getElementById("treemapEmitterDropdown");
