@@ -26,6 +26,13 @@
       desc: "Peer-reviewed temperature thresholds and feedback loops on the 500-year warming curve."
     },
     {
+      title: "1-Million-Year Paleoclimate Comparison (500-Year Warming Rate)",
+      page: "Warming Simulator",
+      url: "advanced.html#1-million-year",
+      tags: "1 million year comparison 1000000 800000 epica dome c ice core glacial interglacial termination paleoclimate",
+      desc: "Compare modern 500-year warming and CO₂ rates against 1,000,000 years of ice-age cycles."
+    },
+    {
       title: "Carbon Budgets & Unburnable Fossil Reserves",
       page: "Carbon Budgets",
       url: "advanced.html#CarbonBudgets",

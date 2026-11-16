@@ -2680,7 +2680,7 @@
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <div class="brand-title" id="headerTitle">Earth's Energy Imbalance</div>
-              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v3.3.0</span>
+              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v3.3.1</span>
             </div>
             <div style="font-size: 0.75rem; color: var(--text-muted);" id="headerSubtitle">How greenhouse gases trap heat and warm the planet</div>
           </div>
@@ -4249,7 +4249,7 @@
         <span>·</span>
         <button type="button" id="btnFeedbackFooter" onclick="openFeedbackModal()" style="background: rgba(56, 189, 248, 0.12); color: var(--cyan); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 6px; padding: 2px 10px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">💬 Send Feedback</button>
         <span>·</span>
-        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v3.3.0</span>
+        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v3.3.1</span>
       </div>
       <div style="font-size: 0.76rem; color: #64748b; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
         <span>&copy; 2026 Earth Energy Balance Simulator Project</span>
@@ -4719,7 +4719,7 @@
           <div class="toc-card">
             <h3 style="margin-top: 0; border: none; color: #fff; display: flex; align-items: center; justify-content: space-between;">
               <span>Documentation Overview</span>
-              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v3.3.0</span>
+              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v3.3.1</span>
             </h3>
             
             <!-- User Commentary & Context Note -->
@@ -15977,7 +15977,12 @@
             "intro": "simple",
             "warmingsim": "advanced",
             "advanced": "advanced",
-            "simulator": "advanced"
+            "simulator": "advanced",
+            "1-million-year": "advanced",
+            "million-year": "advanced",
+            "1m-year": "advanced",
+            "paleo": "advanced",
+            "1-million-year-comparison": "advanced"
           };
 
           const targetMode = aliasMap[raw];
@@ -16009,6 +16014,11 @@
                 const el = document.getElementById("sector-emissions") || document.getElementById("sourcesSectorCard");
                 if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
               }, 150);
+            } else if (raw === "1-million-year" || raw === "million-year" || raw === "1m-year" || raw === "paleo" || raw === "1-million-year-comparison") {
+              setTimeout(() => {
+                const b = document.getElementById("btnMillionYear");
+                if (b) b.click();
+              }, 180);
             }
             if (raw === "llewellyn-smith" || raw === "llewellynsmith" || raw === "royal-society-2023" || raw === "royalsociety") {
               setTimeout(() => {
@@ -16498,12 +16508,13 @@
         btnModeBudgets: "#CarbonBudgets",
         btnModeSources: "#GHGSources",
         btnModeDunkel: "#Dunkelflaute",
-        btnModeSolutions: "#EnergySolutions"
+        btnModeSolutions: "#EnergySolutions",
+        btnMillionYear: "#1-million-year"
       };
 
       function resolveAnchorTarget(el) {
         if (!el || !el.closest) return null;
-        const modeBtn = el.closest(".mode-switch-btn[id]");
+        const modeBtn = el.closest(".mode-switch-btn[id], #btnMillionYear");
         if (modeBtn && BTN_HASH_MAP[modeBtn.id]) {
           return { hash: BTN_HASH_MAP[modeBtn.id], label: modeBtn.textContent.trim() };
         }
