@@ -13197,6 +13197,7 @@
       function setEmitterDropdownMode(mode) {
         emitterDropdownMode = mode === "row" ? "row" : "all";
         updateEmitterDropdownLabel();
+        updateTreemapMetadataAndStats();
         buildTreemapTable();
         renderHistoricalTreemap(true);
       }
@@ -13209,6 +13210,7 @@
         }
         emitterDropdownMode = "all";
         updateEmitterDropdownLabel();
+        updateTreemapMetadataAndStats();
         buildTreemapTable();
         renderHistoricalTreemap(true);
       }
@@ -13217,6 +13219,7 @@
         excludedEmitterCodes.clear();
         emitterDropdownMode = "all";
         buildEmitterExclusionCheckboxes();
+        updateTreemapMetadataAndStats();
         buildTreemapTable();
         renderHistoricalTreemap(true);
       }
@@ -13478,7 +13481,20 @@
         const s4Val = document.getElementById("lblStat4Val");
         const s4Sub = document.getElementById("lblStat4Sub");
         if (s4Title && s4Val && s4Sub) {
-          if (isAnnual) {
+          if (excludedEmitterCodes.size > 0 || emitterDropdownMode === "row") {
+            const remaining = getFilteredTreemapDataset();
+            const remTotal = remaining.reduce((sum, d) => sum + (d.emissions || 0), 0);
+            const remShare = remaining.reduce((sum, d) => sum + (d.share || 0), 0);
+            const unitLabel = isHist ? "Gt CO₂" : "Gt CO₂/yr";
+            const exclText = emitterDropdownMode === "row"
+              ? "excl. Top 50 emitters"
+              : `excl. ${Array.from(excludedEmitterCodes).join(", ")}`;
+            s4Title.textContent = emitterDropdownMode === "row"
+              ? "Remaining (Rest of World)"
+              : `Remaining Nations (${remaining.length})`;
+            s4Val.innerHTML = `${remTotal.toFixed(2)} <span style="font-size: 0.8rem; color: #94a3b8;">${unitLabel}</span>`;
+            s4Sub.textContent = `${remShare.toFixed(2)}% of global total (${exclText})`;
+          } else if (isAnnual) {
             s4Title.textContent = "Top 2 Emitters (China & USA)";
             s4Val.innerHTML = `16.10 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂/yr</span>`;
             s4Sub.textContent = "43.05% of total (CN 30.5% · US 12.6%)";
@@ -13585,7 +13601,6 @@
       // Squarified Treemap Layout Engine (Bruls, Huizing, van Wijk)
       function calculateSquarifiedTreemap(items, x, y, width, height) {
         if (!items || items.length === 0 || width <= 0 || height <= 0) return [];
-        
         // In per-capita scope, block sizes are proportional to perCapita; otherwise to emissions volume
         const isPerCap = activeEmissionsScope === "percapita";
         const getVal = (d) => isPerCap ? Math.max(0.1, d.perCapita || 0.1) : d.emissions;
