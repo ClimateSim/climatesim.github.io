@@ -15971,14 +15971,19 @@
         "RTE": {
           title: "🔄 RTE — Round-Trip Efficiency (%)",
           body: "Percentage of electrical energy recovered on discharge compared to the energy used to charge the storage system (<strong>Energy Out &divide; Energy In &times; 100%</strong>). E.g. ~88% for Li-ion batteries, ~80% for pumped hydro, ~42% for hydrogen salt caverns."
+        },
+        "AMORTIZED": {
+          title: "🏦 Amortized Cost — Paid-Off Construction Debt",
+          body: "Once a capital-intensive power plant (such as a nuclear reactor or hydroelectric dam) has paid off its upfront construction loan over ~20–30 years, its ongoing electricity cost falls to just fuel, operations, and maintenance (O&amp;M)—typically <strong>$0.03–$0.04/kWh</strong> for existing nuclear fleets vs. $0.07–$0.15/kWh for new builds."
         }
       };
 
-      const UNIT_REGEX = /\b(TWh(?:\s*\/\s*(?:yr|year))?|GWh(?:\s*\/\s*(?:yr|year))?|Gt(?:\s*CO[₂2]e?)?\s*\/\s*(?:yr|year)|Gt(?:\s*CO[₂2]e?)?|LCOE|LCOS|RTE)\b/g;
+      const UNIT_REGEX = /\b(TWh(?:\s*\/\s*(?:yr|year))?|GWh(?:\s*\/\s*(?:yr|year))?|Gt(?:\s*CO[₂2]e?)?\s*\/\s*(?:yr|year)|Gt(?:\s*CO[₂2]e?)?|LCOE|LCOS|RTE|[Aa]morti[sz]ed(?:\s+[Cc]ost)?)\b/g;
       const SKIP_TAGS = new Set(["SCRIPT", "STYLE", "TEXTAREA", "INPUT", "SELECT", "OPTION", "SVG", "CANVAS", "TITLE", "CODE", "PRE", "NOSCRIPT"]);
 
       function getUnitKey(token) {
         if (token === "LCOE" || token === "LCOS" || token === "RTE") return token;
+        if (/^amorti[sz]ed/i.test(token)) return "AMORTIZED";
         if (token.startsWith("TWh")) return "TWh";
         if (token.startsWith("GWh")) return "GWh";
         if (/\/\s*(?:yr|year)$/.test(token)) return "Gt/yr";
@@ -15998,7 +16003,7 @@
       }
 
       function hasUnitToken(text) {
-        return text.includes("TWh") || text.includes("GWh") || text.includes("Gt") || text.includes("LCOE") || text.includes("LCOS") || text.includes("RTE");
+        return text.includes("TWh") || text.includes("GWh") || text.includes("Gt") || text.includes("LCOE") || text.includes("LCOS") || text.includes("RTE") || /amorti[sz]ed/i.test(text);
       }
 
       function wrapTextNode(textNode) {
@@ -16102,6 +16107,23 @@
         if (term) {
           const rel = e.relatedTarget && e.relatedTarget.closest ? e.relatedTarget.closest(".unit-tooltip-term") : null;
           if (rel !== term) hideUnitTooltip();
+        }
+      });
+
+      let activeTappedTerm = null;
+      document.addEventListener("click", (e) => {
+        const term = e.target && e.target.closest ? e.target.closest(".unit-tooltip-term") : null;
+        if (term) {
+          if (activeTappedTerm === term && tooltipEl.style.display === "block") {
+            hideUnitTooltip();
+            activeTappedTerm = null;
+          } else {
+            activeTappedTerm = term;
+            showUnitTooltip(term);
+          }
+        } else if (activeTappedTerm) {
+          hideUnitTooltip();
+          activeTappedTerm = null;
         }
       });
 
