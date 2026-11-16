@@ -1083,8 +1083,17 @@
       border-color: rgba(244, 63, 94, 0.5);
       color: #fff;
     }
+    .sources-collapsible-card:not(.is-modal-expanded) #treemapBadgeGroup {
+      display: none !important;
+    }
+    .sources-collapsible-card.is-modal-expanded .card-title-row {
+      padding-right: 44px;
+    }
     .sources-collapsible-card.is-modal-expanded .sources-modal-close-x {
       display: inline-flex;
+      position: absolute;
+      top: 14px;
+      right: 16px;
     }
     .sources-modal-backdrop {
       display: none;
@@ -3497,139 +3506,6 @@
         </div>
       </div>
 
-
-      <!-- =====================================================================
-           COUNTRY EMISSIONS BLOCK CHART: CURRENT ANNUAL (2023) & CUMULATIVE HISTORICAL (1750-PRESENT)
-           ===================================================================== -->
-      <div class="card historical-treemap-card" id="cardHistoricalEmissionsTreemap">
-        <!-- Heading Row with Badges (Click Heading for Full Explanation Modal) -->
-        <div class="card-title-row" style="flex-wrap: wrap; gap: 10px; margin-bottom: 12px; align-items: center; justify-content: space-between;">
-          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-            <div class="card-title" id="lblTreemapCardTitle" onclick="openEmissionsExplanationModal()" style="display: flex; align-items: center; gap: 8px; font-size: 1.05rem; cursor: pointer; user-select: none; border-bottom: 1px dashed rgba(56, 189, 248, 0.45); padding-bottom: 2px;" title="Click this heading for full explanation of this metric and climate context">
-              <span>🌍</span> <span id="lblTreemapCardTitleText">Current Annual Emissions by Country (Latest Data · 2023)</span> <span style="font-size: 0.78rem; color: #38bdf8; opacity: 0.85;">ⓘ</span>
-            </div>
-            <div id="treemapBadgeGroup" style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
-              <span class="badge badge-cyan" id="badgeTreemapSource" style="font-size: 0.72rem;">Global Carbon Project &amp; EDGAR/OWID (2023)</span>
-              <span class="badge badge-amber" id="badgeTreemapTotal" style="font-size: 0.72rem;">Total: 37.4 Gt CO₂/yr</span>
-              <span class="badge badge-purple" id="badgeTreemapUK" style="font-size: 0.72rem; background: rgba(192, 132, 252, 0.15); border-color: #c084fc; color: #c084fc;">🇬🇧 UK #17 Annually (0.33 Gt · 0.88%)</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Drop-down Selector & Metric Control Panel -->
-        <div class="emissions-scope-switcher" style="display: flex; gap: 12px; align-items: center; margin-bottom: 14px; background: rgba(15, 23, 42, 0.9); padding: 10px 14px; border-radius: 8px; border: 1.5px solid rgba(56, 189, 248, 0.35); flex-wrap: wrap; box-shadow: 0 4px 16px rgba(0,0,0,0.4);">
-          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; width: 100%;">
-            <label for="selectEmissionsMetric" style="font-size: 0.86rem; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 6px; letter-spacing: -0.01em; white-space: nowrap;">
-              <span>📊</span> Plot &amp; Sort Chart By:
-            </label>
-            <select id="selectEmissionsMetric" class="treemap-scope-select" onchange="setEmissionsScope(this.value)" style="background: #090d16; color: #ffffff; border: 1.5px solid #38bdf8; border-radius: 6px; padding: 7px 14px; font-size: 0.84rem; font-weight: 700; cursor: pointer; outline: none; box-shadow: 0 0 14px rgba(56, 189, 248, 0.25); flex: 1; min-width: 280px;">
-              <option value="annual">📅 Current Annual Emissions (2023 · Gt CO₂/yr) — China #1 (30.5%), US #2 (12.6%), UK #17 (0.88%)</option>
-              <option value="historical">⏳ Cumulative Historical Contribution (1750–2023 · Total Gt CO₂) — US #1 (23.9%), UK #5 (4.40%)</option>
-              <option value="percapita">👤 Per-Capita Emissions (2023 · Tonnes CO₂/person/yr) — Gulf &amp; Western Heavyweights</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Hidden Explanatory Text Elements (Kept for backwards compatibility, full content moved to pop-up modal) -->
-        <div id="lblActiveScopeNotice" style="display: none;"></div>
-        <div id="lblTreemapDescription" style="display: none;"></div>
-        <div id="bannerTreemapNarrative" style="display: none;"><div id="bannerTreemapNarrativeTitle"></div><div id="bannerTreemapNarrativeBody"></div></div>
-
-        <!-- 4 Quick Stats Strip -->
-        <div id="treemapQuickStatsStrip" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 16px;">
-          <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 10px 12px;">
-            <div id="lblStat1Title" style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px;">Top 50 Nations (Annual)</div>
-            <div id="lblStat1Val" style="font-size: 1.2rem; font-weight: 800; color: var(--cyan); font-family: ui-monospace, monospace;">33.58 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂/yr</span></div>
-            <div id="lblStat1Sub" style="font-size: 0.72rem; color: #94a3b8;">89.8% of 2023 global emissions</div>
-          </div>
-          <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 10px 12px;">
-            <div id="lblStat2Title" style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px;">Rest of the World (170+ Nations)</div>
-            <div id="lblStat2Val" style="font-size: 1.2rem; font-weight: 800; color: #a78bfa; font-family: ui-monospace, monospace;">3.82 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂/yr</span></div>
-            <div id="lblStat2Sub" style="font-size: 0.72rem; color: #94a3b8;">10.2% total · &gt;3.2 Billion people</div>
-          </div>
-          <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 10px 12px;">
-            <div id="lblStat3Title" style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px;">United Kingdom (Current)</div>
-            <div id="lblStat3Val" style="font-size: 1.2rem; font-weight: 800; color: #38bdf8; font-family: ui-monospace, monospace;">0.33 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂/yr</span></div>
-            <div id="lblStat3Sub" style="font-size: 0.72rem; color: #94a3b8;">Rank #17 · 0.88% of world (down >53% since 1990)</div>
-          </div>
-          <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 10px 12px;">
-            <div id="lblStat4Title" style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px;">Top 2 Emitters (China &amp; USA)</div>
-            <div id="lblStat4Val" style="font-size: 1.2rem; font-weight: 800; color: var(--amber); font-family: ui-monospace, monospace;">16.10 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂/yr</span></div>
-            <div id="lblStat4Sub" style="font-size: 0.72rem; color: #94a3b8;">43.05% of total (CN 30.5% · US 12.6%)</div>
-          </div>
-        </div>
-
-        <!-- Toolbar & Filter Controls -->
-        <div class="treemap-toolbar">
-          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-            <select id="selectTreemapViewFormat" onchange="setHistoricalViewFormat(this.value)" class="treemap-scope-select" style="background: rgba(15, 23, 42, 0.95); color: #ffffff; border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 6px; padding: 5px 12px; font-size: 0.76rem; font-weight: 700; cursor: pointer; outline: none; box-shadow: 0 0 10px rgba(56, 189, 248, 0.15);">
-              <option value="treemap">▦ Treemap Blocks</option>
-              <option value="table">☰ Ranked Table</option>
-            </select>
-
-            <!-- Popup List: Filter by Region -->
-            <select id="selectTreemapRegion" onchange="filterTreemapRegion(this.value)" class="treemap-scope-select" style="background: rgba(15, 23, 42, 0.95); color: #ffffff; border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 6px; padding: 5px 12px; font-size: 0.76rem; font-weight: 700; cursor: pointer; outline: none; box-shadow: 0 0 10px rgba(56, 189, 248, 0.15);">
-              <option value="All">🌍 Filter by Region: All (51)</option>
-              <option value="North America">🇺🇸 North America (2)</option>
-              <option value="Europe">🇪🇺 Europe (14)</option>
-              <option value="Asia">🇨🇳 Asia (11)</option>
-              <option value="Eurasia">🇷🇺 Eurasia (5)</option>
-              <option value="Middle East">🇸🇦 Middle East (6)</option>
-              <option value="Latin America">🇧🇷 Latin America (6)</option>
-              <option value="Africa">🇿🇦 Africa (4)</option>
-              <option value="Oceania">🇦🇺 Oceania (1)</option>
-              <option value="Rest of World">🌐 Rest of World (170+)</option>
-            </select>
-
-            <div class="treemap-search-box">
-              <span style="font-size: 0.75rem; opacity: 0.6;">🔎</span>
-              <input type="text" id="inputTreemapSearch" class="treemap-search-input" placeholder="Search country or code..." oninput="handleTreemapSearch(this.value)">
-              <button type="button" id="btnClearTreemapSearch" style="background: transparent; border: none; color: #94a3b8; cursor: pointer; font-size: 0.75rem; display: none;" onclick="clearTreemapSearch()">&times;</button>
-            </div>
-          </div>
-
-          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-            <button class="btn btn-modal" id="btnOpenRestWorldModal" style="font-size: 0.75rem; padding: 5px 14px; background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.4); color: #c084fc; font-weight: 700;" onclick="openRestOfWorldModal()">🌐 Explore Rest of the World (170+ Nations) &rarr;</button>
-          </div>
-        </div>
-
-        <!-- Treemap Canvas Container -->
-        <div class="treemap-canvas-container" id="treemapCanvasContainer">
-          <canvas id="historicalEmissionsCanvas"></canvas>
-          <div class="treemap-floating-tooltip" id="historicalTreemapTooltip"></div>
-        </div>
-
-        <!-- Ranked Table Container (Toggled via button) -->
-        <div class="treemap-table-container" id="treemapTableContainer">
-          <table class="treemap-table">
-            <thead>
-              <tr id="treemapTableHeadRow">
-                <th style="width: 55px;">Rank</th>
-                <th>Country</th>
-                <th>Region</th>
-                <th style="text-align: right;" id="thEmissionsCol">Annual Emissions (Gt CO₂/yr)</th>
-                <th style="text-align: right;" id="thShareCol">Share of Global (%)</th>
-                <th style="text-align: right;" id="thPerCapitaCol">Per Capita (t/person/yr)</th>
-                <th id="thContextCol">Key Drivers &amp; Sectoral Context</th>
-              </tr>
-            </thead>
-            <tbody id="historicalTableBody">
-              <!-- Dynamically populated by JS -->
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Footnote & Attribution -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; font-size: 0.72rem; color: var(--text-muted); flex-wrap: wrap; gap: 8px;">
-          <div>
-            Data source: <strong>Global Carbon Project (GCP)</strong>, CDIAC, and <strong>Our World in Data (OWID)</strong>. Cumulative territorial fossil fuel and cement CO₂ emissions (1750–2023). Excludes land-use change (deforestation) and international aviation/shipping bunker fuels unless noted.
-          </div>
-          <div style="display: flex; gap: 10px;">
-            <span style="color: #38bdf8; cursor: pointer;" onclick="openRestOfWorldModal()">Browse 170+ other sovereign states &rarr;</span>
-          </div>
-        </div>
-
-      </div>
 
       <div id="sourcesModalBackdrop" class="sources-modal-backdrop" onclick="closeSourcesSectionModal()"></div>
     </div>
