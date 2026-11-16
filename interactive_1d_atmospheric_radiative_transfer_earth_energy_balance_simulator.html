@@ -1181,6 +1181,80 @@
         grid-template-columns: 1fr;
       }
     }
+
+    /* Energy Solutions Method Info Trigger & Popover */
+    .sol-method-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      border-bottom: 1px dashed rgba(56, 189, 248, 0.45);
+      padding-bottom: 1px;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+    .sol-method-trigger:hover {
+      color: #38bdf8;
+      border-bottom-color: #38bdf8;
+    }
+    .sol-method-info-icon {
+      font-size: 0.74rem;
+      color: #38bdf8;
+      opacity: 0.85;
+      font-weight: 700;
+    }
+    .sol-method-popover {
+      display: none;
+      position: fixed;
+      z-index: 24500;
+      width: min(470px, calc(100vw - 24px));
+      max-height: calc(100vh - 24px);
+      overflow-y: auto;
+      background: rgba(11, 19, 34, 0.98);
+      border: 1.5px solid #38bdf8;
+      border-radius: 10px;
+      padding: 14px 16px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.88), 0 0 20px rgba(56, 189, 248, 0.22);
+      backdrop-filter: blur(10px);
+      color: #e2e8f0;
+      font-size: 0.78rem;
+      line-height: 1.5;
+      box-sizing: border-box;
+    }
+    .sol-batt-tech-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.14);
+    }
+    .sol-batt-tech-item {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      padding: 7px 10px;
+      font-size: 0.74rem;
+      line-height: 1.4;
+    }
+
+    /* Mobile PWA Long-Press # Anchor Share Popover */
+    .pwa-anchor-popover {
+      display: none;
+      position: fixed;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%);
+      z-index: 26000;
+      width: min(480px, calc(100vw - 24px));
+      background: rgba(11, 19, 34, 0.98);
+      border: 1.5px solid #38bdf8;
+      border-radius: 12px;
+      padding: 12px 14px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 24px rgba(56, 189, 248, 0.28);
+      backdrop-filter: blur(12px);
+      color: #e2e8f0;
+      box-sizing: border-box;
+    }
     .emitter-check-item {
       display: flex;
       align-items: center;
@@ -3590,108 +3664,96 @@
 
           <div class="budget-slider-row">
             <div class="budget-slider-header">
-              <strong>☀️ Solar Photovoltaics (Utility & Rooftop)</strong>
+              <strong class="sol-method-trigger" tabindex="0" role="button" onclick="toggleSolMethodPopover('solar', this, event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSolMethodPopover('solar', this, event);}" title="Click for fleet size, LCOE &amp; feasible max capacity">☀️ Solar Photovoltaics (Utility &amp; Rooftop) <span class="sol-method-info-icon">ⓘ</span></strong>
               <span id="lblSolSolar">1,600 TWh/yr</span>
             </div>
-            <div class="budget-slider-sub">Current fleet: ~1,600 GW (1,600 TWh/yr) · LCOE: $0.03–$0.05/kWh · Capacity factor ~20%<br><span style="color:#94a3b8;">Feasible max: &gt;1,500,000 TWh/yr global technical potential (IEA/NREL — unconstrained by sunlight)</span></div>
             <input type="range" id="sliderSolSolar" min="0" max="50000" step="500" value="1600">
           </div>
 
           <div class="budget-slider-row">
             <div class="budget-slider-header">
-              <strong>💨 Wind Power (Onshore & Offshore)</strong>
+              <strong class="sol-method-trigger" tabindex="0" role="button" onclick="toggleSolMethodPopover('wind', this, event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSolMethodPopover('wind', this, event);}" title="Click for fleet size, LCOE &amp; feasible max capacity">💨 Wind Power (Onshore &amp; Offshore) <span class="sol-method-info-icon">ⓘ</span></strong>
               <span id="lblSolWind">2,300 TWh/yr</span>
             </div>
-            <div class="budget-slider-sub">Current fleet: ~1,020 GW (2,300 TWh/yr) · LCOE: $0.035–$0.065/kWh (Onshore $0.035–$0.05, Offshore $0.07–$0.09) · Capacity factor ~35–50%<br><span style="color:#94a3b8;">Feasible max: &gt;400,000 TWh/yr global technical potential (IEA/IPCC — exceeds total global demand)</span></div>
             <input type="range" id="sliderSolWind" min="0" max="40000" step="500" value="2300">
           </div>
 
           <div class="budget-slider-row">
             <div class="budget-slider-header">
-              <strong>⚛️ Nuclear Fission (Fleet & Advanced SMRs)</strong>
+              <strong class="sol-method-trigger" tabindex="0" role="button" onclick="toggleSolMethodPopover('nuclear', this, event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSolMethodPopover('nuclear', this, event);}" title="Click for fleet size, LCOE, amortized cost &amp; feasible max">⚛️ Nuclear Fission (Fleet &amp; Advanced SMRs) <span class="sol-method-info-icon">ⓘ</span></strong>
               <span id="lblSolNuclear">2,650 TWh/yr</span>
             </div>
-            <div class="budget-slider-sub">Current fleet: ~375 GW / 413 reactors (2,650 TWh/yr) · LCOE: $0.07–$0.15/kWh (amortized $0.03–$0.04) · Capacity factor ~90% · 24/7 firm baseload<br><span style="color:#94a3b8;">Feasible max: ~100+ yrs conventional uranium at current use (millennia w/ breeders); limited by build rate &amp; cooling water</span></div>
             <input type="range" id="sliderSolNuclear" min="0" max="20000" step="250" value="2650">
           </div>
 
           <div class="budget-slider-row">
             <div class="budget-slider-header">
-              <strong>🌊 Hydroelectric (Reservoir & Run-of-River)</strong>
+              <strong class="sol-method-trigger" tabindex="0" role="button" onclick="toggleSolMethodPopover('hydro', this, event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSolMethodPopover('hydro', this, event);}" title="Click for fleet size, LCOE &amp; feasible max capacity">🌊 Hydroelectric (Reservoir &amp; Run-of-River) <span class="sol-method-info-icon">ⓘ</span></strong>
               <span id="lblSolHydro">4,300 TWh/yr</span>
             </div>
-            <div class="budget-slider-sub">Current fleet: ~1,250 GW (4,300 TWh/yr) · LCOE: $0.04–$0.08/kWh · Capacity factor ~42% · Dispatchable clean inertia & seasonal reservoir storage<br><span style="color:#94a3b8;">Feasible max: ~9,000–15,000 TWh/yr economically feasible globally (IEA/IHA — limited by suitable river valleys &amp; ecology)</span></div>
             <input type="range" id="sliderSolHydro" min="0" max="10000" step="200" value="4300">
           </div>
 
           <div class="budget-slider-row" style="margin-bottom: 16px;">
             <div class="budget-slider-header">
-              <strong>🌿 Geothermal, Sustainable Biomass & Marine</strong>
+              <strong class="sol-method-trigger" tabindex="0" role="button" onclick="toggleSolMethodPopover('biogeo', this, event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSolMethodPopover('biogeo', this, event);}" title="Click for fleet size, LCOE &amp; feasible max capacity">🌿 Geothermal, Sustainable Biomass &amp; Marine <span class="sol-method-info-icon">ⓘ</span></strong>
               <span id="lblSolBioGeo">800 TWh/yr</span>
             </div>
-            <div class="budget-slider-sub">Current fleet: ~175 GW (800 TWh/yr — Biomass 145 GW, Geothermal 16 GW, Marine 0.5 GW) · LCOE: $0.05–$0.10/kWh · Capacity factor ~70–85% · High-temp steam & firm heat<br><span style="color:#94a3b8;">Feasible max: Sustainable biomass ~3,000–5,000 TWh/yr (IPCC/IEA, land-limited); Enhanced geothermal &gt;100,000 TWh/yr; Marine ~2,000–4,000 TWh/yr</span></div>
             <input type="range" id="sliderSolBioGeo" min="0" max="10000" step="100" value="800">
           </div>
 
           <!-- Section B: Storage Sliders -->
           <div style="font-size: 0.8rem; font-weight: 700; color: #fff; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 4px;">
-            2. Energy Storage & Grid Balancing Capacity (TWh Energy Storage):
+            2. Energy Storage &amp; Grid Balancing Capacity (TWh Energy Storage):
           </div>
 
           <div class="budget-slider-row">
             <div class="budget-slider-header">
-              <strong>🔋 Battery Storage (Li-ion, Sodium-ion, LFP, Flow)</strong>
+              <strong class="sol-method-trigger" tabindex="0" role="button" onclick="toggleSolMethodPopover('battery', this, event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSolMethodPopover('battery', this, event);}" title="Click for Li-ion, LFP, Sodium-ion &amp; Flow battery estimates">🔋 Battery Storage (Li-ion, LFP, Sodium-ion, Flow) <span class="sol-method-info-icon">ⓘ</span></strong>
               <span id="lblSolBattery">0.8 TWh</span>
             </div>
-            <div class="budget-slider-sub">Current capacity: ~0.8 TWh (800 GWh / ~150 GW) · LCOS: $0.10–$0.18/kWh-cycle · RTE ~88% (Flow ~65–75%) · 2–12+ hr duration · Peak shaving &amp; solar firming<br><span style="color:#94a3b8;">Feasible max: Multi-TWh to tens of TWh globally (IEA) — Li-ion/LFP scaled by lithium; Sodium-ion (abundant NaCl, zero Li/Co) &amp; Flow batteries (vanadium/iron-electrolyte, 8–12+ hr, &gt;20k cycles) remove mineral bottlenecks</span></div>
             <input type="range" id="sliderSolBattery" min="0" max="50" step="0.5" value="0.8">
           </div>
 
           <div class="budget-slider-row">
             <div class="budget-slider-header">
-              <strong>🏔️ Pumped Hydroelectric Storage (PHS)</strong>
+              <strong class="sol-method-trigger" tabindex="0" role="button" onclick="toggleSolMethodPopover('pumped', this, event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSolMethodPopover('pumped', this, event);}" title="Click for LCOS, RTE &amp; valley-limited max capacity">🏔️ Pumped Hydroelectric Storage (PHS) <span class="sol-method-info-icon">ⓘ</span></strong>
               <span id="lblSolPumped">9.0 TWh</span>
             </div>
-            <div class="budget-slider-sub">Current capacity: ~9.0 TWh (9,000 GWh / ~165 GW, >90% global) · LCOS: $0.05–$0.12/kWh-cycle · RTE ~80% · 8–24+ hr duration · 50–100 yr life<br><span style="color:#94a3b8;">Feasible max: UK ~0.5 TWh linking existing reservoirs (~5.3 TWh max flooding new valleys — Royal Society 2023); Global off-river ~23,000 TWh (ANU Atlas)</span></div>
             <input type="range" id="sliderSolPumped" min="0" max="40" step="0.5" value="9.0">
           </div>
 
           <div class="budget-slider-row">
             <div class="budget-slider-header">
-              <strong>💨 Compressed Air Energy Storage (CAES)</strong>
+              <strong class="sol-method-trigger" tabindex="0" role="button" onclick="toggleSolMethodPopover('caes', this, event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSolMethodPopover('caes', this, event);}" title="Click for LCOS, RTE &amp; geological max capacity">💨 Compressed Air Energy Storage (CAES) <span class="sol-method-info-icon">ⓘ</span></strong>
               <span id="lblSolCaes">0.2 TWh</span>
             </div>
-            <div class="budget-slider-sub">Current capacity: ~0.2 TWh (200 GWh / ~2 GW in salt caverns) · LCOS: $0.07–$0.14/kWh-cycle · RTE ~62% · 6–20 hr duration · Zero rare metals<br><span style="color:#94a3b8;">Feasible max: Geologically limited to salt basins &amp; porous aquifers (UK onshore salt basins ~215 TWh practical — BGS/Arup)</span></div>
             <input type="range" id="sliderSolCaes" min="0" max="20" step="0.2" value="0.2">
           </div>
 
           <div class="budget-slider-row">
             <div class="budget-slider-header">
-              <strong>🏗️ Gravity Storage (Weights & Mine Shafts)</strong>
+              <strong class="sol-method-trigger" tabindex="0" role="button" onclick="toggleSolMethodPopover('gravity', this, event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSolMethodPopover('gravity', this, event);}" title="Click for LCOS, RTE &amp; feasible scale">🏗️ Gravity Storage (Weights &amp; Mine Shafts) <span class="sol-method-info-icon">ⓘ</span></strong>
               <span id="lblSolGravity">0.05 TWh</span>
             </div>
-            <div class="budget-slider-sub">Current capacity: ~0.05 TWh (~50 GWh early commercial) · LCOS: $0.08–$0.15/kWh-cycle · RTE ~80% · 4–12 hr duration · Solid mass m·g·h · 40+ yr life<br><span style="color:#94a3b8;">Feasible max: Modular GWh–low TWh scale (constrained by mine-shaft/tower height &amp; mass)</span></div>
             <input type="range" id="sliderSolGravity" min="0" max="15" step="0.2" value="0.05">
           </div>
 
           <div class="budget-slider-row">
             <div class="budget-slider-header">
-              <strong>🔄 Flywheels (High-Speed Rotors)</strong>
+              <strong class="sol-method-trigger" tabindex="0" role="button" onclick="toggleSolMethodPopover('flywheel', this, event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSolMethodPopover('flywheel', this, event);}" title="Click for LCOS, RTE &amp; grid role">🔄 Flywheels (High-Speed Rotors) <span class="sol-method-info-icon">ⓘ</span></strong>
               <span id="lblSolFlywheel">0.02 TWh</span>
             </div>
-            <div class="budget-slider-sub">Current capacity: ~0.02 TWh (~20 GWh / ~1.5 GW) · LCOS: $0.15–$0.25/kWh-cycle · RTE ~88% · Seconds to 1 hr · Kinetic ½·I·ω² · Grid frequency & inertia<br><span style="color:#94a3b8;">Feasible max: High-power/inertia role (seconds–1 hr); not suited for bulk multi-hour energy storage</span></div>
             <input type="range" id="sliderSolFlywheel" min="0" max="5" step="0.1" value="0.02">
           </div>
 
           <div class="budget-slider-row">
             <div class="budget-slider-header">
-              <strong>🧪 Hydrogen & Power-to-Gas (Seasonal Multi-Week)</strong>
+              <strong class="sol-method-trigger" tabindex="0" role="button" onclick="toggleSolMethodPopover('h2', this, event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSolMethodPopover('h2', this, event);}" title="Click for LCOS, RTE &amp; Royal Society salt-cavern estimates">🧪 Hydrogen &amp; Power-to-Gas (Seasonal Multi-Week) <span class="sol-method-info-icon">ⓘ</span></strong>
               <span id="lblSolH2">0.5 TWh</span>
             </div>
-            <div class="budget-slider-sub">Current capacity: ~0.5 TWh (500 GWh cavern storage) · LCOS: $0.18–$0.35/kWh-cycle · RTE ~42% · Multi-week seasonal storage · Heavy industry fuel<br><span style="color:#94a3b8;">Feasible max: UK ~215 TWh practical onshore salt caverns (~2,150–3,000 TWh theoretical; 60–100 TWh needed for UK Net Zero — Royal Society 2023 / BGS)</span></div>
             <input type="range" id="sliderSolH2" min="0" max="50" step="0.5" value="0.5">
           </div>
-
         </div>
 
         <!-- Right Column: Trajectory Chart & Storage Comparison -->
@@ -16258,6 +16320,242 @@
         });
       });
     }
+  </script>
+
+  <!-- Energy Solutions Method Detail Popover -->
+  <div id="solMethodPopover" class="sol-method-popover" role="dialog" aria-modal="false"></div>
+
+  <!-- Mobile PWA Long-Press # Anchor Link Popover -->
+  <div id="pwaAnchorPopover" class="pwa-anchor-popover" role="dialog" aria-modal="false">
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px;">
+      <strong id="pwaAnchorTitle" style="color: #38bdf8; font-size: 0.82rem;">Direct Section Link</strong>
+      <button type="button" onclick="closePwaAnchorPopover()" style="background: none; border: none; color: #94a3b8; font-size: 1.15rem; line-height: 1; cursor: pointer;" aria-label="Close">&times;</button>
+    </div>
+    <div id="pwaAnchorUrl" style="font-family: ui-monospace, monospace; font-size: 0.72rem; color: #e2e8f0; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 6px; padding: 6px 8px; word-break: break-all; margin-bottom: 8px;"></div>
+    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+      <button type="button" id="btnCopyPwaAnchor" onclick="copyPwaAnchorUrl()" class="btn btn-modal" style="font-size: 0.74rem; padding: 5px 12px;">📋 Copy URL</button>
+      <button type="button" id="btnSharePwaAnchor" onclick="sharePwaAnchorUrl()" class="btn btn-secondary" style="font-size: 0.74rem; padding: 5px 12px; display: none;">📤 Share</button>
+    </div>
+  </div>
+
+  <script>
+    (function initSolutionsPopupsAndPwaAnchors() {
+      const SOL_METHOD_DETAILS = {
+        solar: {
+          title: "☀️ Solar Photovoltaics (Utility & Rooftop)",
+          html: "<div><strong>Current fleet:</strong> ~1,600 GW (1,600 TWh/yr) &middot; <strong>LCOE:</strong> $0.03–$0.05/kWh &middot; <strong>Capacity factor:</strong> ~20%</div><div style=\"margin-top:6px; color:#cbd5e1;\"><strong>Feasible max:</strong> &gt;1,500,000 TWh/yr global technical potential (IEA/NREL — unconstrained by sunlight; limited only by grid siting &amp; storage).</div>"
+        },
+        wind: {
+          title: "💨 Wind Power (Onshore & Offshore)",
+          html: "<div><strong>Current fleet:</strong> ~1,020 GW (2,300 TWh/yr) &middot; <strong>LCOE:</strong> $0.035–$0.065/kWh (Onshore $0.035–$0.05, Offshore $0.07–$0.09) &middot; <strong>Capacity factor:</strong> ~35–50%</div><div style=\"margin-top:6px; color:#cbd5e1;\"><strong>Feasible max:</strong> &gt;400,000 TWh/yr global technical potential (IEA/IPCC — far exceeds total global electricity demand).</div>"
+        },
+        nuclear: {
+          title: "⚛️ Nuclear Fission (Fleet & Advanced SMRs)",
+          html: "<div><strong>Current fleet:</strong> ~375 GW / 413 reactors (2,650 TWh/yr) &middot; <strong>LCOE:</strong> $0.07–$0.15/kWh (amortized $0.03–$0.04) &middot; <strong>Capacity factor:</strong> ~90% (24/7 firm baseload)</div><div style=\"margin-top:6px; color:#cbd5e1;\"><strong>Feasible max:</strong> ~100+ yrs conventional uranium at current use (millennia with breeder/thorium reactors); constrained by build rate, capital cost &amp; cooling water.</div>"
+        },
+        hydro: {
+          title: "🌊 Hydroelectric (Reservoir & Run-of-River)",
+          html: "<div><strong>Current fleet:</strong> ~1,250 GW (4,300 TWh/yr) &middot; <strong>LCOE:</strong> $0.04–$0.08/kWh &middot; <strong>Capacity factor:</strong> ~42% &middot; Dispatchable clean inertia &amp; seasonal reservoir storage.</div><div style=\"margin-top:6px; color:#cbd5e1;\"><strong>Feasible max:</strong> ~9,000–15,000 TWh/yr economically feasible globally (IEA/IHA — limited by suitable river valleys, ecology &amp; resettlement).</div>"
+        },
+        biogeo: {
+          title: "🌿 Geothermal, Sustainable Biomass & Marine",
+          html: "<div><strong>Current fleet:</strong> ~175 GW (800 TWh/yr — Biomass 145 GW, Geothermal 16 GW, Marine 0.5 GW) &middot; <strong>LCOE:</strong> $0.05–$0.10/kWh &middot; <strong>Capacity factor:</strong> ~70–85%.</div><div style=\"margin-top:6px; color:#cbd5e1;\"><strong>Feasible max:</strong> Sustainable biomass ~3,000–5,000 TWh/yr (IPCC/IEA, land-limited); Enhanced geothermal &gt;100,000 TWh/yr; Marine ~2,000–4,000 TWh/yr.</div>"
+        },
+        battery: {
+          title: "🔋 Battery Storage Technologies (Separated Estimates)",
+          html: "<div><strong>Current global fleet:</strong> ~0.8 TWh (800 GWh / ~150 GW) &middot; <strong>Feasible max:</strong> Multi-TWh to tens of TWh globally (IEA — mineral/supply-chain scaled, not valley-limited).</div>" +
+            "<div class=\"sol-batt-tech-list\">" +
+              "<div class=\"sol-batt-tech-item\"><strong style=\"color:#38bdf8;\">1. Lithium-ion (NMC / NCA):</strong> LCOS $0.12–$0.20/kWh-cycle &middot; RTE ~88–92% &middot; 2–4 hr duration. Highest energy density (EVs &amp; fast grid response); constrained by lithium, nickel &amp; cobalt supply.</div>" +
+              "<div class=\"sol-batt-tech-item\"><strong style=\"color:#34d399;\">2. LFP (Lithium Iron Phosphate):</strong> LCOS $0.09–$0.15/kWh-cycle &middot; RTE ~88–92% &middot; 2–8 hr duration &middot; 4,000–6,000+ cycles. Cobalt/nickel-free, thermally stable; dominant stationary grid chemistry.</div>" +
+              "<div class=\"sol-batt-tech-item\"><strong style=\"color:#fbbf24;\">3. Sodium-ion (Na-ion):</strong> LCOS $0.08–$0.14/kWh-cycle (at scale) &middot; RTE ~85–90% &middot; 2–6 hr duration. Uses abundant NaCl salt with zero lithium, cobalt, or copper foil; strong cold-weather performance.</div>" +
+              "<div class=\"sol-batt-tech-item\"><strong style=\"color:#c084fc;\">4. Flow Batteries (Vanadium / Iron-Flow):</strong> LCOS $0.11–$0.20/kWh-cycle &middot; RTE ~65–75% &middot; 8–12+ hr duration &middot; &gt;20,000 cycles (20–30 yr life). Non-flammable liquid tanks; power (kW) &amp; energy (kWh) scale independently.</div>" +
+            "</div>"
+        },
+        pumped: {
+          title: "🏔️ Pumped Hydroelectric Storage (PHS)",
+          html: "<div><strong>Current capacity:</strong> ~9.0 TWh (9,000 GWh / ~165 GW, &gt;90% global) &middot; <strong>LCOS:</strong> $0.05–$0.12/kWh-cycle &middot; <strong>RTE:</strong> ~80% &middot; 8–24+ hr duration &middot; 50–100 yr life.</div><div style=\"margin-top:6px; color:#cbd5e1;\"><strong>Feasible max:</strong> UK ~0.5 TWh linking existing reservoirs (~5.3 TWh max flooding new valleys — Royal Society 2023); Global off-river closed-loop ~23,000 TWh (ANU Atlas).</div>"
+        },
+        caes: {
+          title: "💨 Compressed Air Energy Storage (CAES)",
+          html: "<div><strong>Current capacity:</strong> ~0.2 TWh (200 GWh / ~2 GW in salt caverns) &middot; <strong>LCOS:</strong> $0.07–$0.14/kWh-cycle &middot; <strong>RTE:</strong> ~62% &middot; 6–20 hr duration &middot; Zero rare metals.</div><div style=\"margin-top:6px; color:#cbd5e1;\"><strong>Feasible max:</strong> Geologically limited to salt basins &amp; porous aquifers (UK onshore salt basins ~215 TWh practical — BGS/Arup).</div>"
+        },
+        gravity: {
+          title: "🏗️ Gravity Storage (Weights & Mine Shafts)",
+          html: "<div><strong>Current capacity:</strong> ~0.05 TWh (~50 GWh early commercial) &middot; <strong>LCOS:</strong> $0.08–$0.15/kWh-cycle &middot; <strong>RTE:</strong> ~80% &middot; 4–12 hr duration &middot; Solid mass m&middot;g&middot;h &middot; 40+ yr life.</div><div style=\"margin-top:6px; color:#cbd5e1;\"><strong>Feasible max:</strong> Modular GWh–low TWh scale (constrained by mine-shaft/tower height &amp; mass).</div>"
+        },
+        flywheel: {
+          title: "🔄 Flywheels (High-Speed Rotors)",
+          html: "<div><strong>Current capacity:</strong> ~0.02 TWh (~20 GWh / ~1.5 GW) &middot; <strong>LCOS:</strong> $0.15–$0.25/kWh-cycle &middot; <strong>RTE:</strong> ~88% &middot; Seconds to 1 hr &middot; Kinetic &frac12;&middot;I&middot;&omega;&sup2;.</div><div style=\"margin-top:6px; color:#cbd5e1;\"><strong>Feasible max:</strong> High-power grid frequency &amp; inertia role (seconds–1 hr); not suited for bulk multi-hour energy storage.</div>"
+        },
+        h2: {
+          title: "🧪 Hydrogen & Power-to-Gas (Seasonal Multi-Week)",
+          html: "<div><strong>Current capacity:</strong> ~0.5 TWh (500 GWh cavern storage) &middot; <strong>LCOS:</strong> $0.18–$0.35/kWh-cycle &middot; <strong>RTE:</strong> ~42% &middot; Multi-week seasonal storage &amp; heavy industry fuel.</div><div style=\"margin-top:6px; color:#cbd5e1;\"><strong>Feasible max:</strong> UK ~215 TWh practical onshore salt caverns (~2,150–3,000 TWh theoretical; 60–100 TWh needed for UK Net Zero — Royal Society 2023 / BGS).</div>"
+        }
+      };
+
+      const solPop = document.getElementById("solMethodPopover");
+      let activeSolKey = null;
+
+      function closeSolMethodPopover() {
+        if (solPop) solPop.style.display = "none";
+        activeSolKey = null;
+      }
+
+      function toggleSolMethodPopover(key, triggerEl, e) {
+        if (e) e.stopPropagation();
+        if (!solPop || !SOL_METHOD_DETAILS[key]) return;
+        if (activeSolKey === key && solPop.style.display === "block") {
+          closeSolMethodPopover();
+          return;
+        }
+        activeSolKey = key;
+        const item = SOL_METHOD_DETAILS[key];
+        solPop.innerHTML =
+          "<div style=\"display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.12); padding-bottom:6px;\">" +
+            "<strong style=\"color:#38bdf8; font-size:0.86rem;\">" + item.title + "</strong>" +
+            "<button type=\"button\" onclick=\"closeSolMethodPopover()\" style=\"background:none; border:none; color:#94a3b8; font-size:1.15rem; line-height:1; cursor:pointer;\" aria-label=\"Close\">&times;</button>" +
+          "</div>" +
+          item.html;
+        solPop.style.display = "block";
+
+        const rect = triggerEl.getBoundingClientRect();
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const popW = Math.min(470, vw - 24);
+        solPop.style.width = popW + "px";
+        let left = rect.left;
+        if (left + popW > vw - 12) left = vw - popW - 12;
+        if (left < 12) left = 12;
+        const popH = Math.min(solPop.offsetHeight || 260, vh - 24);
+        let top = rect.bottom + 8;
+        if (top + popH > vh - 12 && rect.top - popH - 8 >= 12) {
+          top = rect.top - popH - 8;
+        } else if (top + popH > vh - 12) {
+          top = Math.max(12, vh - popH - 12);
+        }
+        solPop.style.left = Math.round(left) + "px";
+        solPop.style.top = Math.round(top) + "px";
+      }
+
+      document.addEventListener("click", (e) => {
+        if (solPop && solPop.style.display === "block" && !solPop.contains(e.target) && !(e.target.closest && e.target.closest(".sol-method-trigger"))) {
+          closeSolMethodPopover();
+        }
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeSolMethodPopover();
+          closePwaAnchorPopover();
+        }
+      });
+
+      window.toggleSolMethodPopover = toggleSolMethodPopover;
+      window.closeSolMethodPopover = closeSolMethodPopover;
+
+      // Mobile PWA Long-Press & Desktop Right-Click # Anchor Link Popover
+      const pwaPop = document.getElementById("pwaAnchorPopover");
+      const pwaTitle = document.getElementById("pwaAnchorTitle");
+      const pwaUrlEl = document.getElementById("pwaAnchorUrl");
+      const btnCopyPwa = document.getElementById("btnCopyPwaAnchor");
+      const btnSharePwa = document.getElementById("btnSharePwaAnchor");
+      let currentPwaUrl = "";
+
+      const BTN_HASH_MAP = {
+        btnModeSimple: "#Intro",
+        btnModeAdvanced: "#WarmingSim",
+        btnModeBudgets: "#CarbonBudgets",
+        btnModeSources: "#GHGSources",
+        btnModeDunkel: "#Dunkelflaute",
+        btnModeSolutions: "#EnergySolutions"
+      };
+
+      function resolveAnchorTarget(el) {
+        if (!el || !el.closest) return null;
+        const modeBtn = el.closest(".mode-switch-btn[id]");
+        if (modeBtn && BTN_HASH_MAP[modeBtn.id]) {
+          return { hash: BTN_HASH_MAP[modeBtn.id], label: modeBtn.textContent.trim() };
+        }
+        const anchored = el.closest("[id='sector-emissions'], [id='country-emissions'], [id='fossil-breakdown'], [id='llewellyn-smith'], .card-title[id], h1[id], h2[id], h3[id]");
+        if (anchored && anchored.id) {
+          const text = anchored.textContent.replace(/\s+/g, " ").trim().slice(0, 70);
+          return { hash: "#" + anchored.id, label: text || ("#" + anchored.id) };
+        }
+        return null;
+      }
+
+      function showPwaAnchorPopover(info) {
+        if (!pwaPop || !info) return;
+        const base = window.location.origin + window.location.pathname;
+        currentPwaUrl = base + info.hash;
+        if (pwaTitle) pwaTitle.textContent = "🔗 Direct Link: " + info.label;
+        if (pwaUrlEl) pwaUrlEl.textContent = currentPwaUrl;
+        if (btnCopyPwa) btnCopyPwa.textContent = "📋 Copy URL";
+        if (btnSharePwa) btnSharePwa.style.display = navigator.share ? "inline-flex" : "none";
+        pwaPop.style.display = "block";
+        if (navigator.vibrate) {
+          try { navigator.vibrate(20); } catch (_) {}
+        }
+      }
+
+      function closePwaAnchorPopover() {
+        if (pwaPop) pwaPop.style.display = "none";
+      }
+
+      function copyPwaAnchorUrl() {
+        if (!currentPwaUrl) return;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(currentPwaUrl).then(() => {
+            if (btnCopyPwa) btnCopyPwa.textContent = "✓ Copied!";
+          }).catch(() => {});
+        }
+      }
+
+      function sharePwaAnchorUrl() {
+        if (!currentPwaUrl || !navigator.share) return;
+        navigator.share({
+          title: pwaTitle ? pwaTitle.textContent.replace("🔗 Direct Link: ", "") : "ClimateSim",
+          url: currentPwaUrl
+        }).catch(() => {});
+      }
+
+      let longPressTimer = null;
+      let suppressNextClick = false;
+      document.addEventListener("pointerdown", (e) => {
+        if (e.pointerType !== "touch" && e.button !== 0) return;
+        const info = resolveAnchorTarget(e.target);
+        if (!info) return;
+        clearTimeout(longPressTimer);
+        longPressTimer = setTimeout(() => {
+          suppressNextClick = true;
+          showPwaAnchorPopover(info);
+        }, 550);
+      });
+      ["pointerup", "pointercancel", "pointermove"].forEach(evt => {
+        document.addEventListener(evt, () => clearTimeout(longPressTimer), { passive: true });
+      });
+      document.addEventListener("click", (e) => {
+        if (suppressNextClick) {
+          suppressNextClick = false;
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+        if (pwaPop && pwaPop.style.display === "block" && !pwaPop.contains(e.target)) {
+          closePwaAnchorPopover();
+        }
+      }, true);
+      document.addEventListener("contextmenu", (e) => {
+        const info = resolveAnchorTarget(e.target);
+        if (info && (window.matchMedia("(display-mode: standalone)").matches || e.target.closest(".card-title[id], [id='country-emissions'], [id='fossil-breakdown'], [id='llewellyn-smith']"))) {
+          e.preventDefault();
+          showPwaAnchorPopover(info);
+        }
+      });
+
+      window.closePwaAnchorPopover = closePwaAnchorPopover;
+      window.copyPwaAnchorUrl = copyPwaAnchorUrl;
+      window.sharePwaAnchorUrl = sharePwaAnchorUrl;
+    })();
   </script>
 </body>
 </html>
