@@ -17,6 +17,7 @@ const PRECACHE_ASSETS = [
   './podcasts.html',
   './national_emergency_briefing.html',
   './what_can_i_do.html',
+  './site-search.js',
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png',
