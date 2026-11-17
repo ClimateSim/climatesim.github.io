@@ -7,49 +7,56 @@
     {
       title: "Earth's Energy Imbalance (Plain-English Intro)",
       page: "Introduction",
-      url: "earth_heat_trap.html",
+      url: "index.html#Intro",
       tags: "greenhouse effect heat trap blanket infrared co2 warming basics simple mode",
       desc: "Interactive 1D atmospheric column explaining how greenhouse gases trap outgoing infrared heat."
     },
     {
+      title: "Earth's Heat Trap (Plain-English Climate Guide)",
+      page: "Heat Trap Guide",
+      url: "earth_heat_trap.html",
+      tags: "earth heat trap plain english climate guide sun reader intro",
+      desc: "Standalone plain-English guide explaining why our planet is warming and practical pathways to restore balance."
+    },
+    {
       title: "Warming Simulator (1D Radiative Transfer & 500-Year Trajectory)",
       page: "Warming Simulator",
-      url: "advanced.html#WarmingSim",
+      url: "index.html#WarmingSim",
       tags: "1d radiative transfer keeling curve temperature projection 1750 2100 climate sensitivity",
       desc: "Simulate CO₂ emissions or drawdown from -3.0 to +4.0 ppm/yr and inspect radiative forcing & warming."
     },
     {
       title: "Climate Tipping Points (Greenland, AMOC, Permafrost, Amazon)",
       page: "Warming Simulator",
-      url: "advanced.html#WarmingSim",
+      url: "index.html#WarmingSim",
       tags: "tipping points greenland ice sheet west antarctica amoc permafrost amazon rainforest boreal tundra coral reefs",
       desc: "Peer-reviewed temperature thresholds and feedback loops on the 500-year warming curve."
     },
     {
       title: "1-Million-Year Paleoclimate Comparison (500-Year Warming Rate)",
       page: "Warming Simulator",
-      url: "advanced.html#1-million-year",
+      url: "index.html#1-million-year",
       tags: "1 million year comparison 1000000 800000 epica dome c ice core glacial interglacial termination paleoclimate",
       desc: "Compare modern 500-year warming and CO₂ rates against 1,000,000 years of ice-age cycles."
     },
     {
       title: "Carbon Budgets & Unburnable Fossil Reserves",
       page: "Carbon Budgets",
-      url: "advanced.html#CarbonBudgets",
+      url: "index.html#CarbonBudgets",
       tags: "carbon budget 1.5c 1.7c 2.0c 3400 gt proven reserves unburnable oil gas coal",
       desc: "Compare remaining 1.5°C/2.0°C carbon budgets against ~3,400 Gt CO₂ of proven commercial fossil reserves."
     },
     {
       title: "Global Emissions by Economic Sector (Our World in Data)",
       page: "GHG Sources",
-      url: "advanced.html#sector-emissions",
+      url: "index.html#sector-emissions",
       tags: "ghg sources sectors energy transport industry agriculture buildings waste 54.6 gt 40.9 gt",
       desc: "Interactive donut chart of global greenhouse gas and CO₂ emissions by economic sector."
     },
     {
       title: "Current & Historical Emissions by Country (Top 50 & Rest of World)",
       page: "GHG Sources",
-      url: "advanced.html#country-emissions",
+      url: "index.html#country-emissions",
       tags: "country emissions treemap china usa uk india eu 1750 cumulative per capita exclude top 20 rest of world",
       desc: "Interactive treemap & ranked table of annual, cumulative historical, and per-capita emissions with Top 20 exclusions."
     },
@@ -63,49 +70,49 @@
     {
       title: "Fossil Fuel Breakdown & What Replaces It",
       page: "GHG Sources",
-      url: "advanced.html#fossil-breakdown",
+      url: "index.html#fossil-breakdown",
       tags: "coal oil gas cement land use change exxon 1998 playbook disinformation drilled",
       desc: "Primary fossil CO₂ shares alongside what replaces fossil fuels and the 1998 Exxon disinformation playbook."
     },
     {
       title: "UK Dünkelflaute & Seasonal Storage Simulator",
       page: "UK Dünkelflaute",
-      url: "advanced.html#Dunkelflaute",
+      url: "index.html#Dunkelflaute",
       tags: "uk dunkelflaute dünkelflaute wind drought winter storage salt caverns hydrogen grid demand",
       desc: "Model Great Britain's electricity demand and multi-week winter wind-drought storage requirements."
     },
     {
       title: "Clean Energy Solutions & 75,000 TWh Goal",
       page: "Energy Solutions",
-      url: "advanced.html#EnergySolutions",
+      url: "index.html#EnergySolutions",
       tags: "energy solutions 75000 twh electrification efficiency dividend solar wind nuclear hydro geothermal biomass marine",
       desc: "Build global clean generation and storage portfolios with LCOE, LCOS, RTE, amortized cost, and feasible max limits."
     },
     {
       title: "Battery Storage: Li-ion, LFP, Sodium-ion & Flow Batteries",
       page: "Energy Solutions",
-      url: "advanced.html#EnergySolutions",
+      url: "index.html#EnergySolutions",
       tags: "battery storage lithium ion lfp sodium ion na-ion flow battery vanadium iron lcos rte",
       desc: "Separated estimates for Li-ion (NMC/NCA), LFP, Sodium-ion (NaCl, zero Li/Co), and Flow batteries (8-12+ hr)."
     },
     {
       title: "Pumped Hydro, CAES, Gravity, Flywheels & Hydrogen Caverns",
       page: "Energy Solutions",
-      url: "advanced.html#EnergySolutions",
+      url: "index.html#EnergySolutions",
       tags: "pumped hydro phs compressed air caes gravity flywheel hydrogen salt caverns uk valleys feasible max",
       desc: "Compare grid storage technologies, round-trip efficiency (RTE), LCOS, and geographical/geological limits."
     },
     {
       title: "The Royal Society (2023) — Sir Chris Llewellyn Smith",
       page: "Energy Solutions",
-      url: "advanced.html#llewellyn-smith",
+      url: "index.html#llewellyn-smith",
       tags: "royal society 2023 sir chris llewellyn smith oxford large scale electricity storage 60 100 twh hydrogen salt caverns",
       desc: "37-year hourly UK weather analysis showing 60–100 TWh hydrogen salt-cavern storage need."
     },
     {
       title: "Sustainable Energy – without the hot air (Prof. Sir David MacKay)",
       page: "Energy Solutions",
-      url: "advanced.html#mackay-hot-air",
+      url: "index.html#mackay-hot-air",
       tags: "david mackay sustainable energy without the hot air cambridge decc numbers not adjectives",
       desc: "Foundational open-access energy physics book & tribute to Prof. Sir David J. C. MacKay FRS (1967–2016)."
     },
@@ -385,7 +392,8 @@
     const [targetFile, targetHash] = item.url.split("#");
     const curFile = (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
     const normTarget = targetFile.toLowerCase();
-    const isSamePage = curFile === normTarget || ((curFile === "" || curFile === "index.html") && normTarget === "earth_heat_trap.html");
+    const isMainSim = (f) => f === "" || f === "index.html" || f === "interactive_1d_atmospheric_radiative_transfer_earth_energy_balance_simulator.html";
+    const isSamePage = curFile === normTarget || (isMainSim(curFile) && isMainSim(normTarget));
     if (isSamePage && targetHash) {
       window.location.hash = "#" + targetHash;
       window.dispatchEvent(new HashChangeEvent("hashchange"));

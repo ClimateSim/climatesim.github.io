@@ -42,7 +42,7 @@
       "name": "Warming Simulator",
       "short_name": "Simulator",
       "description": "1D Atmospheric Radiative Transfer & Energy Balance",
-      "url": "./advanced.html",
+      "url": "./index.html#WarmingSim",
       "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
     },
     {
