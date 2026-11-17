@@ -388,6 +388,27 @@
       width: 100%;
       box-sizing: border-box;
     }
+    .cs-guide-menu-btn {
+      grid-column: 1 / -1;
+      margin-top: 4px;
+      padding: 7px 12px !important;
+      border-radius: 7px !important;
+      border: 1px solid rgba(56, 189, 248, 0.45) !important;
+      background: rgba(56, 189, 248, 0.14) !important;
+      color: #38bdf8 !important;
+      font-size: 0.78rem !important;
+      font-weight: 700 !important;
+      text-decoration: none !important;
+      display: inline-flex !important;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .cs-guide-menu-btn:hover {
+      background: rgba(56, 189, 248, 0.24) !important;
+      border-color: #38bdf8 !important;
+      color: #ffffff !important;
+    }
     @media (max-width: 480px) {
       .cs-hamburger-panel.open .mode-switch-group,
       .cs-hamburger-panel.open.nav-links,
@@ -591,12 +612,18 @@
     }
 
     if (guideBtn && guideBtn.parentElement) {
-      guideBtn.parentElement.style.display = "flex";
-      guideBtn.parentElement.style.alignItems = "center";
-      guideBtn.parentElement.style.gap = "8px";
-      guideBtn.parentElement.style.flexWrap = "wrap";
-      guideBtn.parentElement.insertBefore(btn, guideBtn);
-      if (hamBtn) guideBtn.parentElement.appendChild(hamBtn);
+      const headerCtrlContainer = guideBtn.parentElement;
+      headerCtrlContainer.style.display = "flex";
+      headerCtrlContainer.style.alignItems = "center";
+      headerCtrlContainer.style.gap = "8px";
+      headerCtrlContainer.style.flexWrap = "wrap";
+      headerCtrlContainer.appendChild(btn);
+      if (hamBtn) headerCtrlContainer.appendChild(hamBtn);
+      if (navPanel) {
+        const targetGrid = navPanel.querySelector(".mode-switch-group") || navPanel;
+        guideBtn.classList.add("cs-guide-menu-btn");
+        targetGrid.appendChild(guideBtn);
+      }
     } else if (navPanel && navPanel.parentElement) {
       const ctrlWrap = document.createElement("div");
       ctrlWrap.style.display = "flex";
@@ -606,6 +633,13 @@
       ctrlWrap.appendChild(btn);
       if (hamBtn) ctrlWrap.appendChild(hamBtn);
       navPanel.parentElement.insertBefore(ctrlWrap, navPanel);
+
+      const targetGrid = navPanel.querySelector(".mode-switch-group") || navPanel;
+      const guideLink = document.createElement("a");
+      guideLink.href = "index.html?guide=1";
+      guideLink.className = "cs-guide-menu-btn";
+      guideLink.textContent = "📖 Guide & Proofs";
+      targetGrid.appendChild(guideLink);
     } else {
       btn.classList.add("cs-search-floating");
       document.body.appendChild(btn);
