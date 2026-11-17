@@ -110,6 +110,13 @@
       desc: "Foundational open-access energy physics book & tribute to Prof. Sir David J. C. MacKay FRS (1967–2016)."
     },
     {
+      title: "Project Drawdown Solutions Explorer (Electricity · Highly Recommended ↗)",
+      page: "External · drawdown.org",
+      url: "https://drawdown.org/explorer?sector=155&classification=256",
+      tags: "project drawdown explorer climate solutions electricity solar wind storage heat pumps efficiency highly recommended sector 155 classification 256",
+      desc: "Interactive Project Drawdown database of Highly Recommended electricity & grid solutions ranked by Gt CO₂-eq avoided, speed, and cost."
+    },
+    {
       title: "UK Temperature Stripes (1500–2025) & HadCET",
       page: "UK Impacts",
       url: "uk_climate_impacts_500_years.html#temperature-stripes",
