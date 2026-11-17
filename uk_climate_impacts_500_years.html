@@ -1047,7 +1047,7 @@
       <div class="header-top-row">
         <div class="badge-wrap">
           <span class="badge-pill">Chronology of Extremes</span>
-          <span class="version-tag">v2.4.0</span>
+          <span class="version-tag">v2.4.1</span>
         </div>
         <nav class="nav-links-row">
           <a href="earth_heat_trap.html" class="nav-btn nav-btn-home">← Earth's Heat Trap</a>
@@ -1094,6 +1094,7 @@
             <option value="temperature">🌡️ Temperature Stripes</option>
             <option value="rainfall">🌧️ UK Rainfall Stripes</option>
             <option value="wind">💨 Storm Wind Stripes</option>
+            <option value="enso">🌊 El Niño / ENSO Stripes</option>
           </select>
         </div>
 
@@ -2016,7 +2017,7 @@
         <a href="doughnut_economics.html" class="footer-link">Doughnut Economics</a>
       </div>
       <div>
-        <span>Calibrated empirical physics and historical climatology. <strong style="color: #38bdf8; font-family: var(--font-mono);">v2.4.0</strong></span>
+        <span>Calibrated empirical physics and historical climatology. <strong style="color: #38bdf8; font-family: var(--font-mono);">v2.4.1</strong></span>
       </div>
     </footer>
 
@@ -2346,6 +2347,64 @@
         /* 2020 */ 97.0, 98.0, 122.0, 96.0, 99.0, 108.0
       ];
 
+      // Peak DJF Niño 3.4 Sea-Surface Temperature Anomaly (°C) 1500–2025:
+      // 1871–2025: HadISST1 / NOAA ONI ERSSTv5; 1500–1870: Li et al. (2013) & Gergis & Fowler (2009) proxy reconstruction
+      const ENSO_NINO34 = [
+        /* 1500 */  0.2, -0.4,  0.8,  0.1, -0.7, -0.3,  0.5,  1.1, -0.2, -0.8,
+        /* 1510 */  0.4,  1.3, -0.5, -0.9,  0.2,  0.7, -0.3, -0.6,  0.9,  0.1,
+        /* 1520 */ -0.5,  0.6,  1.4, -0.2, -1.0,  0.3,  0.8, -0.4, -0.7,  0.5,
+        /* 1530 */  1.2, -0.3, -0.8,  0.1,  0.6, -0.5,  0.9,  0.2, -0.4,  1.5,
+        /* 1540 */ -0.6, -0.9,  0.3,  0.7, -0.2,  1.1, -0.5, -0.7,  0.4,  0.8,
+        /* 1550 */ -0.3, -1.1,  0.6,  1.3, -0.4, -0.6,  0.2,  0.9, -0.3,  0.5,
+        /* 1560 */ -0.8,  0.1,  0.7, -0.4, -0.9,  1.2,  0.3, -0.5,  0.8, -0.2,
+        /* 1570 */ -0.7,  0.4,  0.9, -0.3, -1.0,  0.6,  0.2,  1.0,  1.9, -0.4,
+        /* 1580 */ -0.8,  0.5,  0.7, -0.3, -0.6,  1.1, -0.2, -0.9,  0.4,  0.8,
+        /* 1590 */ -0.5,  0.3,  1.3, -0.4, -0.8,  0.6,  0.9, -0.2, -0.7,  0.5,
+        /* 1600 */  1.4, -0.5, -0.9,  0.2,  0.7, -0.3, -0.6,  1.1,  0.1, -0.8,
+        /* 1610 */  0.4,  0.9, -0.4, -0.7,  0.6,  1.2, -0.3, -0.9,  0.5,  0.8,
+        /* 1620 */ -0.2,  1.3, -0.6, -0.8,  0.4,  0.7, -0.3, -1.0,  0.5,  1.0,
+        /* 1630 */ -0.4, -0.7,  0.6,  0.9, -0.3, -0.8,  0.2,  1.1, -0.5, -0.6,
+        /* 1640 */  0.7,  1.4, -0.4, -0.9,  0.3,  0.8, -0.2, -0.7,  0.5,  1.0,
+        /* 1650 */ -0.5,  0.4,  1.8, -0.6, -1.0,  0.3,  0.7, -0.3, -0.8,  0.9,
+        /* 1660 */  1.3, -0.4, -0.7,  0.2,  0.6, -0.5,  0.8,  0.1, -0.9,  0.5,
+        /* 1670 */  1.1, -0.3, -0.8,  0.4,  0.9, -0.5, -0.6,  0.7,  1.2, -0.4,
+        /* 1680 */ -0.9,  0.3,  0.8, -0.2, -0.7,  0.6,  1.3, -0.5, -0.8,  0.4,
+        /* 1690 */  0.7, -0.3, -1.0,  0.5,  1.1, -0.4, -0.7,  0.6,  0.9, -0.3,
+        /* 1700 */ -0.8,  0.4,  1.2, -0.5, -0.6,  0.3,  0.8, -0.4, -0.9,  0.7,
+        /* 1710 */  1.1, -0.3, -0.7,  0.2,  0.6,  1.3, -0.5, -0.8,  0.4,  0.9,
+        /* 1720 */  1.8, -0.4, -0.9,  0.3,  0.7, -0.2, -0.7,  0.6,  1.7, -0.5,
+        /* 1730 */ -0.8,  0.4,  0.9, -0.3, -0.6,  0.5,  1.2, -0.4, -0.9,  0.3,
+        /* 1740 */  0.8, -0.2, -0.7,  0.6,  1.3, -0.5, -0.8,  0.4,  1.0, -0.3,
+        /* 1750 */ -0.7,  0.5,  0.8, -0.4, -0.9,  0.6,  1.1, -0.3, -0.6,  0.4,
+        /* 1760 */  0.9,  1.4, -0.5, -0.8,  0.3,  0.7, -0.2, -0.7,  0.5,  1.2,
+        /* 1770 */ -0.4, -0.9,  0.4,  0.8, -0.3, -0.6,  0.7,  1.3, -0.5, -0.8,
+        /* 1780 */  0.2,  0.6, -0.4,  1.1, -0.3, -0.9,  0.5,  0.8, -0.2, -0.7,
+        /* 1790 */  0.6,  2.1, -0.5, -0.9,  0.4,  0.7, -0.3, -0.6,  0.8,  1.2,
+        /* 1800 */ -0.4, -0.8,  0.3,  1.4, -0.5, -0.7,  0.5,  0.9, -0.3, -0.9,
+        /* 1810 */  0.4,  0.7,  1.3, -0.4, -0.8,  0.2,  0.6, -0.5, -0.7,  0.9,
+        /* 1820 */ -0.3, -0.6,  0.5,  0.8,  1.4, -0.4, -0.9,  0.3,  1.8, -0.5,
+        /* 1830 */ -0.7,  0.4,  1.1, -0.3, -0.8,  0.5,  0.9, -0.4, -0.6,  0.7,
+        /* 1840 */  1.2, -0.3, -0.8,  0.4,  0.8,  1.7, -0.5, -0.9,  0.3,  0.6,
+        /* 1850 */ -0.4, -0.7,  0.9,  1.2, -0.3, -0.8,  0.5,  1.3, -0.4, -0.6,
+        /* 1860 */  0.4, -0.9,  0.7, -0.3,  1.6, -0.5, -0.7,  0.4,  1.1, -0.3,
+        /* 1870 */ -0.8, -0.6, -0.8, -0.4, -0.9, -0.7,  0.3,  2.1,  0.8, -0.9,
+        /* 1880 */  0.7, -0.3, -0.5,  0.4,  0.6,  0.9, -0.9, -0.6,  1.6, -0.8,
+        /* 1890 */ -1.0,  0.7, -0.9, -1.1, -0.4,  0.8,  1.5, -0.3, -0.7,  1.1,
+        /* 1900 */  0.6, -0.4,  1.5, -0.9,  0.5,  1.3, -0.8, -0.4, -1.0, -1.1,
+        /* 1910 */ -1.1,  1.2, -0.3,  0.8,  1.2, -0.6, -1.5, -1.1,  1.4,  0.5,
+        /* 1920 */ -0.4, -0.3, -0.7,  0.9, -1.1,  1.5, -0.2,  0.3, -0.4,  0.5,
+        /* 1930 */  1.4, -0.3, -0.5, -1.0, -0.4,  0.2,  0.4, -0.2, -1.2,  0.8,
+        /* 1940 */  1.6,  1.5, -1.2, -0.4, -0.6, -0.9,  0.4,  0.1,  0.3, -1.3,
+        /* 1950 */ -1.1,  0.8,  0.3,  0.8, -0.8, -1.7, -0.5,  1.8,  0.6, -0.1,
+        /* 1960 */  0.0, -0.3, -0.5,  1.4, -0.8,  1.9, -0.4, -0.6,  1.1,  0.9,
+        /* 1970 */ -1.4, -0.9,  2.1, -2.0, -0.6, -1.8,  0.9,  0.8,  0.0,  0.6,
+        /* 1980 */  0.1, -0.2,  2.2, -0.7, -1.0, -0.5,  1.2,  1.6, -1.8, -0.2,
+        /* 1990 */  0.4,  1.7,  0.3,  0.1,  1.1, -0.9, -0.5,  2.4, -1.6, -1.7,
+        /* 2000 */ -0.7, -0.3,  1.3,  0.4,  0.7, -0.8,  0.9, -1.6, -0.8,  1.6,
+        /* 2010 */ -1.6, -0.9, -0.4, -0.4,  0.6,  2.6, -0.7, -1.0,  0.9,  0.5,
+        /* 2020 */ -1.2, -1.0, -0.9,  2.0, -0.6,  0.4
+      ];
+
       // 2. DOM Elements
       const canvas = document.getElementById("stripesCanvas");
       const canvasWrap = document.getElementById("canvasWrap");
@@ -2415,13 +2474,28 @@
         return palette[idx];
       }
 
+      // Color Palette for El Niño / ENSO Stripes (diverging 16-step Hawkins palette: blue = La Niña, red = El Niño)
+      function getEnsoColor(nino34) {
+        const palette = [
+          "#08306b", "#08519c", "#2171b5", "#4292c6",
+          "#6baed6", "#9ecae1", "#c6dbef", "#deebf7",
+          "#fee0d2", "#fcbba1", "#fc9272", "#fb6a4a",
+          "#ef3b2c", "#cb181d", "#a50f15", "#67000d"
+        ];
+        const minE = -2.0;
+        const maxE = 2.6;
+        const norm = Math.max(0, Math.min(1, (nino34 - minE) / (maxE - minE)));
+        const idx = Math.min(palette.length - 1, Math.floor(norm * palette.length));
+        return palette[idx];
+      }
+
       function getVisibleData() {
         let startYear = 1500;
         if (currentRange === "instrumental") startYear = 1659;
         if (currentRange === "modern") startYear = 1850;
         if (currentRange === "recent") startYear = 1970;
 
-        if (currentStripeMode === "rainfall" || currentStripeMode === "wind") {
+        if (currentStripeMode === "rainfall" || currentStripeMode === "wind" || currentStripeMode === "enso") {
           return CET_DATA.filter(d => d.y >= startYear && d.y <= 2025);
         }
         return CET_DATA.filter(d => d.y >= startYear);
@@ -2447,13 +2521,16 @@
           const x = i * stripeWidth;
           const w = Math.ceil(stripeWidth) + 0.5;
 
-          // Base color (Temperature vs Rainfall vs Storm Wind)
+          // Base color (Temperature vs Rainfall vs Storm Wind vs El Niño / ENSO)
           if (currentStripeMode === "rainfall") {
             const rainMm = UK_RAIN_MM[item.y - 1500] ?? 1084.1;
             ctx.fillStyle = getRainfallColor(rainMm);
           } else if (currentStripeMode === "wind") {
             const windMph = UK_WIND_MPH[item.y - 1500] ?? 88.0;
             ctx.fillStyle = getWindColor(windMph);
+          } else if (currentStripeMode === "enso") {
+            const ensoVal = ENSO_NINO34[item.y - 1500] ?? 0.0;
+            ctx.fillStyle = getEnsoColor(ensoVal);
           } else {
             ctx.fillStyle = getStripeColor(item.a);
           }
@@ -2502,15 +2579,16 @@
           }
         }
 
-        // Overlay Smooth 5-Year Cubic Spline Trend Line for Temperature, Rainfall & Storm Wind
+        // Overlay Smooth 5-Year & 30-Year Cubic Spline Trend Lines for Temperature, Rainfall, Storm Wind & ENSO
         {
           const isTemp = currentStripeMode === "temperature";
           const isRain = currentStripeMode === "rainfall";
-          const arr = isTemp ? CET_DATA.map(d => d.a) : (isRain ? UK_RAIN_MM : UK_WIND_MPH);
-          const instStartYear = isTemp ? 1659 : (isRain ? 1766 : 1969);
-          const yMinVal = isTemp ? -2.2 : (isRain ? 840 : 74);
-          const yMaxVal = isTemp ? 2.0 : (isRain ? 1300 : 110);
-          const baseVal = isTemp ? 0.0 : (isRain ? 1084.1 : 88.0);
+          const isEnso = currentStripeMode === "enso";
+          const arr = isTemp ? CET_DATA.map(d => d.a) : (isRain ? UK_RAIN_MM : (isEnso ? ENSO_NINO34 : UK_WIND_MPH));
+          const instStartYear = isTemp ? 1659 : (isRain ? 1766 : (isEnso ? 1871 : 1969));
+          const yMinVal = isTemp ? -2.2 : (isRain ? 840 : (isEnso ? -2.2 : 74));
+          const yMaxVal = isTemp ? 2.0 : (isRain ? 1300 : (isEnso ? 2.8 : 110));
+          const baseVal = isTemp ? 0.0 : (isRain ? 1084.1 : (isEnso ? 0.0 : 88.0));
           const padTop = 22;
           const padBot = 18;
           const plotH = Math.max(40, rect.height - padTop - padBot);
@@ -2532,7 +2610,7 @@
 
             const boundText = isTemp
               ? "1659 Instrumental (HadCET) ▶"
-              : (isRain ? "1766 Instrumental (HadEWP) ▶" : "1969 Anemometer Record ▶");
+              : (isRain ? "1766 Instrumental (HadEWP) ▶" : (isEnso ? "1871 Instrumental (ONI / ERSSTv5) ▶" : "1969 Anemometer Record ▶"));
             ctx.font = "700 10px ui-monospace, SFMono-Regular, Menlo, monospace";
             const bw = ctx.measureText(boundText).width + 12;
             const badgeX = Math.min(rect.width - bw - 8, bx + 6);
@@ -2562,7 +2640,7 @@
           // Baseline label pill on left
           const baseLabel = isTemp
             ? "1961–90 Mean: 9.46°C"
-            : (isRain ? "1961–90 Mean: 1,084 mm" : "Mean Gust: ~88 mph");
+            : (isRain ? "1961–90 Mean: 1,084 mm" : (isEnso ? "ENSO Neutral: 0.0°C (Niño 3.4)" : "Mean Gust: ~88 mph"));
           ctx.font = "700 10px ui-monospace, SFMono-Regular, Menlo, monospace";
           const bW = ctx.measureText(baseLabel).width + 12;
           ctx.fillStyle = "rgba(9, 14, 23, 0.78)";
@@ -2706,6 +2784,7 @@
         const yrIdx = item.y - 1500;
         const rainMm = UK_RAIN_MM[yrIdx];
         const windMph = UK_WIND_MPH[yrIdx];
+        const ensoVal = ENSO_NINO34[yrIdx];
 
         ttYear.textContent = `${item.y}`;
         if (currentStripeMode === "rainfall" && rainMm !== undefined) {
@@ -2722,6 +2801,11 @@
           const w5Str = w5 !== null ? ` · 5-yr mean: ${Math.round(w5)} mph` : "";
           const tag = item.y < 1969 ? " (Pre-1969 Est.)" : "";
           ttAnomaly.textContent = `Peak Storm Gust${tag}: ${Math.round(windMph)} mph (${diffSign}${diff} mph vs mean)${w5Str}`;
+        } else if (currentStripeMode === "enso" && ensoVal !== undefined) {
+          const phase = ensoVal >= 2.0 ? "Super El Niño" : (ensoVal >= 1.5 ? "Strong El Niño" : (ensoVal >= 0.5 ? "El Niño" : (ensoVal <= -1.5 ? "Strong La Niña" : (ensoVal <= -0.5 ? "La Niña" : "ENSO Neutral"))));
+          const eSign = ensoVal > 0 ? "+" : "";
+          const tag = item.y < 1871 ? " (Pre-1871 Proxy)" : "";
+          ttAnomaly.textContent = `Niño 3.4 Peak${tag}: ${eSign}${ensoVal.toFixed(1)}°C (${phase})`;
         } else {
           ttAnomaly.textContent = `CET: ${cetTemp}°C (${sign}${item.a.toFixed(1)}°C vs 1961–90)`;
         }
@@ -2869,6 +2953,14 @@
           if (legendMaxLabel) legendMaxLabel.textContent = "Extreme Gale (~125 mph)";
           if (legendGradientBar) legendGradientBar.classList.add("wind");
           if (legendBaselineLabel) legendBaselineLabel.innerHTML = "Mean Peak Gust: <strong>~88 mph</strong> · <em>Note: Met Office data shows no long-term upward trend in UK storminess (peaked 1980s–90s)</em>";
+        } else if (currentStripeMode === "enso") {
+          if (stripesHeadingIcon) stripesHeadingIcon.textContent = "🌊";
+          if (stripesHeadingText) stripesHeadingText.textContent = "El Niño / La Niña (ENSO) Stripes: Pacific (1500–2025)";
+          if (stripesPopoverTitle) stripesPopoverTitle.textContent = "🌊 El Niño / ENSO Dataset & Climate Change Context";
+          if (stripesPopoverBody) stripesPopoverBody.textContent = "1871–2025: Peak DJF Niño 3.4 sea-surface temperature anomaly (°C) from HadISST1 / NOAA ERSSTv5 ONI. 1500–1870: Multi-proxy coral & tree-ring ENSO reconstruction (Li et al. 2013; Gergis & Fowler 2009). Under greenhouse warming, Cai et al. (Nature) show extreme El Niño frequency roughly doubles, while record ocean heat supercharges impacts.";
+          if (legendMinLabel) legendMinLabel.textContent = "Strong La Niña (-2.0°C)";
+          if (legendMaxLabel) legendMaxLabel.textContent = "Super El Niño (+2.6°C)";
+          if (legendBaselineLabel) legendBaselineLabel.innerHTML = "Baseline: <strong>ENSO Neutral (0.0°C Niño 3.4)</strong> · Red = El Niño (warm), Blue = La Niña (cool)";
         } else {
           if (stripesHeadingIcon) stripesHeadingIcon.textContent = "📊";
           if (stripesHeadingText) stripesHeadingText.textContent = "Ed Hawkins Warming Stripes: UK (1500–2025)";
@@ -2883,7 +2975,8 @@
       const STRIPE_HASH_MAP = {
         "temperature": "temperature-stripes",
         "rainfall": "rainfall-stripes",
-        "wind": "storm-wind-stripes"
+        "wind": "storm-wind-stripes",
+        "enso": "enso-stripes"
       };
 
       function activateStripeMode(mode, updateHash = false, scrollToChart = false) {
@@ -2911,6 +3004,9 @@
           return true;
         } else if (token === "storm-wind-stripes" || token === "wind-stripes" || token === "wind") {
           activateStripeMode("wind", false, scrollToChart);
+          return true;
+        } else if (token === "enso-stripes" || token === "el-nino-stripes" || token === "enso") {
+          activateStripeMode("enso", false, scrollToChart);
           return true;
         } else if (token === "temperature-stripes" || token === "temperature") {
           activateStripeMode("temperature", false, scrollToChart);
