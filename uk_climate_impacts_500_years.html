@@ -944,7 +944,7 @@
       <div class="header-top-row">
         <div class="badge-wrap">
           <span class="badge-pill">Chronology of Extremes</span>
-          <span class="version-tag">v2.2.0</span>
+          <span class="version-tag">v2.2.1</span>
         </div>
         <nav class="nav-links-row">
           <a href="earth_heat_trap.html" class="nav-btn nav-btn-home">← Earth's Heat Trap</a>
@@ -1876,7 +1876,7 @@
         <a href="doughnut_economics.html" class="footer-link">Doughnut Economics</a>
       </div>
       <div>
-        <span>Calibrated empirical physics and historical climatology. <strong style="color: #38bdf8; font-family: var(--font-mono);">v2.2.0</strong></span>
+        <span>Calibrated empirical physics and historical climatology. <strong style="color: #38bdf8; font-family: var(--font-mono);">v2.2.1</strong></span>
       </div>
     </footer>
 
@@ -2334,14 +2334,36 @@
           }
         }
 
-        // Overlay 5-Year Rolling Mean Trend Line for Rainfall & Storm Wind (Instrumental Era Only)
-        if (currentStripeMode === "rainfall" || currentStripeMode === "wind") {
-          const arr = currentStripeMode === "rainfall" ? UK_RAIN_MM : UK_WIND_MPH;
-          const instStartYear = currentStripeMode === "rainfall" ? 1766 : 1969;
-          const minInstIdx = instStartYear - 1500;
-          const yMinVal = currentStripeMode === "rainfall" ? 840 : 74;
-          const yMaxVal = currentStripeMode === "rainfall" ? 1300 : 110;
-          const baseVal = currentStripeMode === "rainfall" ? 1084.1 : 88.0;
+        // Helper: trace a smooth Catmull-Rom cubic spline through points (clamped vertically)
+        function traceCubicSpline(c, pts, minY, maxY) {
+          c.moveTo(pts[0].x, pts[0].y);
+          if (pts.length === 2) {
+            c.lineTo(pts[1].x, pts[1].y);
+            return;
+          }
+          const clampY = (y) => Math.max(minY, Math.min(maxY, y));
+          for (let k = 0; k < pts.length - 1; k++) {
+            const p0 = pts[Math.max(0, k - 1)];
+            const p1 = pts[k];
+            const p2 = pts[k + 1];
+            const p3 = pts[Math.min(pts.length - 1, k + 2)];
+            const cp1x = p1.x + (p2.x - p0.x) / 6;
+            const cp1y = clampY(p1.y + (p2.y - p0.y) / 6);
+            const cp2x = p2.x - (p3.x - p1.x) / 6;
+            const cp2y = clampY(p2.y - (p3.y - p1.y) / 6);
+            c.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
+          }
+        }
+
+        // Overlay Smooth 5-Year Cubic Spline Trend Line for Temperature, Rainfall & Storm Wind
+        {
+          const isTemp = currentStripeMode === "temperature";
+          const isRain = currentStripeMode === "rainfall";
+          const arr = isTemp ? CET_DATA.map(d => d.a) : (isRain ? UK_RAIN_MM : UK_WIND_MPH);
+          const instStartYear = isTemp ? 1659 : (isRain ? 1766 : 1969);
+          const yMinVal = isTemp ? -2.2 : (isRain ? 840 : 74);
+          const yMaxVal = isTemp ? 2.0 : (isRain ? 1300 : 110);
+          const baseVal = isTemp ? 0.0 : (isRain ? 1084.1 : 88.0);
           const padTop = 22;
           const padBot = 18;
           const plotH = Math.max(40, rect.height - padTop - padBot);
@@ -2361,9 +2383,9 @@
             ctx.stroke();
             ctx.restore();
 
-            const boundText = currentStripeMode === "rainfall"
-              ? "1766 Instrumental (HadEWP) ▶"
-              : "1969 Anemometer Record ▶";
+            const boundText = isTemp
+              ? "1659 Instrumental (HadCET) ▶"
+              : (isRain ? "1766 Instrumental (HadEWP) ▶" : "1969 Anemometer Record ▶");
             ctx.font = "700 10px ui-monospace, SFMono-Regular, Menlo, monospace";
             const bw = ctx.measureText(boundText).width + 12;
             const badgeX = Math.min(rect.width - bw - 8, bx + 6);
@@ -2391,7 +2413,9 @@
           ctx.restore();
 
           // Baseline label pill on left
-          const baseLabel = currentStripeMode === "rainfall" ? "1961–90 Mean: 1,084 mm" : "Mean Gust: ~88 mph";
+          const baseLabel = isTemp
+            ? "1961–90 Mean: 9.46°C"
+            : (isRain ? "1961–90 Mean: 1,084 mm" : "Mean Gust: ~88 mph");
           ctx.font = "700 10px ui-monospace, SFMono-Regular, Menlo, monospace";
           const bW = ctx.measureText(baseLabel).width + 12;
           ctx.fillStyle = "rgba(9, 14, 23, 0.78)";
@@ -2417,19 +2441,18 @@
             ctx.lineJoin = "round";
             ctx.lineCap = "round";
             ctx.beginPath();
-            ctx.moveTo(pts[0].x, pts[0].y);
-            for (let k = 1; k < pts.length; k++) ctx.lineTo(pts[k].x, pts[k].y);
+            traceCubicSpline(ctx, pts, padTop - 4, rect.height - padBot + 4);
             ctx.strokeStyle = "rgba(9, 14, 23, 0.85)";
             ctx.lineWidth = 5;
             ctx.stroke();
 
-            // Inner warm amber-gold trend stroke
+            // Inner warm amber-gold cubic spline trend stroke
             ctx.strokeStyle = "#fbbf24";
             ctx.lineWidth = 2.5;
             ctx.stroke();
             ctx.restore();
 
-            // Active hover point dot on the 5-year mean line
+            // Active hover point dot on the spline line
             if (activeHoverIndex !== null) {
               const hp = pts.find(p => p.i === activeHoverIndex);
               if (hp) {
@@ -2444,8 +2467,8 @@
             }
           }
 
-          // 3. Top-right legend pill for 5-year rolling mean
-          const trendLabel = "━━ 5-Yr Rolling Mean";
+          // 3. Top-right legend pill for 5-year cubic spline
+          const trendLabel = "━━ 5-Yr Cubic Spline";
           ctx.font = "700 10.5px system-ui, -apple-system, sans-serif";
           const tW = ctx.measureText(trendLabel).width + 14;
           ctx.fillStyle = "rgba(9, 14, 23, 0.82)";
