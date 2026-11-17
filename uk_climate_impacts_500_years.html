@@ -293,6 +293,29 @@
       border-color: #38bdf8;
       box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
     }
+    .impact-check-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: #17243f;
+      color: #e2e8f0;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .impact-check-pill:hover {
+      border-color: rgba(251, 191, 36, 0.5);
+      background: #23355c;
+    }
+    .impact-check-pill input {
+      accent-color: #fbbf24;
+      cursor: pointer;
+    }
     .btn-timeframe, .btn-impact-filter {
       font-size: 0.74rem;
       font-weight: 700;
@@ -961,7 +984,7 @@
       <div class="header-top-row">
         <div class="badge-wrap">
           <span class="badge-pill">Chronology of Extremes</span>
-          <span class="version-tag">v2.2.3</span>
+          <span class="version-tag">v2.2.4</span>
         </div>
         <nav class="nav-links-row">
           <a href="earth_heat_trap.html" class="nav-btn nav-btn-home">← Earth's Heat Trap</a>
@@ -1021,12 +1044,12 @@
 
         <span class="stripes-control-label" style="color: #fbbf24;">Highlight Impact Events:</span>
         <div class="controls-row" role="group" aria-label="Filter by Impact Type">
-          <button type="button" class="btn-impact-filter active" data-cat="all">All Climate Events</button>
-          <button type="button" class="btn-impact-filter" data-cat="heat">🔥 Wildfires &amp; Heatwaves</button>
-          <button type="button" class="btn-impact-filter" data-cat="flood">🌊 Floods &amp; Storm Surges</button>
-          <button type="button" class="btn-impact-filter" data-cat="drought">☀️ Droughts &amp; Dry Spells</button>
-          <button type="button" class="btn-impact-filter" data-cat="harvest">🌾 Harvest Collapses &amp; Famines</button>
-          <button type="button" class="btn-impact-filter" data-cat="frost" title="Frost Fairs &amp; Big Freezes">❄️ Big Freezes</button>
+          <label class="impact-check-pill"><input type="checkbox" id="chkImpactAll" checked> All Climate Events</label>
+          <label class="impact-check-pill"><input type="checkbox" class="chk-impact-cat" value="heat" checked> 🔥 Wildfires &amp; Heatwaves</label>
+          <label class="impact-check-pill"><input type="checkbox" class="chk-impact-cat" value="flood" checked> 🌊 Floods &amp; Storm Surges</label>
+          <label class="impact-check-pill"><input type="checkbox" class="chk-impact-cat" value="drought" checked> ☀️ Droughts &amp; Dry Spells</label>
+          <label class="impact-check-pill"><input type="checkbox" class="chk-impact-cat" value="harvest" checked> 🌾 Harvest Collapses &amp; Famines</label>
+          <label class="impact-check-pill" title="Frost Fairs &amp; Big Freezes"><input type="checkbox" class="chk-impact-cat" value="frost" checked> ❄️ Big Freezes</label>
         </div>
       </div>
 
@@ -1897,7 +1920,7 @@
         <a href="doughnut_economics.html" class="footer-link">Doughnut Economics</a>
       </div>
       <div>
-        <span>Calibrated empirical physics and historical climatology. <strong style="color: #38bdf8; font-family: var(--font-mono);">v2.2.3</strong></span>
+        <span>Calibrated empirical physics and historical climatology. <strong style="color: #38bdf8; font-family: var(--font-mono);">v2.2.4</strong></span>
       </div>
     </footer>
 
@@ -2240,7 +2263,14 @@
 
       let currentStripeMode = "temperature";
       let currentRange = "500";
-      let currentFilter = "all";
+      const ALL_IMPACT_CATS = ["heat", "flood", "drought", "harvest", "frost"];
+      const activeImpactCats = new Set(ALL_IMPACT_CATS);
+      function isAllImpactCats() {
+        return activeImpactCats.size === ALL_IMPACT_CATS.length;
+      }
+      function itemMatchesImpactFilter(item) {
+        return isAllImpactCats() || (item.cat && activeImpactCats.has(item.cat));
+      }
       let activeHoverIndex = null;
 
       // Color Palette for Warming Stripes (diverging 16-step Hawkins palette)
@@ -2334,13 +2364,13 @@
           ctx.fillRect(x, 0, w, rect.height);
 
           // If filter is active and this item does not match, dim it
-          if (currentFilter !== "all" && item.cat !== currentFilter) {
+          if (!itemMatchesImpactFilter(item)) {
             ctx.fillStyle = "rgba(9, 14, 23, 0.72)";
             ctx.fillRect(x, 0, w, rect.height);
           }
 
           // If item has a noted climate event, draw a small marker badge at the top
-          if (item.cat && (currentFilter === "all" || item.cat === currentFilter)) {
+          if (item.cat && (isAllImpactCats() || activeImpactCats.has(item.cat))) {
             ctx.fillStyle = item.cat === "heat" ? "#f43f5e" : (item.cat === "flood" ? "#38bdf8" : (item.cat === "drought" ? "#fbbf24" : (item.cat === "harvest" ? "#eab308" : "#a7f3d0")));
             ctx.fillRect(x, 0, w, 6);
           }
@@ -2647,7 +2677,7 @@
         } else if (e.key === "]" || e.key === "n" || e.key === "N") {
           e.preventDefault();
           for (let i = cur + 1; i < n; i++) {
-            if (data[i].title && (currentFilter === "all" || data[i].cat === currentFilter)) {
+            if (data[i].title && itemMatchesImpactFilter(data[i])) {
               selectIndex(i);
               break;
             }
@@ -2655,7 +2685,7 @@
         } else if (e.key === "[" || e.key === "p" || e.key === "P") {
           e.preventDefault();
           for (let i = cur - 1; i >= 0; i--) {
-            if (data[i].title && (currentFilter === "all" || data[i].cat === currentFilter)) {
+            if (data[i].title && itemMatchesImpactFilter(data[i])) {
               selectIndex(i);
               break;
             }
@@ -2763,12 +2793,24 @@
         });
       }
 
-      // Impact Filter Buttons
-      document.querySelectorAll(".btn-impact-filter").forEach(btn => {
-        btn.addEventListener("click", () => {
-          document.querySelectorAll(".btn-impact-filter").forEach(b => b.classList.remove("active"));
-          btn.classList.add("active");
-          currentFilter = btn.dataset.cat;
+      // Impact Filter Checkboxes
+      const chkImpactAll = document.getElementById("chkImpactAll");
+      const chkImpactCats = Array.from(document.querySelectorAll(".chk-impact-cat"));
+      if (chkImpactAll) {
+        chkImpactAll.addEventListener("change", () => {
+          activeImpactCats.clear();
+          if (chkImpactAll.checked) {
+            ALL_IMPACT_CATS.forEach(c => activeImpactCats.add(c));
+          }
+          chkImpactCats.forEach(cb => { cb.checked = chkImpactAll.checked; });
+          drawStripes();
+        });
+      }
+      chkImpactCats.forEach(cb => {
+        cb.addEventListener("change", () => {
+          if (cb.checked) activeImpactCats.add(cb.value);
+          else activeImpactCats.delete(cb.value);
+          if (chkImpactAll) chkImpactAll.checked = isAllImpactCats();
           drawStripes();
         });
       });
