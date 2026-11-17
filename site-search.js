@@ -334,6 +334,7 @@
       .cs-search-kbd { display: none; }
     }
     .cs-hamburger-btn {
+      position: relative;
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -348,6 +349,36 @@
       cursor: pointer;
       white-space: nowrap;
       transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .cs-hamburger-btn::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: max-content;
+      max-width: min(290px, calc(100vw - 24px));
+      padding: 8px 11px;
+      border-radius: 8px;
+      background: rgba(9, 14, 23, 0.97);
+      border: 1px solid rgba(56, 189, 248, 0.55);
+      color: #e2e8f0;
+      font-size: 0.73rem;
+      font-weight: 500;
+      line-height: 1.45;
+      white-space: normal;
+      text-align: left;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.85);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s ease;
+      z-index: 25600;
+    }
+    .cs-hamburger-btn:hover::after,
+    .cs-hamburger-btn:focus-visible::after {
+      opacity: 1;
+    }
+    .cs-hamburger-btn[aria-expanded="true"]::after {
+      opacity: 0 !important;
     }
     .cs-hamburger-btn:hover, .cs-hamburger-btn[aria-expanded="true"] {
       background: rgba(56, 189, 248, 0.18);
@@ -564,6 +595,7 @@
       hamBtn.className = "cs-hamburger-btn";
       hamBtn.setAttribute("aria-expanded", "false");
       hamBtn.setAttribute("aria-label", "Open More Facts menu");
+      hamBtn.setAttribute("data-tooltip", "Everything on this site is verifiable against peer-reviewed science, Met Office / NOAA / IPCC data, and primary references.");
       hamBtn.innerHTML = `<span style="font-size: 0.95rem; line-height: 1;">☰</span><span>More Facts</span>`;
 
       function positionHamburgerPanel() {
