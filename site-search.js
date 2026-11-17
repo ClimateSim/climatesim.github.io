@@ -542,8 +542,8 @@
       hamBtn.id = "btnCsHamburger";
       hamBtn.className = "cs-hamburger-btn";
       hamBtn.setAttribute("aria-expanded", "false");
-      hamBtn.setAttribute("aria-label", "Open pages menu");
-      hamBtn.innerHTML = `<span style="font-size: 0.95rem; line-height: 1;">☰</span><span>Pages</span>`;
+      hamBtn.setAttribute("aria-label", "Open More Facts menu");
+      hamBtn.innerHTML = `<span style="font-size: 0.95rem; line-height: 1;">☰</span><span>More Facts</span>`;
 
       function positionHamburgerPanel() {
         if (!navPanel.classList.contains("open")) return;

@@ -984,7 +984,7 @@
       <div class="header-top-row">
         <div class="badge-wrap">
           <span class="badge-pill">Chronology of Extremes</span>
-          <span class="version-tag">v2.2.4</span>
+          <span class="version-tag">v2.2.5</span>
         </div>
         <nav class="nav-links-row">
           <a href="earth_heat_trap.html" class="nav-btn nav-btn-home">← Earth's Heat Trap</a>
@@ -1920,7 +1920,7 @@
         <a href="doughnut_economics.html" class="footer-link">Doughnut Economics</a>
       </div>
       <div>
-        <span>Calibrated empirical physics and historical climatology. <strong style="color: #38bdf8; font-family: var(--font-mono);">v2.2.4</strong></span>
+        <span>Calibrated empirical physics and historical climatology. <strong style="color: #38bdf8; font-family: var(--font-mono);">v2.2.5</strong></span>
       </div>
     </footer>
 
@@ -2518,19 +2518,52 @@
             }
           }
 
-          // 3. Top-right legend pill for 5-year cubic spline
-          const trendLabel = "━━ 5-Yr Cubic Spline";
+          // 2b. Compute 30-year Gaussian-smoothed long-term trend cubic spline across the visible range
+          const trendPts = [];
+          for (let i = 0; i < n; i++) {
+            const yrIdx = data[i].y - 1500;
+            const mt = getGaussianTrend(arr, yrIdx, 0, 12);
+            if (mt !== null) {
+              trendPts.push({ x: (i + 0.5) * stripeWidth, y: valToY(mt), i: i });
+            }
+          }
+
+          if (trendPts.length > 1) {
+            ctx.save();
+            ctx.lineJoin = "round";
+            ctx.lineCap = "round";
+            ctx.beginPath();
+            traceCubicSpline(ctx, trendPts, padTop - 4, rect.height - padBot + 4);
+            ctx.strokeStyle = "rgba(9, 14, 23, 0.9)";
+            ctx.lineWidth = 5;
+            ctx.stroke();
+
+            ctx.strokeStyle = "#f8fafc";
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+            ctx.restore();
+          }
+
+          // 3. Top-right legend pill for 5-year cubic spline & 30-year climate trend
+          const splineLabel = "━━ 5-Yr Cubic Spline";
+          const trendLabel = "━━ 30-Yr Trend";
           ctx.font = "700 10.5px system-ui, -apple-system, sans-serif";
-          const tW = ctx.measureText(trendLabel).width + 14;
-          ctx.fillStyle = "rgba(9, 14, 23, 0.82)";
+          const sW = ctx.measureText(splineLabel).width;
+          const trW = ctx.measureText(trendLabel).width;
+          const gapW = 10;
+          const boxW = sW + gapW + trW + 16;
+          const boxX = rect.width - boxW - 10;
+          ctx.fillStyle = "rgba(9, 14, 23, 0.84)";
           ctx.strokeStyle = "rgba(251, 191, 36, 0.55)";
           ctx.lineWidth = 1;
           ctx.beginPath();
-          ctx.roundRect(rect.width - tW - 10, 10, tW, 20, 5);
+          ctx.roundRect(boxX, 10, boxW, 20, 5);
           ctx.fill();
           ctx.stroke();
           ctx.fillStyle = "#fbbf24";
-          ctx.fillText(trendLabel, rect.width - tW - 3, 24);
+          ctx.fillText(splineLabel, boxX + 8, 24);
+          ctx.fillStyle = "#f8fafc";
+          ctx.fillText(trendLabel, boxX + 8 + sW + gapW, 24);
         }
       }
 
@@ -2544,6 +2577,21 @@
           }
         }
         return count > 0 ? sum / count : null;
+      }
+
+      function getGaussianTrend(arr, idx, minIdx = 0, sigma = 12) {
+        if (idx < minIdx || idx >= arr.length) return null;
+        const halfWin = Math.ceil(sigma * 2.5);
+        let wSum = 0, vSum = 0;
+        for (let k = Math.max(minIdx, idx - halfWin); k <= Math.min(arr.length - 1, idx + halfWin); k++) {
+          if (arr[k] !== undefined) {
+            const d = k - idx;
+            const w = Math.exp(-(d * d) / (2 * sigma * sigma));
+            vSum += arr[k] * w;
+            wSum += w;
+          }
+        }
+        return wSum > 0 ? vSum / wSum : null;
       }
 
       // Select Index with Tooltip & Inspector sync (supports mouse, touch & cursor keys)
