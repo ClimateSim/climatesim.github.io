@@ -984,7 +984,7 @@
       <div class="header-top-row">
         <div class="badge-wrap">
           <span class="badge-pill">Chronology of Extremes</span>
-          <span class="version-tag">v2.2.5</span>
+          <span class="version-tag">v2.2.6</span>
         </div>
         <nav class="nav-links-row">
           <a href="earth_heat_trap.html" class="nav-btn nav-btn-home">← Earth's Heat Trap</a>
@@ -1775,9 +1775,14 @@
 
     <!-- 500-YEAR BENCHMARK COMPARISON TABLE -->
     <section class="comparison-table-wrap">
-      <h3 style="font-size: 1.15rem; font-weight: 800; color: #fff; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-        <span>📋</span> Benchmark Climate Milestones Across 5 Centuries of UK Records
-      </h3>
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+        <h3 style="font-size: 1.15rem; font-weight: 800; color: #fff; margin: 0; display: flex; align-items: center; gap: 8px;">
+          <span>📋</span> Benchmark Climate Milestones Across 5 Centuries of UK Records
+        </h3>
+        <button type="button" onclick="openAnomalyBasisModal()" style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.45); background: rgba(56, 189, 248, 0.12); color: #38bdf8; font-size: 0.75rem; font-weight: 700; cursor: pointer;">
+          <span>ℹ️</span> Why do these anomalies differ?
+        </button>
+      </div>
       <table class="data-table">
         <thead>
           <tr>
@@ -1785,7 +1790,10 @@
             <th class="num-col">
               <span class="cet-abbr-badge" id="cetAbbr" tabindex="0">CET</span> Annual Temp
             </th>
-            <th class="num-col">Anomaly (vs 1961–90)</th>
+            <th class="num-col">
+              Anomaly (vs 1961–90)
+              <button type="button" onclick="openAnomalyBasisModal()" title="Why do these anomalies differ from the main simulator?" aria-label="Why do these anomalies differ from the main simulator?" style="background: none; border: none; color: #38bdf8; cursor: pointer; font-size: 0.8rem; padding: 0 2px; vertical-align: middle;">ℹ️</button>
+            </th>
             <th>Primary Climate Character</th>
             <th>Documented Societal &amp; Ecosystem Impact</th>
           </tr>
@@ -1920,7 +1928,7 @@
         <a href="doughnut_economics.html" class="footer-link">Doughnut Economics</a>
       </div>
       <div>
-        <span>Calibrated empirical physics and historical climatology. <strong style="color: #38bdf8; font-family: var(--font-mono);">v2.2.5</strong></span>
+        <span>Calibrated empirical physics and historical climatology. <strong style="color: #38bdf8; font-family: var(--font-mono);">v2.2.6</strong></span>
       </div>
     </footer>
 
@@ -2957,6 +2965,20 @@
 
       window.closeImpactEventModal = function closeImpactEventModal() {
         backdrop.classList.remove("open");
+      };
+
+      window.openAnomalyBasisModal = function openAnomalyBasisModal() {
+        titleEl.style.color = "#38bdf8";
+        titleEl.textContent = "ℹ️ Why Benchmark Anomalies Differ From the Main Simulator";
+        bodyEl.innerHTML = `
+          <p><strong>1. Different Baseline Period (1961–1990 vs 1850–1900 Pre-Industrial):</strong><br>
+          This table follows the Met Office &amp; #ShowYourStripes convention, measuring anomalies relative to the <strong>1961–1990 HadCET mean (9.46°C)</strong>. By contrast, the main 1D Simulator and Paris Agreement thresholds (+1.5°C, +2.0°C) measure warming above the <strong>pre-industrial (1850–1900)</strong> baseline (~9.1°C in Central England). Because ~0.3°C–0.4°C of warming had already occurred between 1850–1900 and 1961–1990, anomalies in this table read <strong>~0.3°C–0.4°C lower</strong> than pre-industrial figures (e.g. 2022's 11.0°C is <strong>+1.6°C</strong> vs 1961–90, or <strong>~+1.9°C</strong> above 1850–1900).</p>
+          <p style="margin-top:10px;"><strong>2. Regional Land Single-Year vs Global Mean:</strong><br>
+          <strong>HadCET</strong> measures a relatively small mid-latitude <em>land</em> region (Central England), whereas the main simulator tracks the <strong>global mean</strong> (~71% ocean). Land warms faster than oceans, and individual years swing much more sharply with North Atlantic jet-stream variability (e.g. 1684 at −2.1°C or 2022 at +1.6°C) than the global multi-year average.</p>
+          <p style="margin-top:10px;"><strong>3. Precision &amp; Rounding:</strong><br>
+          Anomalies are calculated from unrounded HadCET annual temperatures minus 9.46°C and rounded to 1 decimal place (e.g. 2022: 11.04°C − 9.46°C = +1.58°C → <strong>+1.6°C</strong>).</p>
+        `;
+        backdrop.classList.add("open");
       };
 
       document.addEventListener("click", (e) => {
