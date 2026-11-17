@@ -276,6 +276,23 @@
       flex-wrap: wrap;
       align-items: center;
     }
+    .stripes-select {
+      background: rgba(15, 23, 42, 0.95);
+      color: #ffffff;
+      border: 1px solid rgba(56, 189, 248, 0.45);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      outline: none;
+      max-width: 100%;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.14);
+    }
+    .stripes-select:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
+    }
     .btn-timeframe, .btn-impact-filter {
       font-size: 0.74rem;
       font-weight: 700;
@@ -944,7 +961,7 @@
       <div class="header-top-row">
         <div class="badge-wrap">
           <span class="badge-pill">Chronology of Extremes</span>
-          <span class="version-tag">v2.2.2</span>
+          <span class="version-tag">v2.2.3</span>
         </div>
         <nav class="nav-links-row">
           <a href="earth_heat_trap.html" class="nav-btn nav-btn-home">← Earth's Heat Trap</a>
@@ -983,19 +1000,23 @@
 
       <!-- METRIC SWITCH, TIMEFRAME SELECTOR & IMPACT FILTER (ALIGNED GRID) -->
       <div class="stripes-controls-grid">
-        <span class="stripes-control-label">Metric:</span>
-        <div class="controls-row" role="group" aria-label="Climate Metric Switch">
-          <button type="button" class="btn-stripe-mode active" data-mode="temperature">🌡️ Temperature Stripes</button>
-          <button type="button" class="btn-stripe-mode" data-mode="rainfall">🌧️ UK Rainfall Stripes</button>
-          <button type="button" class="btn-stripe-mode" data-mode="wind">💨 Storm Wind Stripes</button>
+        <label for="selectStripeMetric" class="stripes-control-label">Metric:</label>
+        <div class="controls-row">
+          <select id="selectStripeMetric" class="stripes-select" aria-label="Climate Metric Switch">
+            <option value="temperature">🌡️ Temperature Stripes</option>
+            <option value="rainfall">🌧️ UK Rainfall Stripes</option>
+            <option value="wind">💨 Storm Wind Stripes</option>
+          </select>
         </div>
 
-        <span class="stripes-control-label">Timeframe:</span>
-        <div class="controls-row" role="group" aria-label="Timeframe Selector">
-          <button type="button" class="btn-timeframe active" data-range="500">Full 500 Years (1500–2025)</button>
-          <button type="button" class="btn-timeframe" data-range="instrumental">Instrumental Era (1659–2025)</button>
-          <button type="button" class="btn-timeframe" data-range="modern">Industrial Era (1850–2025)</button>
-          <button type="button" class="btn-timeframe" data-range="recent">Satellite &amp; High-Warming (1970–2025)</button>
+        <label for="selectStripeTimeframe" class="stripes-control-label">Timeframe:</label>
+        <div class="controls-row">
+          <select id="selectStripeTimeframe" class="stripes-select" aria-label="Timeframe Selector">
+            <option value="500">Full 500 Years (1500–2025)</option>
+            <option value="instrumental">Instrumental Era (1659–2025)</option>
+            <option value="modern">Industrial Era (1850–2025)</option>
+            <option value="recent">Satellite &amp; High-Warming (1970–2025)</option>
+          </select>
         </div>
 
         <span class="stripes-control-label" style="color: #fbbf24;">Highlight Impact Events:</span>
@@ -1876,7 +1897,7 @@
         <a href="doughnut_economics.html" class="footer-link">Doughnut Economics</a>
       </div>
       <div>
-        <span>Calibrated empirical physics and historical climatology. <strong style="color: #38bdf8; font-family: var(--font-mono);">v2.2.2</strong></span>
+        <span>Calibrated empirical physics and historical climatology. <strong style="color: #38bdf8; font-family: var(--font-mono);">v2.2.3</strong></span>
       </div>
     </footer>
 
@@ -2693,9 +2714,8 @@
 
       function activateStripeMode(mode, updateHash = false, scrollToChart = false) {
         if (!STRIPE_HASH_MAP[mode]) return;
-        document.querySelectorAll(".btn-stripe-mode").forEach(b => {
-          b.classList.toggle("active", b.dataset.mode === mode);
-        });
+        const metricSel = document.getElementById("selectStripeMetric");
+        if (metricSel && metricSel.value !== mode) metricSel.value = mode;
         currentStripeMode = mode;
         updateMetricUI();
         hideTooltip();
@@ -2725,23 +2745,23 @@
         return false;
       }
 
-      document.querySelectorAll(".btn-stripe-mode").forEach(btn => {
-        btn.addEventListener("click", () => {
-          activateStripeMode(btn.dataset.mode, true, false);
+      const metricSelectEl = document.getElementById("selectStripeMetric");
+      if (metricSelectEl) {
+        metricSelectEl.addEventListener("change", () => {
+          activateStripeMode(metricSelectEl.value, true, false);
         });
-      });
+      }
 
       window.addEventListener("hashchange", () => applyMetricFromUrl(true));
 
-      // Range Selector Buttons
-      document.querySelectorAll(".btn-timeframe").forEach(btn => {
-        btn.addEventListener("click", () => {
-          document.querySelectorAll(".btn-timeframe").forEach(b => b.classList.remove("active"));
-          btn.classList.add("active");
-          currentRange = btn.dataset.range;
+      // Range Selector Dropdown
+      const timeframeSelectEl = document.getElementById("selectStripeTimeframe");
+      if (timeframeSelectEl) {
+        timeframeSelectEl.addEventListener("change", () => {
+          currentRange = timeframeSelectEl.value;
           hideTooltip();
         });
-      });
+      }
 
       // Impact Filter Buttons
       document.querySelectorAll(".btn-impact-filter").forEach(btn => {
