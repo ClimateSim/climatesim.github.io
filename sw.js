@@ -1,6 +1,6 @@
 // ClimateSim Progressive Web App (PWA) Service Worker
-// Version: v4.0.0
-const CACHE_NAME = 'climatesim-v4.0.0';
+// Version: v4.0.1
+const CACHE_NAME = 'climatesim-v4.0.1';
 
 const PRECACHE_ASSETS = [
   './',
@@ -70,10 +70,10 @@ self.addEventListener('fetch', event => {
         }).catch(() => {
           return caches.match(req).then(cachedResponse => {
             if (cachedResponse) return cachedResponse;
-            // Fallback to index if exact navigation path isn't in cache
-            if (req.url.includes('advanced')) return caches.match('./index.html') || caches.match('./advanced.html');
+            // Fallback to index or heat trap if exact navigation path isn't in cache
+            if (req.url.includes('advanced')) return caches.match('./advanced.html');
             if (req.url.includes('pale_blue_dot')) return caches.match('./we_only_have_one_pale_blue_dot.html');
-            return caches.match('./index.html') || caches.match('./interactive_1d_atmospheric_radiative_transfer_earth_energy_balance_simulator.html');
+            return caches.match('./index.html') || caches.match('./earth_heat_trap.html');
           });
         })
       );

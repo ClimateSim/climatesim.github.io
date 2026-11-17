@@ -10,7 +10,7 @@
 
   <!-- OpenGraph / Social Sharing Meta (LinkedIn, X, Facebook) -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://climatesim.org/earth_heat_trap.html">
+  <meta property="og:url" content="https://climatesim.org/">
   <meta property="og:title" content="Earth's Heat Trap: Why Our Planet Is Warming & How We Fix It">
   <meta property="og:description" content="A plain-English interactive explanation of how greenhouse gases trap infrared heat, why the planet warms, and practical pathways to restore balance.">
   <meta property="og:image" content="https://climatesim.org/icon-512.png">
@@ -702,10 +702,10 @@
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
       <div style="display: flex; align-items: center; gap: 8px;">
         <div class="badge-live">The Plain-English Climate Guide</div>
-        <span class="version-badge" style="font-size: 11px; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 7px; border-radius: 4px; letter-spacing: 0.04em;">v4.0.0</span>
+        <span class="version-badge" style="font-size: 11px; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 7px; border-radius: 4px; letter-spacing: 0.04em;">v4.0.1</span>
       </div>
       <nav style="display: flex; gap: 8px; flex-wrap: wrap;">
-        <a href="index.html" style="font-size: 12px; font-weight: 700; color: #38bdf8; text-decoration: none; padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.3); background: rgba(56, 189, 248, 0.08);">🔬 Warming Simulator →</a>
+        <a href="advanced.html" style="font-size: 12px; font-weight: 700; color: #38bdf8; text-decoration: none; padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.3); background: rgba(56, 189, 248, 0.08);">🔬 Warming Simulator →</a>
         <a href="national_emergency_briefing.html" style="font-size: 12px; font-weight: 700; color: #f43f5e; text-decoration: none; padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(244, 63, 94, 0.35); background: rgba(244, 63, 94, 0.1);">🚨 National Emergency Briefing →</a>
         <a href="uk_climate_impacts_500_years.html" style="font-size: 12px; font-weight: 700; color: #fbbf24; text-decoration: none; padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(251, 191, 36, 0.3); background: rgba(251, 191, 36, 0.08);">📊 Impacts →</a>
         <a href="what_can_i_do.html" style="font-size: 12px; font-weight: 700; color: #34d399; text-decoration: none; padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(52, 211, 153, 0.3); background: rgba(52, 211, 153, 0.08);">🌱 What Can I Do? →</a>
@@ -989,9 +989,9 @@
 
   <footer>
     <div class="footer-content">
-      <span>Calibrated physics model built on IPCC AR6 climate sensitivity and historical observations. Made for plain-English understanding. <strong style="color: #38bdf8; font-family: ui-monospace, monospace; font-weight: 700; margin-left: 6px;">v4.0.0</strong></span>
+      <span>Calibrated physics model built on IPCC AR6 climate sensitivity and historical observations. Made for plain-English understanding. <strong style="color: #38bdf8; font-family: ui-monospace, monospace; font-weight: 700; margin-left: 6px;">v4.0.1</strong></span>
       <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 6px;">
-        <a href="index.html" class="btn-advanced-link" id="btnAdvancedVersion">
+        <a href="advanced.html" class="btn-advanced-link" id="btnAdvancedVersion">
           🔬 Open Full 1D Physics Simulator (Advanced Version) →
         </a>
         <a href="national_emergency_briefing.html" class="btn-advanced-link" style="border-color: #f43f5e; color: #f43f5e;" id="btnNebLink">
@@ -1793,12 +1793,12 @@
       const h = decodeURIComponent(window.location.hash || "").replace(/^#/, "").trim().toLowerCase();
       if (!h) return;
       const routeMap = {
-        "warmingsim": "index.html#WarmingSim",
-        "carbonbudgets": "index.html#CarbonBudgets",
-        "ghgsources": "index.html#GHGSources",
-        "energysolutions": "index.html#EnergySolutions",
-        "dunkelflaute": "index.html#Dunkelflaute",
-        "dunkel": "index.html#dunkel",
+        "warmingsim": "advanced.html#WarmingSim",
+        "carbonbudgets": "advanced.html#CarbonBudgets",
+        "ghgsources": "advanced.html#GHGSources",
+        "energysolutions": "advanced.html#EnergySolutions",
+        "dunkelflaute": "advanced.html#Dunkelflaute",
+        "dunkel": "advanced.html#dunkel",
         "nebriefing": "national_emergency_briefing.html",
         "impacts": "uk_climate_impacts_500_years.html",
         "whatcanido": "what_can_i_do.html",

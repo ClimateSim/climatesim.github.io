@@ -333,6 +333,76 @@
     @media (max-width: 600px) {
       .cs-search-kbd { display: none; }
     }
+    .cs-hamburger-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(15, 23, 42, 0.85);
+      color: #e2e8f0;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 6px;
+      padding: 5px 11px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .cs-hamburger-btn:hover, .cs-hamburger-btn[aria-expanded="true"] {
+      background: rgba(56, 189, 248, 0.18);
+      border-color: #38bdf8;
+      color: #ffffff;
+    }
+    .cs-hamburger-panel {
+      display: none !important;
+      position: fixed;
+      z-index: 25500;
+      width: min(460px, calc(100vw - 24px));
+      max-height: calc(100vh - 80px);
+      overflow-y: auto;
+      background: rgba(11, 19, 34, 0.98);
+      border: 1.5px solid rgba(56, 189, 248, 0.5);
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: 0 22px 60px rgba(0, 0, 0, 0.9), 0 0 24px rgba(56, 189, 248, 0.2);
+      backdrop-filter: blur(12px);
+      box-sizing: border-box;
+    }
+    .cs-hamburger-panel.open {
+      display: block !important;
+    }
+    .cs-hamburger-panel .mode-switch-group,
+    .cs-hamburger-panel.nav-links,
+    .cs-hamburger-panel.nav-links-row,
+    nav.cs-hamburger-panel {
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
+      width: 100%;
+    }
+    .cs-hamburger-panel.open .mode-switch-group {
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
+      width: 100%;
+    }
+    .cs-hamburger-panel button,
+    .cs-hamburger-panel a {
+      justify-content: flex-start !important;
+      text-align: left !important;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    @media (max-width: 480px) {
+      .cs-hamburger-panel .mode-switch-group,
+      .cs-hamburger-panel.open .mode-switch-group,
+      .cs-hamburger-panel.nav-links,
+      .cs-hamburger-panel.nav-links-row,
+      nav.cs-hamburger-panel {
+        grid-template-columns: 1fr !important;
+      }
+    }
   `;
   document.head.appendChild(style);
 
@@ -468,15 +538,81 @@
     btn.addEventListener("click", openSearch);
 
     const guideBtn = document.getElementById("openModalBtn");
-    const navTarget = document.querySelector(".mode-switch-group, .mode-switch, .header-nav, .nav-links, header nav");
+    const navPanel = document.querySelector(".header-nav-row, nav.nav-links, nav.nav-links-row, header nav");
+
+    // Create Hamburger Menu button if the page has a navigation bar of page buttons
+    let hamBtn = null;
+    if (navPanel) {
+      navPanel.classList.add("cs-hamburger-panel");
+      hamBtn = document.createElement("button");
+      hamBtn.type = "button";
+      hamBtn.id = "btnCsHamburger";
+      hamBtn.className = "cs-hamburger-btn";
+      hamBtn.setAttribute("aria-expanded", "false");
+      hamBtn.setAttribute("aria-label", "Open pages menu");
+      hamBtn.innerHTML = `<span style="font-size: 0.95rem; line-height: 1;">☰</span><span>Pages</span>`;
+
+      function positionHamburgerPanel() {
+        if (!navPanel.classList.contains("open")) return;
+        const rect = hamBtn.getBoundingClientRect();
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const w = Math.min(460, vw - 24);
+        navPanel.style.width = w + "px";
+        let left = rect.right - w;
+        if (left < 12) left = 12;
+        if (left + w > vw - 12) left = vw - w - 12;
+        const top = Math.min(vh - 120, rect.bottom + 8);
+        navPanel.style.left = Math.round(left) + "px";
+        navPanel.style.top = Math.round(top) + "px";
+      }
+
+      function closeHamburger() {
+        navPanel.classList.remove("open");
+        hamBtn.setAttribute("aria-expanded", "false");
+      }
+
+      hamBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const willOpen = !navPanel.classList.contains("open");
+        navPanel.classList.toggle("open", willOpen);
+        hamBtn.setAttribute("aria-expanded", willOpen ? "true" : "false");
+        if (willOpen) positionHamburgerPanel();
+      });
+
+      navPanel.addEventListener("click", (e) => {
+        if (e.target && e.target.closest && e.target.closest("button, a")) {
+          closeHamburger();
+        }
+      });
+
+      document.addEventListener("click", (e) => {
+        if (navPanel.classList.contains("open") && !navPanel.contains(e.target) && !hamBtn.contains(e.target)) {
+          closeHamburger();
+        }
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeHamburger();
+      });
+      window.addEventListener("resize", positionHamburgerPanel);
+    }
+
     if (guideBtn && guideBtn.parentElement) {
       guideBtn.parentElement.style.display = "flex";
       guideBtn.parentElement.style.alignItems = "center";
       guideBtn.parentElement.style.gap = "8px";
       guideBtn.parentElement.style.flexWrap = "wrap";
       guideBtn.parentElement.insertBefore(btn, guideBtn);
-    } else if (navTarget) {
-      navTarget.appendChild(btn);
+      if (hamBtn) guideBtn.parentElement.appendChild(hamBtn);
+    } else if (navPanel && navPanel.parentElement) {
+      const ctrlWrap = document.createElement("div");
+      ctrlWrap.style.display = "flex";
+      ctrlWrap.style.alignItems = "center";
+      ctrlWrap.style.gap = "8px";
+      ctrlWrap.style.flexWrap = "wrap";
+      ctrlWrap.appendChild(btn);
+      if (hamBtn) ctrlWrap.appendChild(hamBtn);
+      navPanel.parentElement.insertBefore(ctrlWrap, navPanel);
     } else {
       btn.classList.add("cs-search-floating");
       document.body.appendChild(btn);
