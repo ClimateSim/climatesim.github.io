@@ -57,13 +57,18 @@
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
       padding: 16px;
+    html, body {
+      max-width: 100%;
       overflow-x: hidden;
     }
 
     .container {
       max-width: 1220px;
+      width: 100%;
+      min-width: 0;
       margin: 0 auto;
       padding-bottom: 60px;
+      box-sizing: border-box;
     }
 
     /* TOP HEADER BAR */
@@ -504,20 +509,25 @@
 
     .pillars-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 20px;
       margin-bottom: 36px;
+      width: 100%;
+      min-width: 0;
+    }
+    .pillar-two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      width: 100%;
+      min-width: 0;
     }
     @media (max-width: 860px) {
       .pillars-grid,
       .pillar-two-col {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 14px;
       }
-    }
-    .pillar-two-col {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
     }
 
     .pillar-card {
@@ -528,7 +538,23 @@
       display: flex;
       flex-direction: column;
       gap: 14px;
+      min-width: 0;
+      max-width: 100%;
+      box-sizing: border-box;
+      overflow-wrap: anywhere;
       transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    @media (max-width: 600px) {
+      body {
+        padding: 14px 10px !important;
+      }
+      .cs-panel,
+      .pillar-card {
+        padding: 14px 12px !important;
+      }
+      .pillar-header h3 {
+        font-size: 1.04rem;
+      }
     }
     .pillar-card:hover {
       border-color: var(--card-hover);
@@ -538,6 +564,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      min-width: 0;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       padding-bottom: 12px;
     }
@@ -545,10 +572,15 @@
       font-size: 2rem;
       width: 48px;
       height: 48px;
+      flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: 10px;
+    }
+    .pillar-header > div {
+      min-width: 0;
+      flex: 1;
     }
     .pillar-header h3 {
       font-size: 1.2rem;
@@ -567,6 +599,8 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
+      min-width: 0;
+      width: 100%;
     }
     .event-item {
       padding: 8px 11px;
@@ -574,6 +608,9 @@
       background: rgba(15, 23, 42, 0.45);
       border-left: 3px solid rgba(255, 255, 255, 0.2);
       cursor: pointer;
+      min-width: 0;
+      max-width: 100%;
+      box-sizing: border-box;
       transition: background 0.15s ease, transform 0.12s ease;
     }
     .event-item:hover, .event-item:focus-visible {
@@ -584,12 +621,15 @@
       font-family: var(--font-mono);
       font-size: 0.78rem;
       font-weight: 800;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.02em;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start;
       gap: 10px;
       margin-bottom: 0;
+      min-width: 0;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
     .event-year::after {
       content: "📷";
@@ -685,6 +725,15 @@
     .impact-event-modal.photo-expanded {
       width: min(880px, calc(100vw - 20px));
     }
+    .event-photo-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      margin-bottom: 6px;
+    }
     .event-photo-hero {
       position: relative;
       width: 100%;
@@ -694,7 +743,6 @@
       background: linear-gradient(135deg, #0f172a, #1e293b);
       border: 2px solid rgba(248, 250, 252, 0.18);
       box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65);
-      margin-top: 10px;
       cursor: zoom-in;
       user-select: none;
       -webkit-user-select: none;
@@ -721,66 +769,61 @@
       background: #050811;
     }
     .event-photo-loc-badge {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: rgba(9, 14, 23, 0.84);
-      backdrop-filter: blur(6px);
+      background: rgba(15, 23, 42, 0.9);
       border: 1px dashed rgba(251, 191, 36, 0.65);
       color: #fde68a;
       font-family: var(--font-mono);
       font-size: 0.68rem;
       font-weight: 800;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
       padding: 3px 8px;
       border-radius: 5px;
       text-transform: uppercase;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     }
     .event-photo-metric-badge {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: rgba(15, 23, 42, 0.88);
-      backdrop-filter: blur(6px);
-      border: 1.5px dotted rgba(248, 250, 252, 0.65);
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid rgba(56, 189, 248, 0.45);
       color: #38bdf8;
       font-family: var(--font-mono);
       font-size: 0.68rem;
       font-weight: 800;
-      padding: 4px 8px;
-      border-radius: 4px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+      padding: 3px 8px;
+      border-radius: 5px;
       transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
     }
-    .event-photo-hero.green-active .event-photo-metric-badge {
+    .event-photo-metric-badge.green-active {
       background: rgba(6, 78, 59, 0.92);
       color: #6ee7b7;
       border-color: rgba(52, 211, 153, 0.8);
     }
+    .event-photo-hold-bar {
+      display: flex;
+      justify-content: center;
+      margin-top: 7px;
+    }
     .event-photo-hold-pill {
-      position: absolute;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(6, 78, 59, 0.92);
-      backdrop-filter: blur(6px);
-      border: 1.5px solid rgba(52, 211, 153, 0.8);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: rgba(6, 78, 59, 0.88);
+      border: 1.5px solid rgba(52, 211, 153, 0.75);
       color: #ecfdf5;
       font-family: var(--font-mono);
       font-size: 0.7rem;
       font-weight: 800;
       padding: 5px 12px;
       border-radius: 999px;
-      white-space: nowrap;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7);
-      pointer-events: none;
-      transition: background 0.18s ease, transform 0.18s ease;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
     }
-    .event-photo-hero.green-active .event-photo-hold-pill {
+    .event-photo-hold-pill.green-active {
       background: rgba(16, 185, 129, 0.96);
       color: #022c22;
-      transform: translateX(-50%) scale(1.03);
+      transform: scale(1.02);
     }
     .event-photo-caption-bar {
       display: flex;
@@ -1240,7 +1283,7 @@
       <div class="header-top-row">
         <div class="badge-wrap">
           <span class="badge-pill">Chronology of Extremes</span>
-          <span class="version-tag">v2.7.1</span>
+          <span class="version-tag">v2.7.2</span>
         </div>
         <nav class="nav-links-row">
           <a href="earth_heat_trap.html" class="nav-btn nav-btn-home">← Earth's Heat Trap</a>
@@ -2222,7 +2265,7 @@
         <a href="doughnut_economics.html" class="footer-link">Doughnut Economics</a>
       </div>
       <div>
-        <span>Calibrated empirical physics and historical climatology. <strong style="color: #38bdf8; font-family: var(--font-mono);">v2.7.1</strong></span>
+        <span>Calibrated empirical physics and historical climatology. <strong style="color: #38bdf8; font-family: var(--font-mono);">v2.7.2</strong></span>
       </div>
     </footer>
 
@@ -3712,19 +3755,21 @@
       function buildEventPhotoHeroHtml(meta, titleText) {
         if (!meta) return "";
         const hasAlt = Boolean(meta.altImg);
-        const holdPillHtml = hasAlt
-          ? `<span class="event-photo-hold-pill" id="eventPhotoHoldPill">🌱 Press &amp; hold photo for normal green rainfall view</span>`
+        const holdBarHtml = hasAlt
+          ? `<div class="event-photo-hold-bar"><span class="event-photo-hold-pill" id="eventPhotoHoldPill">🌱 Press &amp; hold photo for normal green rainfall view</span></div>`
           : "";
         const tooltipText = hasAlt
           ? "Press and hold photo to compare with normal rainfall (green & pleasant land); short click to expand/shrink"
           : "Click image to toggle full-size view";
         return `
-          <div class="event-photo-hero" id="eventPhotoHeroBox" title="${tooltipText}">
-            <img class="event-photo-hero-img" id="eventPhotoHeroImg" src="${meta.img}" alt="${(titleText || "").replace(/"/g, "&quot;")}">
+          <div class="event-photo-top-bar">
             <span class="event-photo-loc-badge">📍 ${meta.locBadge}</span>
             <span class="event-photo-metric-badge" id="eventPhotoMetricBadge">${meta.metricBadge}</span>
-            ${holdPillHtml}
           </div>
+          <div class="event-photo-hero" id="eventPhotoHeroBox" title="${tooltipText}">
+            <img class="event-photo-hero-img" id="eventPhotoHeroImg" src="${meta.img}" alt="${(titleText || "").replace(/"/g, "&quot;")}">
+          </div>
+          ${holdBarHtml}
           <div class="event-photo-caption-bar">
             <span id="eventPhotoCaptionText">🖼️ ${meta.caption}</span>
             <a id="eventPhotoCreditLink" href="${meta.creditUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" style="color: #38bdf8; font-weight: 700; text-decoration: none; white-space: nowrap;">📜 Wikimedia Commons ↗</a>
@@ -3758,11 +3803,13 @@
           heroBox.classList.toggle("green-active", active);
           heroImg.src = active ? meta.altImg : meta.img;
           if (metricBadge) {
+            metricBadge.classList.toggle("green-active", active);
             metricBadge.textContent = active ? (meta.altBadge || "🌿 NORMAL RAINFALL") : meta.metricBadge;
           }
           if (holdPill) {
+            holdPill.classList.toggle("green-active", active);
             holdPill.innerHTML = active
-              ? "🌿 Showing Normal Rainfall (Green &amp; Pleasant Land) — release to return"
+              ? "🌿 Normal Rainfall (Green &amp; Pleasant Land) — release to return"
               : "🌱 Press &amp; hold photo for normal green rainfall view";
           }
           if (captionText) {
@@ -3790,14 +3837,17 @@
           }
         }
 
-        heroBox.addEventListener("mousedown", startPress);
-        heroBox.addEventListener("touchstart", startPress, { passive: true });
-        heroBox.addEventListener("mouseup", endPress);
-        heroBox.addEventListener("mouseleave", endPress);
-        heroBox.addEventListener("touchend", endPress);
-        heroBox.addEventListener("touchcancel", endPress);
-        heroBox.addEventListener("contextmenu", (e) => {
-          if (meta.altImg) e.preventDefault();
+        [heroBox, holdPill].forEach(el => {
+          if (!el) return;
+          el.addEventListener("mousedown", startPress);
+          el.addEventListener("touchstart", startPress, { passive: true });
+          el.addEventListener("mouseup", endPress);
+          el.addEventListener("mouseleave", endPress);
+          el.addEventListener("touchend", endPress);
+          el.addEventListener("touchcancel", endPress);
+          el.addEventListener("contextmenu", (e) => {
+            if (meta.altImg) e.preventDefault();
+          });
         });
 
         heroBox.addEventListener("click", () => {
