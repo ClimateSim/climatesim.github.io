@@ -56,6 +56,10 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
     body {
       background-color: var(--bg-dark);
       color: var(--text);
@@ -252,7 +256,7 @@
     /* PODCAST CARDS GRID */
     .podcasts-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr));
       gap: 18px;
     }
 

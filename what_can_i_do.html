@@ -56,6 +56,10 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
     body {
       background-color: var(--bg-dark);
       color: var(--text);
@@ -148,7 +152,7 @@
     /* MANDATED PROMINENT HEADER CALLOUTS */
     .headline-callout-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
       gap: 12px;
       margin-top: 4px;
     }
@@ -443,7 +447,7 @@
     /* SLIDERS 3-COLUMN GRID */
     .slider-columns-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(310px, 100%), 1fr));
       gap: 16px;
     }
 
