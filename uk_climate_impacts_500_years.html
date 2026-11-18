@@ -1283,7 +1283,7 @@
       <div class="header-top-row">
         <div class="badge-wrap">
           <span class="badge-pill">Chronology of Extremes</span>
-          <span class="version-tag">v2.7.3</span>
+          <span class="version-tag">v2.7.4</span>
         </div>
         <nav class="nav-links-row">
           <a href="earth_heat_trap.html" class="nav-btn nav-btn-home">← Earth's Heat Trap</a>
@@ -2265,7 +2265,7 @@
         <a href="doughnut_economics.html" class="footer-link">Doughnut Economics</a>
       </div>
       <div>
-        <span>Calibrated empirical physics and historical climatology. <strong style="color: #38bdf8; font-family: var(--font-mono);">v2.7.3</strong></span>
+        <span>Calibrated empirical physics and historical climatology. <strong style="color: #38bdf8; font-family: var(--font-mono);">v2.7.4</strong></span>
       </div>
     </footer>
 
@@ -3512,8 +3512,8 @@
           caption: "ESA Copernicus satellite imagery showing acute British soil moisture deficit—illustrating the Environment Agency's 'Jaws of Death' water supply warning.",
           altImg: "https://upload.wikimedia.org/wikipedia/commons/6/6e/A_Green_field_in_the_countryside_-_geograph.org.uk_-_193455.jpg",
           altCreditUrl: "https://commons.wikimedia.org/wiki/File:A_Green_field_in_the_countryside_-_geograph.org.uk_-_193455.jpg",
-          altCaption: "Normal British Rainfall: Verdant 'green and pleasant' English countryside pastures sustained by healthy soil moisture and normal seasonal rainfall (Geograph UK).",
-          altBadge: "🌿 NORMAL RAINFALL · GREEN & PLEASANT LAND"
+          altCaption: "Normal British Rainfall: Healthy green English countryside pastures sustained by normal seasonal rainfall and soil moisture (Geograph UK).",
+          altBadge: "🌿 NORMAL RAINFALL · HEALTHY PASTURE"
         },
         {
           match: ["1683", "1684", "great thames frost fair"],
@@ -3668,8 +3668,8 @@
           caption: "Historical chronicle reconstruction map of the 1540 European megadrought (Wetter et al., Climatic Change).",
           altImg: "https://upload.wikimedia.org/wikipedia/commons/6/6e/A_Green_field_in_the_countryside_-_geograph.org.uk_-_193455.jpg",
           altCreditUrl: "https://commons.wikimedia.org/wiki/File:A_Green_field_in_the_countryside_-_geograph.org.uk_-_193455.jpg",
-          altCaption: "Normal British Rainfall: Lush 'green and pleasant' English countryside pastures and hedgerows under normal seasonal rainfall (Geograph UK).",
-          altBadge: "🌿 NORMAL RAINFALL · GREEN & PLEASANT LAND"
+          altCaption: "Normal British Rainfall: Healthy green English countryside pastures and hedgerows under normal seasonal rainfall (Geograph UK).",
+          altBadge: "🌿 NORMAL RAINFALL · HEALTHY PASTURE"
         },
         {
           match: ["1564", "1608", "1621", "1677", "1716"],
@@ -3759,7 +3759,7 @@
           ? `<div class="event-photo-hold-bar"><span class="event-photo-hold-pill" id="eventPhotoHoldPill">🌱 Press &amp; hold photo for normal green rainfall view</span></div>`
           : "";
         const tooltipText = hasAlt
-          ? "Press and hold photo to compare with normal rainfall (green & pleasant land); short click to expand/shrink"
+          ? "Press and hold photo to compare with normal rainfall; short click to expand/shrink"
           : "Click image to toggle full-size view";
         return `
           <div class="event-photo-top-bar">
@@ -3809,7 +3809,7 @@
           if (holdPill) {
             holdPill.classList.toggle("green-active", active);
             holdPill.innerHTML = active
-              ? "🌿 Normal Rainfall (Green &amp; Pleasant Land) — release to return"
+              ? "🌿 Normal Rainfall — release to return"
               : "🌱 Press &amp; hold photo for normal green rainfall view";
           }
           if (captionText) {

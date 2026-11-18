@@ -1,6 +1,6 @@
 // ClimateSim Progressive Web App (PWA) Service Worker
-// Version: v4.5.3
-const CACHE_NAME = 'climatesim-v4.5.3';
+// Version: v4.5.4
+const CACHE_NAME = 'climatesim-v4.5.4';
 
 const PRECACHE_ASSETS = [
   './',
