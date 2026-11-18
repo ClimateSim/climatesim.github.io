@@ -426,6 +426,25 @@
       width: 100%;
       box-sizing: border-box;
     }
+    .cs-denial-menu-link {
+      padding: 6px 11px !important;
+      border-radius: 7px !important;
+      border: 1px solid rgba(244, 63, 94, 0.42) !important;
+      background: rgba(244, 63, 94, 0.12) !important;
+      color: #fda4af !important;
+      font-size: 0.76rem !important;
+      font-weight: 700 !important;
+      text-decoration: none !important;
+      display: inline-flex !important;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .cs-denial-menu-link:hover {
+      background: rgba(244, 63, 94, 0.24) !important;
+      border-color: #f43f5e !important;
+      color: #ffffff !important;
+    }
     .cs-guide-menu-btn {
       grid-column: 1 / -1;
       margin-top: 4px;
@@ -650,6 +669,15 @@
       window.addEventListener("resize", positionHamburgerPanel);
     }
 
+    function ensureDenialMenuLink(targetGrid) {
+      if (!targetGrid || targetGrid.querySelector('a[href*="denialism.html"]')) return;
+      const denialLink = document.createElement("a");
+      denialLink.href = "denialism.html";
+      denialLink.className = "cs-denial-menu-link";
+      denialLink.textContent = "🗣️ Denialism & Silence";
+      targetGrid.appendChild(denialLink);
+    }
+
     if (guideBtn && guideBtn.parentElement) {
       const headerCtrlContainer = guideBtn.parentElement;
       headerCtrlContainer.style.display = "flex";
@@ -660,6 +688,7 @@
       if (hamBtn) headerCtrlContainer.appendChild(hamBtn);
       if (navPanel) {
         const targetGrid = navPanel.querySelector(".mode-switch-group") || navPanel;
+        ensureDenialMenuLink(targetGrid);
         guideBtn.classList.add("cs-guide-menu-btn");
         targetGrid.appendChild(guideBtn);
       }
@@ -674,6 +703,7 @@
       navPanel.parentElement.insertBefore(ctrlWrap, navPanel);
 
       const targetGrid = navPanel.querySelector(".mode-switch-group") || navPanel;
+      ensureDenialMenuLink(targetGrid);
       const guideLink = document.createElement("a");
       guideLink.href = "index.html?guide=1";
       guideLink.className = "cs-guide-menu-btn";
