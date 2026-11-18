@@ -5,6 +5,13 @@
 
   const SITE_SEARCH_INDEX = [
     {
+      title: "Climate Denialism, Delay & The Unreported Emergency",
+      page: "Denialism & Delay",
+      url: "denialism.html",
+      tags: "denialism delay media silence headlines too expensive only 1 percent 1958 ipcc ar6 tipping points net zero",
+      desc: "Why climate change rarely leads the news, why 'too expensive' and 'only 1%' fail, and why 60 years of verified physics show even immediate Net Zero crosses tipping points."
+    },
+    {
       title: "Earth's Energy Imbalance (Plain-English Intro)",
       page: "Introduction",
       url: "index.html#Intro",
