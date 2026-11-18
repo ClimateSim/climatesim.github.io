@@ -645,7 +645,7 @@
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <div class="brand-title">National <span>Emergency Briefing</span></div>
-              <span class="version-badge">v4.6.0</span>
+              <span class="version-badge">v4.6.1</span>
             </div>
             <div class="brand-sub">Independent Scientific, Health & Security Evidence Delivered at Westminster Central Hall</div>
           </div>
@@ -691,10 +691,18 @@
       </div>
     </div>
 
+    <!-- SPEAKER PRESENTATIONS (Panel 1: Expanded by default) -->
+    <section class="cs-panel" id="briefing-speakers" style="background: rgba(15, 23, 42, 0.35); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 20px;">
+      <div class="cs-panel-header" style="margin-bottom: 12px;">
+        <h2 id="speaker-presentations" style="font-size: 0.95rem; font-weight: 800; color: #fff; margin: 0;">
+          🎙️ Speaker Presentations (11 Recorded Sessions)
+        </h2>
+      </div>
+      <div class="cs-panel-body">
     <!-- FILTER BAR -->
     <div class="filter-bar">
-      <div style="font-size: 0.8rem; font-weight: 800; color: #fff;">
-        🎙️ Speaker Presentations (11 Recorded Sessions)
+      <div style="font-size: 0.78rem; font-weight: 700; color: #94a3b8;">
+        Filter by domain:
       </div>
       <div class="filter-tabs">
         <button type="button" class="filter-btn active" data-filter="all">All Speakers</button>
@@ -1018,15 +1026,20 @@
       </div>
 
     </div>
+    </div>
+    </section>
 
     <!-- FEATURED SUSTAINABLE(ISH) PODCAST CONVERSATIONS -->
-    <div class="podcast-panel">
+    <div class="podcast-panel cs-panel cs-panel-collapsed" id="briefing-podcasts">
+      <div class="cs-panel-header" style="margin-bottom: 10px;">
+        <h2 class="podcast-title" id="sustainable-ish-podcast" style="margin: 0;">
+          <span>🎧</span> In-Depth Conversations: Jen Gale's Sustainable(ish) Podcast
+        </h2>
+      </div>
+      <div class="cs-panel-body">
       <div class="podcast-header">
         <div>
-          <div class="podcast-title">
-            <span>🎧</span> In-Depth Conversations: Jen Gale's Sustainable(ish) Podcast
-          </div>
-          <div class="podcast-intro" style="margin-top: 4px;">
+          <div class="podcast-intro" style="margin-top: 0;">
             Extended, candid audio discussions delving into the genesis of the National Emergency Briefing, breaking through climate silence, and mobilizing clinical and civic action. Hosted by environmental author &amp; campaigner <strong>Jen Gale</strong>.
           </div>
         </div>
@@ -1111,11 +1124,15 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="takeaways-panel">
-      <div class="takeaways-title">
-        <span>📋</span> The Core Demands of the National Emergency Briefing
       </div>
+    </div>
+    <div class="takeaways-panel cs-panel cs-panel-collapsed" id="briefing-demands">
+      <div class="cs-panel-header" style="margin-bottom: 10px;">
+        <h2 class="takeaways-title" id="core-demands" style="margin: 0;">
+          <span>📋</span> The Core Demands of the National Emergency Briefing
+        </h2>
+      </div>
+      <div class="cs-panel-body">
       <div class="takeaways-grid">
         <div class="takeaway-box">
           <h4>1. Televised National Briefing</h4>
@@ -1142,6 +1159,7 @@
           </p>
         </div>
       </div>
+      </div>
     </div>
 
     <!-- FOOTER -->
@@ -1163,7 +1181,7 @@
         <span>·</span>
         <a href="doughnut_economics.html" class="footer-link" style="color: #fbbf24;">🍩 Doughnut Economics</a>
         <span>·</span>
-        <span style="font-family: var(--font-mono); font-weight: 700; color: var(--rose);">v4.6.0</span>
+        <span style="font-family: var(--font-mono); font-weight: 700; color: var(--rose);">v4.6.1</span>
       </div>
       <div>
         Data compiled from the official National Emergency Briefing (<a href="https://www.nebriefing.org/" target="_blank" rel="noopener noreferrer" style="color: var(--blue);">nebriefing.org</a>) and public presentations delivered at Westminster Central Hall, London.

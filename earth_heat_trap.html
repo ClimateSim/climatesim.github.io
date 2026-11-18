@@ -706,7 +706,7 @@
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
       <div style="display: flex; align-items: center; gap: 8px;">
         <div class="badge-live">The Plain-English Climate Guide</div>
-        <span class="version-badge" style="font-size: 11px; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 7px; border-radius: 4px; letter-spacing: 0.04em;">v4.6.0</span>
+        <span class="version-badge" style="font-size: 11px; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 7px; border-radius: 4px; letter-spacing: 0.04em;">v4.6.1</span>
       </div>
       <nav style="display: flex; gap: 8px; flex-wrap: wrap;">
         <a href="advanced.html" style="font-size: 12px; font-weight: 700; color: #38bdf8; text-decoration: none; padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.3); background: rgba(56, 189, 248, 0.08);">🔬 Warming Simulator →</a>
@@ -748,7 +748,14 @@
     </div>
   </div>
 
-  <!-- INTERACTIVE PLAYGROUND -->
+  <!-- INTERACTIVE PLAYGROUND (Panel 1: Expanded by default) -->
+  <section class="cs-panel" id="heat-trap-playground" style="background: rgba(17,24,39,0.55); border: 1px solid var(--panel-border); border-radius: 16px; padding: 16px;">
+    <div class="cs-panel-header" style="margin-bottom: 12px;">
+      <h2 id="the-heat-trap-in-action" style="font-size: 16px; font-weight: 800; color: #f8fafc; margin: 0; display: flex; align-items: center; gap: 8px;">
+        <span>🌍</span> The Heat Trap in Action (Interactive Simulator)
+      </h2>
+    </div>
+    <div class="cs-panel-body">
   <div class="main-grid">
 
     <!-- CANVAS VIEW -->
@@ -853,11 +860,18 @@
       </button>
     </div>
   </div>
+  </div>
+  </section>
 
   <!-- MYTH BUSTER: DOESN'T CLIMATE ALWAYS CHANGE? -->
-  <div class="myth-panel">
-    <div class="myth-tag">THE BIGGEST CLIMATE MYTH BUSTED</div>
-    <h2 class="myth-heading">"WAIT A MINUTE... DOESN'T THE CLIMATE ALWAYS CHANGE ANYWAY?"</h2>
+  <div class="myth-panel cs-panel cs-panel-collapsed" id="climate-always-changes">
+    <div class="cs-panel-header" style="margin-bottom: 12px;">
+      <div>
+        <div class="myth-tag">THE BIGGEST CLIMATE MYTH BUSTED</div>
+        <h2 class="myth-heading" id="climate-myth-heading">"WAIT A MINUTE... DOESN'T THE CLIMATE ALWAYS CHANGE ANYWAY?"</h2>
+      </div>
+    </div>
+    <div class="cs-panel-body">
     <p class="myth-intro">
       <strong>Yes—our planet had Ice Ages and warm spells long before humans built factories.</strong> But there is a huge catch: <strong>it has NEVER changed this fast in the last million years.</strong>
     </p>
@@ -903,13 +917,17 @@
     <div class="analogy-banner">
       💡 <strong>The Everyday Analogy:</strong> Walking down a flight of stairs takes 2 minutes. Jumping off the roof takes 2 seconds. Both take you down to the ground floor—but only one smashes everything to pieces. <strong>Speed is everything!</strong> Modern human towns, crops, and coastlines cannot move in the blink of an eye.
     </div>
+    </div>
   </div>
 
   <!-- WHAT BURNING FUEL DOES -->
-  <div class="fuel-converter-panel">
-    <div style="font-size: 15px; font-weight: 800; text-transform: uppercase;">
-      ⛽ What Burning Fuel Actually Does
+  <div class="fuel-converter-panel cs-panel cs-panel-collapsed" id="fuel-converter">
+    <div class="cs-panel-header" style="margin-bottom: 10px;">
+      <h2 id="what-burning-fuel-actually-does" style="font-size: 15px; font-weight: 800; text-transform: uppercase; margin: 0;">
+        ⛽ What Burning Fuel Actually Does
+      </h2>
     </div>
+    <div class="cs-panel-body">
     <p style="font-size: 13px; color: var(--text-muted);">
       Pick an everyday amount of fuel to see how much heat-trapping gas it adds to the atmosphere:
     </p>
@@ -940,13 +958,17 @@
         <p id="fuelCash">Petrol costs 3× more per mile</p>
       </div>
     </div>
+    </div>
   </div>
 
   <!-- HOW WE FIX IT AND SAVE MONEY -->
-  <div class="playbook-panel">
-    <div class="playbook-header">
-      <span>💡</span> How We Fix It & Slash Household Bills
+  <div class="playbook-panel cs-panel cs-panel-collapsed" id="how-we-fix-it">
+    <div class="cs-panel-header" style="margin-bottom: 12px;">
+      <h2 class="playbook-header" id="how-we-fix-it-heading" style="margin: 0;">
+        <span>💡</span> How We Fix It &amp; Slash Household Bills
+      </h2>
     </div>
+    <div class="cs-panel-body">
     <div class="playbook-grid">
       <div class="playbook-card">
         <h4>🌬️ Cheap British Wind & Solar</h4>
@@ -989,11 +1011,12 @@
         <a href="https://renewables-map.robinhawkes.com/#5/55/-3.2" target="_blank" rel="noopener noreferrer" style="color: #34d399; font-weight: 700; text-decoration: underline;">🗺️ UK Renewables Map (Robin Hawkes) ↗</a>
       </div>
     </div>
+    </div>
   </div>
 
   <footer>
     <div class="footer-content">
-      <span>Calibrated physics model built on IPCC AR6 climate sensitivity and historical observations. Made for plain-English understanding. <strong style="color: #38bdf8; font-family: ui-monospace, monospace; font-weight: 700; margin-left: 6px;">v4.6.0</strong></span>
+      <span>Calibrated physics model built on IPCC AR6 climate sensitivity and historical observations. Made for plain-English understanding. <strong style="color: #38bdf8; font-family: ui-monospace, monospace; font-weight: 700; margin-left: 6px;">v4.6.1</strong></span>
       <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 6px;">
         <a href="advanced.html" class="btn-advanced-link" id="btnAdvancedVersion">
           🔬 Open Full 1D Physics Simulator (Advanced Version) →

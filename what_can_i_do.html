@@ -950,11 +950,14 @@
       </div>
     </header>
 
-    <!-- INTERACTIVE PERSONAL CARBON CALCULATOR -->
-    <section class="calc-wrapper">
+    <!-- INTERACTIVE PERSONAL CARBON CALCULATOR (Panel 1: Expanded by default) -->
+    <section class="calc-wrapper cs-panel" id="personal-carbon-dial">
+      <div class="cs-panel-header" style="margin-bottom: 12px;">
+        <h2 id="personal-carbon-dial-heading" style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #fff;"><span>⚖️</span> Personal Carbon Dial &amp; Net-Zero Pathfinder</h2>
+      </div>
+      <div class="cs-panel-body">
       <div class="calc-header">
         <div class="calc-title-box">
-          <h2><span>⚖️</span> Personal Carbon Dial &amp; Net-Zero Pathfinder</h2>
           <p>Adjust your household, mobility, and diet choices to see how close you can get to the Paris 1.5°C target (~2.0 tonnes/year).</p>
         </div>
 
@@ -1198,20 +1201,24 @@
         </div>
 
       </div>
+      </div>
     </section>
 
     <!-- IN-DEPTH EXPLAINER CARDS -->
     <section class="knowledge-section">
 
       <!-- CARD 1: HOME -->
-      <article class="knowledge-card">
-        <div class="knowledge-header">
-          <span style="font-size: 1.5rem;">🏠</span>
-          <div>
-            <h3>Home Decarbonisation: Insulation, Heat Pumps &amp; Induction Cooking</h3>
-            <span style="font-size: 0.76rem; color: #38bdf8;">Space heating accounts for over 60% of British household energy consumption</span>
+      <article class="knowledge-card cs-panel cs-panel-collapsed" id="home-decarbonisation">
+        <div class="cs-panel-header" style="margin-bottom: 10px;">
+          <div class="knowledge-header" style="margin: 0; border: none; padding: 0;">
+            <span style="font-size: 1.5rem;">🏠</span>
+            <div>
+              <h3 id="home-decarbonisation-heading">Home Decarbonisation: Insulation, Heat Pumps &amp; Induction Cooking</h3>
+              <span style="font-size: 0.76rem; color: #38bdf8;">Space heating accounts for over 60% of British household energy consumption</span>
+            </div>
           </div>
         </div>
+        <div class="cs-panel-body">
 
         <p>
           In the United Kingdom, domestic buildings are responsible for roughly <strong>17% of total greenhouse gas emissions</strong>, primarily from burning fossil natural gas in over 24 million boilers. Decarbonising a home follows a strict physical hierarchy:
@@ -1244,17 +1251,21 @@
           <span style="color: #cbd5e1;">🌍 <strong>Global Solutions Ranking:</strong> Explore quantified gigaton abatement, speed of action &amp; cost savings across electricity and buildings:</span>
           <a href="https://drawdown.org/explorer?sector=155&amp;classification=256" target="_blank" rel="noopener noreferrer" style="color: #34d399; font-weight: 700; text-decoration: underline;">Project Drawdown Explorer (Highly Recommended Electricity Solutions) ↗</a>
         </div>
+      </div>
       </article>
 
       <!-- CARD 2: TRANSPORT -->
-      <article class="knowledge-card">
-        <div class="knowledge-header">
-          <span style="font-size: 1.5rem;">🚆</span>
-          <div>
-            <h3>Transport: Electric Vehicles, Rail, and Compassionate Realism on Flights</h3>
-            <span style="font-size: 0.76rem; color: #00e5ff;">Surface transport is the single largest greenhouse gas emitting sector in the UK (~24%)</span>
+      <article class="knowledge-card cs-panel cs-panel-collapsed" id="transport-decarbonisation">
+        <div class="cs-panel-header" style="margin-bottom: 10px;">
+          <div class="knowledge-header" style="margin: 0; border: none; padding: 0;">
+            <span style="font-size: 1.5rem;">🚆</span>
+            <div>
+              <h3 id="transport-heading">Transport: Electric Vehicles, Rail, and Compassionate Realism on Flights</h3>
+              <span style="font-size: 0.76rem; color: #00e5ff;">Surface transport is the single largest greenhouse gas emitting sector in the UK (~24%)</span>
+            </div>
           </div>
         </div>
+        <div class="cs-panel-body">
 
         <p>
           The physics of moving human beings and cargo is dictated by propulsion efficiency and rolling resistance:
@@ -1274,17 +1285,21 @@
             <strong>The Realistic Compassion Boundary (Long-Haul Family Ties):</strong> While short-haul domestic flights (e.g. London to Edinburgh or Manchester) can readily be replaced by electric rail, <strong>intercontinental travel has no current low-carbon alternative</strong>. If your family lives in Melbourne, Auckland, Toronto, or Mumbai, nobody expects you to spend six weeks on a cargo vessel or sever human bonds. Eliminating routine regional flights, driving an EV or cycling locally, and reducing beef consumption easily compensates for an occasional family reunion flight.
           </li>
         </ul>
+        </div>
       </article>
 
       <!-- CARD 3: FOOD -->
-      <article class="knowledge-card">
-        <div class="knowledge-header">
-          <span style="font-size: 1.5rem;">🥑</span>
-          <div>
-            <h3>Food: Buying Local, Eating Less Meat &amp; The 10,000-Mile Fruit Reality</h3>
-            <span style="font-size: 0.76rem; color: #fbbf24;">Why what you eat matters 10× to 50× more than where it was grown</span>
+      <article class="knowledge-card cs-panel cs-panel-collapsed" id="food-footprint">
+        <div class="cs-panel-header" style="margin-bottom: 10px;">
+          <div class="knowledge-header" style="margin: 0; border: none; padding: 0;">
+            <span style="font-size: 1.5rem;">🥑</span>
+            <div>
+              <h3 id="food-footprint-heading">Food: Buying Local, Eating Less Meat &amp; The 10,000-Mile Fruit Reality</h3>
+              <span style="font-size: 0.76rem; color: #fbbf24;">Why what you eat matters 10× to 50× more than where it was grown</span>
+            </div>
           </div>
         </div>
+        <div class="cs-panel-body">
 
         <p>
           A common intuition is that eating local food is the best way to cut carbon. While supporting local farmers is fantastic for community resilience and fresh produce, <a href="https://ourworldindata.org/food-choice-vs-eating-local" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: underline;"><strong>food transport accounts for only ~5% to 6% of food's total carbon footprint</strong></a> (Poore &amp; Nemecek, <em>Science</em> 2018; Our World in Data). The emissions released during food production—enteric methane, deforestation, fertilisers, and manure—dominate by an order of magnitude.
@@ -1375,6 +1390,7 @@
             <strong>Land Use Opportunity Cost:</strong> Livestock uses <strong>77% of all agricultural land worldwide</strong>, but produces only <strong>18% of global calories and 37% of protein</strong>. Swapping to plant-rich meals frees up vast land areas for peatland rewetting, commercial timber, and woodland carbon capture.
           </li>
         </ul>
+        </div>
       </article>
 
     </section>

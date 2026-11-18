@@ -1215,7 +1215,7 @@
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <div class="brand-title">We Only Have <span>One Pale Blue Dot</span></div>
-              <span class="version-badge" style="font-size: 0.68rem; font-family: var(--font-mono); font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v4.6.0</span>
+              <span class="version-badge" style="font-size: 0.68rem; font-family: var(--font-mono); font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v4.6.1</span>
             </div>
             <div class="brand-sub">Humanity's Non-Fossil Resource Metabolism & The Path to One-Planet Living</div>
           </div>
@@ -1270,11 +1270,14 @@
         </div>
       </div>
 
-      <!-- PLANETARY NEIGHBOURS: VENUS, EARTH & MARS -->
-      <div class="neighbours-section">
+      <!-- PLANETARY NEIGHBOURS: VENUS, EARTH & MARS (Panel 1: Expanded by default) -->
+      <div class="neighbours-section cs-panel" id="planetary-neighbours">
+        <div class="cs-panel-header" style="margin-bottom: 10px;">
+          <h3 id="our-next-door-neighbours" style="margin: 0; font-size: 1.05rem; font-weight: 800; color: #f8fafc;">🪐 Our Next-Door Neighbours: Why Earth's Gossamer Atmosphere is Our Only Life Support</h3>
+        </div>
+        <div class="cs-panel-body">
         <div class="neighbours-header">
           <div class="neighbours-title-box">
-            <h3>🪐 Our Next-Door Neighbours: Why Earth's Gossamer Atmosphere is Our Only Life Support</h3>
             <p>
               Space is not an escape hatch. Venus is a crushing 465&deg;C greenhouse acid furnace, while Mars is a freezing near-vacuum where exposed fluids boil in seconds. Earth's entire biosphere relies on a 10-kilometre atmospheric veneer thinner than a coat of varnish on a classroom globe.
             </p>
@@ -1392,6 +1395,7 @@
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </header>
@@ -1541,12 +1545,15 @@
     </div>
 
     <!-- GLOBAL CARBON & CONSUMPTION INEQUALITY PANEL -->
-    <div class="inequality-panel">
+    <div class="inequality-panel cs-panel cs-panel-collapsed" id="global-inequality">
+      <div class="cs-panel-header" style="margin-bottom: 10px;">
+        <h2 class="inequality-title" id="global-carbon-inequality" style="margin: 0;">
+          <span>⚖️</span> Global Carbon &amp; Ecological Inequality: Who Emits, Who Suffers, and Who Must Cut
+        </h2>
+      </div>
+      <div class="cs-panel-body">
       <div class="inequality-head">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-          <div class="inequality-title">
-            <span>⚖️</span> Global Carbon &amp; Ecological Inequality: Who Emits, Who Suffers, and Who Must Cut
-          </div>
           <span style="font-family: var(--font-mono); font-size: 0.72rem; color: #38bdf8; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">
             Paris 1.5°C Budget: ~2.1 t CO₂ / person / yr
           </span>
@@ -1586,13 +1593,17 @@
           </div>
         </div>
       </div>
+      </div>
     </div>
 
     <!-- SIMULATOR CONTROLS DECK -->
-    <div class="deck-panel">
+    <div class="deck-panel cs-panel cs-panel-collapsed" id="planetary-levers">
+      <div class="cs-panel-header" style="margin-bottom: 10px;">
+        <h2 class="deck-title" id="planetary-transition-levers" style="margin: 0;">🎛️ Planetary Transition Levers</h2>
+      </div>
+      <div class="cs-panel-body">
       <div class="deck-header">
         <div class="deck-title-group">
-          <div class="deck-title">🎛️ Planetary Transition Levers</div>
           <div class="deck-desc">Adjust humanity's diet, waste, farming, conservation, and materials to move back to ≤ 1.0 Planet Earth</div>
         </div>
 
@@ -1702,13 +1713,17 @@
         </div>
 
       </div>
+      </div>
     </div>
 
     <!-- SCIENTIFIC DEEP-DIVE DOCUMENTATION -->
-    <div class="docs-panel">
-      <div class="docs-title">
-        <span>📚</span> Why Exclude Fossil Fuels? Understanding Humanity's Biological Metabolism
+    <div class="docs-panel cs-panel cs-panel-collapsed" id="biological-metabolism">
+      <div class="cs-panel-header" style="margin-bottom: 10px;">
+        <h2 class="docs-title" id="why-exclude-fossil-fuels" style="margin: 0;">
+          <span>📚</span> Why Exclude Fossil Fuels? Understanding Humanity's Biological Metabolism
+        </h2>
       </div>
+      <div class="cs-panel-body">
 
       <div class="docs-grid">
 
@@ -1816,6 +1831,7 @@
         </div>
 
       </div>
+      </div>
     </div>
 
     <!-- FOOTER -->
@@ -1837,7 +1853,7 @@
         <span>·</span>
         <a href="doughnut_economics.html" class="footer-link" style="color: #fbbf24;">🍩 Doughnut Economics</a>
         <span>·</span>
-        <span style="font-family: var(--font-mono); font-weight: 700; color: var(--cyan);">v4.6.0</span>
+        <span style="font-family: var(--font-mono); font-weight: 700; color: var(--cyan);">v4.6.1</span>
       </div>
       <div>
         Peer-reviewed resource data calibrated against FAO SOFIA (2024), UNEP International Resource Panel, Rockström et al. Planetary Boundaries (2023), and Global Footprint Network biocapacity accounts.

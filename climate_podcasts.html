@@ -1644,6 +1644,31 @@
     });
   </script>
 
+  <!-- Collapsible Podcast Panels (First expanded, others collapsed by default) -->
+  <script>
+    (function setupPodcastPanels() {
+      const cards = Array.from(document.querySelectorAll("#podcastsGrid .podcast-card"));
+      cards.forEach((card, idx) => {
+        const hdr = card.querySelector(".podcast-header");
+        if (!hdr) return;
+        card.classList.add("cs-panel");
+        if (idx > 0) card.classList.add("cs-panel-collapsed");
+        hdr.classList.add("cs-panel-header");
+        const bodyWrap = document.createElement("div");
+        bodyWrap.className = "cs-panel-body";
+        const bodyEl = card.querySelector(".podcast-body");
+        const footerEl = card.querySelector(".podcast-footer");
+        if (bodyEl) bodyWrap.appendChild(bodyEl);
+        if (footerEl) bodyWrap.appendChild(footerEl);
+        card.appendChild(bodyWrap);
+        const titleEl = hdr.querySelector(".podcast-title");
+        if (titleEl && card.id && !titleEl.id) {
+          titleEl.id = card.id + "-heading";
+        }
+      });
+    })();
+  </script>
+
   <!-- PWA Service Worker Registration -->
   <script>
     if ('serviceWorker' in navigator) {

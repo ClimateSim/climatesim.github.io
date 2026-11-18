@@ -640,7 +640,14 @@
       </div>
     </div>
 
-    <!-- INTERACTIVE DOUGHNUT VISUALIZER & INSPECTOR -->
+    <!-- INTERACTIVE DOUGHNUT VISUALIZER & INSPECTOR (Panel 1: Expanded by default) -->
+    <section class="cs-panel" id="doughnut-visualizer" style="background: rgba(15, 23, 42, 0.35); border: 1px solid var(--border); border-radius: 14px; padding: 14px;">
+      <div class="cs-panel-header" style="margin-bottom: 12px;">
+        <h2 id="interactive-global-doughnut-map" style="font-size: 1.05rem; font-weight: 800; color: #fff; margin: 0; display: flex; align-items: center; gap: 8px;">
+          <span>🍩</span> Interactive Global Doughnut Map &amp; Boundary Inspector
+        </h2>
+      </div>
+      <div class="cs-panel-body">
     <div class="doughnut-layout">
 
       <!-- LEFT: INTERACTIVE SVG DOUGHNUT -->
@@ -723,11 +730,16 @@
       </div>
 
     </div>
+    </div>
+    </section>
 
     <!-- PALE BLUE DOT BRIDGE SECTION -->
-    <div class="pale-bridge-card">
+    <div class="pale-bridge-card cs-panel cs-panel-collapsed" id="pale-blue-dot-bridge" style="flex-direction: column; align-items: stretch;">
+      <div class="cs-panel-header" style="margin-bottom: 10px;">
+        <h3 id="how-doughnut-extends-pale-blue-dot" style="margin: 0; font-size: 1rem; font-weight: 800; color: #f8fafc;">🌍 How Doughnut Economics Extends "We Only Have One Pale Blue Dot"</h3>
+      </div>
+      <div class="cs-panel-body" style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
       <div class="pale-bridge-info">
-        <h4>🌍 How Doughnut Economics Extends "We Only Have One Pale Blue Dot"</h4>
         <p>
           Our <strong>Pale Blue Dot</strong> simulator demonstrates that humanity's non-fossil biological metabolism already consumes <strong>1.38 Planet Earths</strong> when factoring in Nature's 30% wildlife reserve. <strong>Doughnut Economics</strong> takes this physical truth and solves the distribution equation: it proves that eliminating ecological overshoot must not be done by starving human populations, but by reorganizing institutions to be <em>regenerative</em> and <em>distributive</em> by design.
         </p>
@@ -735,13 +747,17 @@
       <a href="we_only_have_one_pale_blue_dot.html" class="btn-pale-bridge">
         🌍 Open Pale Blue Dot Simulator →
       </a>
+      </div>
     </div>
 
     <!-- THE 7 WAYS TO THINK LIKE A 21st-CENTURY ECONOMIST -->
-    <div class="principles-section">
-      <div class="section-title">
-        <span>🧭</span> The 7 Ways to Think Like a 21st-Century Economist (Kate Raworth)
+    <div class="principles-section cs-panel cs-panel-collapsed" id="seven-principles">
+      <div class="cs-panel-header" style="margin-bottom: 10px;">
+        <div class="section-title" id="seven-ways-to-think" style="margin: 0;">
+          <span>🧭</span> The 7 Ways to Think Like a 21st-Century Economist (Kate Raworth)
+        </div>
       </div>
+      <div class="cs-panel-body">
       <p style="font-size: 0.85rem; color: var(--text-muted);">
         Mainstream economics was conceived for an empty world in the 18th and 19th centuries. Surviving the 21st century requires replacing outdated axioms with complex systems thinking.
       </p>
@@ -839,12 +855,16 @@
         </div>
       </div>
     </div>
+    </div>
 
     <!-- THE 9 PLANETARY BOUNDARIES SCIENTIFIC TABLE -->
-    <div class="table-panel">
-      <div class="section-title">
-        <span>🔬</span> The 9 Planetary Boundaries (Richardson et al. Science 2023 / Rockström et al.)
+    <div class="table-panel cs-panel cs-panel-collapsed" id="planetary-boundaries">
+      <div class="cs-panel-header" style="margin-bottom: 10px;">
+        <div class="section-title" id="nine-planetary-boundaries" style="margin: 0;">
+          <span>🔬</span> The 9 Planetary Boundaries (Richardson et al. Science 2023 / Rockström et al.)
+        </div>
       </div>
+      <div class="cs-panel-body">
       <p style="font-size: 0.82rem; color: var(--text-muted);">
         The ecological ceiling of the Doughnut is directly defined by peer-reviewed Earth System science. As of 2023–2026, <strong>6 of the 9 boundaries</strong> have been transgressed due to global industrial throughput.
       </p>
@@ -925,6 +945,7 @@
           </tr>
         </tbody>
       </table>
+      </div>
     </div>
 
     <!-- FOOTER -->

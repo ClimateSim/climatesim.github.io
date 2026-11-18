@@ -731,9 +731,294 @@
   });
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", injectSearchTrigger);
+    document.addEventListener("DOMContentLoaded", () => {
+      injectSearchTrigger();
+      initPanelsAndSubheadingAnchors();
+    });
   } else {
     injectSearchTrigger();
+    initPanelsAndSubheadingAnchors();
   }
   window.openClimateSimSearch = openSearch;
+
+  function initPanelsAndSubheadingAnchors() {
+    if (window.__csPanelsAndAnchorsInit) return;
+    window.__csPanelsAndAnchorsInit = true;
+
+    // 1. Shared CSS for .cs-panel & #csAnchorPopup
+    if (!document.getElementById("csPanelsSharedStyle")) {
+      const st = document.createElement("style");
+      st.id = "csPanelsSharedStyle";
+      st.textContent = `
+        .cs-panel-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 10px;
+          flex-wrap: wrap;
+          cursor: pointer;
+          user-select: none;
+          -webkit-user-select: none;
+        }
+        .cs-panel-toggle-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          padding: 4px 10px;
+          border-radius: 6px;
+          border: 1px solid rgba(56, 189, 248, 0.4);
+          background: rgba(56, 189, 248, 0.12);
+          color: #38bdf8;
+          font-size: 0.72rem;
+          font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+          font-weight: 700;
+          cursor: pointer;
+          flex-shrink: 0;
+          transition: background 0.15s ease, color 0.15s ease;
+        }
+        .cs-panel-toggle-btn:hover {
+          background: rgba(56, 189, 248, 0.24);
+          color: #fff;
+        }
+        .cs-panel-chevron {
+          display: inline-block;
+          transition: transform 0.2s ease;
+        }
+        .cs-panel.cs-panel-collapsed .cs-panel-chevron {
+          transform: rotate(-90deg);
+        }
+        .cs-panel.cs-panel-collapsed > .cs-panel-body {
+          display: none !important;
+        }
+        .cs-panel.cs-panel-collapsed {
+          padding-bottom: 14px !important;
+        }
+        .cs-panel.cs-panel-collapsed .cs-panel-header {
+          margin-bottom: 0 !important;
+          border-bottom: none !important;
+          padding-bottom: 0 !important;
+        }
+        .cs-anchor-popup {
+          position: fixed;
+          z-index: 26000;
+          display: none;
+          align-items: center;
+          gap: 6px;
+          background: rgba(9, 14, 23, 0.96);
+          border: 1px solid rgba(56, 189, 248, 0.65);
+          color: #e2e8f0;
+          font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+          font-size: 0.72rem;
+          font-weight: 700;
+          padding: 5px 10px;
+          border-radius: 999px;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.85), 0 0 14px rgba(56, 189, 248, 0.25);
+          cursor: pointer;
+          max-width: calc(100vw - 24px);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .cs-anchor-popup.visible {
+          display: inline-flex;
+        }
+        .cs-anchor-popup .cs-anchor-hash {
+          color: #38bdf8;
+        }
+        .cs-anchor-popup .cs-anchor-copy {
+          color: #94a3b8;
+          font-size: 0.66rem;
+          border-left: 1px solid rgba(255, 255, 255, 0.14);
+          padding-left: 6px;
+        }
+      `;
+      document.head.appendChild(st);
+    }
+
+    // 2. Collapsible .cs-panel setup (skip click binding on uk_climate_impacts_500_years.html which has its own)
+    const hasCustomPanelHandler = Boolean(document.getElementById("impactEventModalBackdrop"));
+    const panels = Array.from(document.querySelectorAll(".cs-panel"));
+
+    function setPanelExpanded(panel, expanded) {
+      if (!panel) return;
+      panel.classList.toggle("cs-panel-collapsed", !expanded);
+      const btn = panel.querySelector(":scope > .cs-panel-header .cs-panel-toggle-btn");
+      if (btn) {
+        btn.setAttribute("aria-expanded", expanded ? "true" : "false");
+        const lbl = btn.querySelector(".cs-panel-toggle-label");
+        if (lbl) lbl.textContent = expanded ? "Hide" : "Show";
+      }
+      if (expanded) {
+        setTimeout(() => window.dispatchEvent(new Event("resize")), 40);
+      }
+    }
+
+    panels.forEach((panel) => {
+      const hdr = panel.querySelector(":scope > .cs-panel-header");
+      if (!hdr) return;
+      const isCollapsed = panel.classList.contains("cs-panel-collapsed");
+      let btn = hdr.querySelector(":scope > .cs-panel-toggle-btn, .cs-panel-toggle-btn");
+      if (!btn) {
+        btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "cs-panel-toggle-btn";
+        btn.setAttribute("aria-expanded", isCollapsed ? "false" : "true");
+        btn.innerHTML = `<span class="cs-panel-chevron">▾</span><span class="cs-panel-toggle-label">${isCollapsed ? "Show" : "Hide"}</span>`;
+        hdr.appendChild(btn);
+      }
+    });
+
+    if (!hasCustomPanelHandler && panels.length > 0) {
+      document.addEventListener("click", (e) => {
+        if (window.__csSuppressPanelClick) {
+          window.__csSuppressPanelClick = false;
+          return;
+        }
+        const hdr = e.target && e.target.closest ? e.target.closest(".cs-panel-header") : null;
+        if (!hdr) return;
+        const isToggleBtn = e.target.closest(".cs-panel-toggle-btn");
+        const isInteractive = e.target.closest("a, button, input, select, .cs-anchor-popup");
+        if (!isInteractive || isToggleBtn) {
+          const panel = hdr.closest(".cs-panel");
+          if (panel) {
+            setPanelExpanded(panel, panel.classList.contains("cs-panel-collapsed"));
+          }
+        }
+      });
+    }
+
+    // Expand panel if URL hash targets an element inside a collapsed .cs-panel
+    function expandPanelForHash() {
+      const hash = (window.location.hash || "").replace(/^#/, "");
+      if (!hash) return;
+      const target = document.getElementById(hash);
+      if (!target) return;
+      const parentPanel = target.closest(".cs-panel");
+      if (parentPanel && parentPanel.classList.contains("cs-panel-collapsed")) {
+        setPanelExpanded(parentPanel, true);
+      }
+      setTimeout(() => {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 60);
+    }
+    if (window.location.hash) expandPanelForHash();
+    window.addEventListener("hashchange", expandPanelForHash);
+
+    // 3. Subheading Anchor IDs & Hover / Long-Click Popup
+    const usedIds = new Set(Array.from(document.querySelectorAll("[id]")).map(el => el.id));
+    function slugify(text) {
+      return (text || "")
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-")
+        .slice(0, 48) || "section";
+    }
+
+    const subheadings = Array.from(document.querySelectorAll("h2, h3, .section-title, .panel-title, .podcast-title"))
+      .filter(el => !el.closest(".cs-search-modal, .impact-event-modal, .sub-modal, #csSearchBackdrop, #impactEventModalBackdrop"));
+
+    subheadings.forEach((el) => {
+      if (!el.id) {
+        let base = slugify(el.textContent);
+        let candidate = base;
+        let n = 2;
+        while (usedIds.has(candidate)) {
+          candidate = `${base}-${n++}`;
+        }
+        el.id = candidate;
+        usedIds.add(candidate);
+      }
+    });
+
+    const popup = document.createElement("div");
+    popup.id = "csAnchorPopup";
+    popup.className = "cs-anchor-popup";
+    popup.setAttribute("role", "button");
+    popup.setAttribute("tabindex", "0");
+    popup.innerHTML = `<span class="cs-anchor-hash">#anchor</span><span class="cs-anchor-copy">Copy link</span>`;
+    document.body.appendChild(popup);
+
+    let activeHeading = null;
+    let hideTimer = null;
+    let longPressTimer = null;
+
+    function positionPopup(targetEl) {
+      const rect = targetEl.getBoundingClientRect();
+      popup.classList.add("visible");
+      const pw = popup.offsetWidth || 180;
+      const ph = popup.offsetHeight || 28;
+      let left = Math.max(10, Math.min(rect.left, window.innerWidth - pw - 10));
+      let top = rect.top - ph - 6;
+      if (top < 8) top = rect.bottom + 6;
+      popup.style.left = `${Math.round(left)}px`;
+      popup.style.top = `${Math.round(top)}px`;
+    }
+
+    function showAnchorPopup(targetEl, autoHideMs = 0) {
+      if (!targetEl || !targetEl.id) return;
+      clearTimeout(hideTimer);
+      activeHeading = targetEl;
+      popup.querySelector(".cs-anchor-hash").textContent = `#${targetEl.id}`;
+      popup.querySelector(".cs-anchor-copy").textContent = "Copy link";
+      positionPopup(targetEl);
+      if (autoHideMs > 0) {
+        hideTimer = setTimeout(() => {
+          popup.classList.remove("visible");
+          activeHeading = null;
+        }, autoHideMs);
+      }
+    }
+
+    function scheduleHidePopup(delay = 220) {
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => {
+        popup.classList.remove("visible");
+        activeHeading = null;
+      }, delay);
+    }
+
+    popup.addEventListener("mouseenter", () => clearTimeout(hideTimer));
+    popup.addEventListener("mouseleave", () => scheduleHidePopup(180));
+    popup.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (!activeHeading || !activeHeading.id) return;
+      const url = `${window.location.origin}${window.location.pathname}${window.location.search}#${activeHeading.id}`;
+      try {
+        history.replaceState(null, "", `#${activeHeading.id}`);
+      } catch (_) {}
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).catch(() => {});
+      }
+      popup.querySelector(".cs-anchor-copy").textContent = "✓ Copied!";
+      scheduleHidePopup(1400);
+    });
+
+    subheadings.forEach((el) => {
+      el.addEventListener("mouseenter", () => showAnchorPopup(el));
+      el.addEventListener("mouseleave", () => scheduleHidePopup(220));
+      el.addEventListener("focusin", () => showAnchorPopup(el));
+      el.addEventListener("focusout", () => scheduleHidePopup(220));
+
+      el.addEventListener("mousedown", (e) => {
+        if (e.button !== 0) return;
+        clearTimeout(longPressTimer);
+        longPressTimer = setTimeout(() => {
+          window.__csSuppressPanelClick = true;
+          showAnchorPopup(el, 3800);
+        }, 380);
+      });
+      el.addEventListener("touchstart", () => {
+        clearTimeout(longPressTimer);
+        longPressTimer = setTimeout(() => {
+          window.__csSuppressPanelClick = true;
+          showAnchorPopup(el, 3800);
+        }, 380);
+      }, { passive: true });
+      ["mouseup", "mouseleave", "touchend", "touchcancel"].forEach(ev => {
+        el.addEventListener(ev, () => clearTimeout(longPressTimer));
+      });
+    });
+  }
 })();
