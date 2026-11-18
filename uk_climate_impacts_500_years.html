@@ -541,7 +541,7 @@
       min-width: 0;
       max-width: 100%;
       box-sizing: border-box;
-      overflow-wrap: anywhere;
+      overflow-wrap: break-word;
       transition: transform 0.15s ease, border-color 0.15s ease;
     }
     @media (max-width: 600px) {
@@ -580,7 +580,7 @@
     }
     .pillar-header > div {
       min-width: 0;
-      flex: 1;
+      flex: 1 1 200px;
     }
     .pillar-header h3 {
       font-size: 1.2rem;
@@ -628,8 +628,8 @@
       gap: 10px;
       margin-bottom: 0;
       min-width: 0;
-      overflow-wrap: anywhere;
-      word-break: break-word;
+      overflow-wrap: break-word;
+      word-break: normal;
     }
     .event-year::after {
       content: "📷";
@@ -1283,7 +1283,7 @@
       <div class="header-top-row">
         <div class="badge-wrap">
           <span class="badge-pill">Chronology of Extremes</span>
-          <span class="version-tag">v2.7.2</span>
+          <span class="version-tag">v2.7.3</span>
         </div>
         <nav class="nav-links-row">
           <a href="earth_heat_trap.html" class="nav-btn nav-btn-home">← Earth's Heat Trap</a>
@@ -2265,7 +2265,7 @@
         <a href="doughnut_economics.html" class="footer-link">Doughnut Economics</a>
       </div>
       <div>
-        <span>Calibrated empirical physics and historical climatology. <strong style="color: #38bdf8; font-family: var(--font-mono);">v2.7.2</strong></span>
+        <span>Calibrated empirical physics and historical climatology. <strong style="color: #38bdf8; font-family: var(--font-mono);">v2.7.3</strong></span>
       </div>
     </footer>
 
