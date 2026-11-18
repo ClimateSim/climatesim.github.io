@@ -561,7 +561,7 @@
       display: block;
     }
 
-    /* HISTORICAL EVENT CHRONOLOGY LIST (Subheadings only; click to open popup) */
+    /* HISTORICAL EVENT CHRONOLOGY LIST (Subheadings + thumbnails; click to open postcard popup) */
     .event-chronology {
       list-style: none;
       display: flex;
@@ -569,7 +569,7 @@
       gap: 8px;
     }
     .event-item {
-      padding: 9px 12px;
+      padding: 8px 11px;
       border-radius: 8px;
       background: rgba(15, 23, 42, 0.45);
       border-left: 3px solid rgba(255, 255, 255, 0.2);
@@ -588,15 +588,66 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 10px;
       margin-bottom: 0;
     }
     .event-year::after {
-      content: "ⓘ";
-      font-size: 0.78rem;
-      color: #38bdf8;
-      opacity: 0.8;
+      content: "📮";
+      font-size: 0.82rem;
+      opacity: 0.85;
       flex-shrink: 0;
+      margin-left: auto;
+    }
+    .event-thumb-wrap {
+      position: relative;
+      width: 58px;
+      height: 40px;
+      border-radius: 6px;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .event-item:hover .event-thumb-wrap,
+    #landmarkGlobalEventsGrid .attribution-box:hover .event-thumb-wrap,
+    .inspector-thumb-wrap:hover {
+      transform: scale(1.05);
+      border-color: #38bdf8;
+    }
+    .event-thumb-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .inspector-thumb-wrap {
+      position: relative;
+      width: 112px;
+      height: 76px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 1.5px solid rgba(56, 189, 248, 0.45);
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55);
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .inspector-thumb-badge {
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      background: rgba(9, 14, 23, 0.86);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.45);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: 0.62rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      pointer-events: none;
     }
     .event-item p,
     .event-item .event-sources {
@@ -606,7 +657,7 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(3, 7, 18, 0.84);
+      background: rgba(3, 7, 18, 0.86);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       z-index: 25000;
@@ -619,16 +670,118 @@
       display: flex;
     }
     .impact-event-modal {
-      width: min(560px, calc(100vw - 24px));
-      max-height: 85vh;
+      width: min(640px, calc(100vw - 24px));
+      max-height: 90vh;
       overflow-y: auto;
       background: #0b1220;
-      border: 1.5px solid rgba(56, 189, 248, 0.5);
-      border-radius: 12px;
+      border: 1.5px solid rgba(56, 189, 248, 0.55);
+      border-radius: 14px;
       padding: 16px 18px;
-      box-shadow: 0 24px 65px rgba(0, 0, 0, 0.9), 0 0 24px rgba(56, 189, 248, 0.22);
+      box-shadow: 0 24px 65px rgba(0, 0, 0, 0.92), 0 0 28px rgba(56, 189, 248, 0.24);
       color: #e2e8f0;
       box-sizing: border-box;
+      transition: width 0.2s ease;
+    }
+    .impact-event-modal.postcard-expanded {
+      width: min(880px, calc(100vw - 20px));
+    }
+    .postcard-hero {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 10px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      border: 2px solid rgba(248, 250, 252, 0.18);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65);
+      margin-top: 10px;
+      cursor: zoom-in;
+    }
+    .impact-event-modal.postcard-expanded .postcard-hero {
+      aspect-ratio: 16 / 10;
+      cursor: zoom-out;
+    }
+    .postcard-hero-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.25s ease;
+    }
+    .impact-event-modal.postcard-expanded .postcard-hero-img {
+      object-fit: contain;
+      background: #050811;
+    }
+    .postcard-postmark {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(9, 14, 23, 0.84);
+      backdrop-filter: blur(6px);
+      border: 1px dashed rgba(251, 191, 36, 0.65);
+      color: #fde68a;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: 5px;
+      text-transform: uppercase;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+    .postcard-stamp {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(6px);
+      border: 1.5px dotted rgba(248, 250, 252, 0.65);
+      color: #38bdf8;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 4px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+    }
+    .postcard-caption-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 7px;
+      padding: 6px 10px;
+      margin-top: 6px;
+      font-size: 0.73rem;
+      color: #94a3b8;
+    }
+    .postcard-nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .postcard-nav-btn {
+      background: rgba(56, 189, 248, 0.1);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 0.74rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .postcard-nav-btn:hover {
+      background: rgba(56, 189, 248, 0.22);
+      color: #fff;
     }
     .impact-event-modal p {
       font-size: 0.86rem;
@@ -639,7 +792,7 @@
     .impact-event-modal .event-sources {
       display: flex;
     }
-    /* Landmark Global Extreme Weather Events (Subheadings only; click to open popup) */
+    /* Landmark Global Extreme Weather Events (Subheadings + thumbnails; click to open postcard popup) */
     #landmarkGlobalEventsGrid .attribution-box {
       cursor: pointer;
       padding: 10px 14px;
@@ -653,13 +806,15 @@
     #landmarkGlobalEventsGrid .attribution-box > div:first-child {
       margin-bottom: 0 !important;
       align-items: center !important;
+      justify-content: flex-start !important;
+      gap: 10px !important;
     }
     #landmarkGlobalEventsGrid .attribution-box > div:first-child::after {
-      content: "ⓘ";
-      font-size: 0.78rem;
-      color: #38bdf8;
-      opacity: 0.8;
+      content: "📮";
+      font-size: 0.82rem;
+      opacity: 0.85;
       flex-shrink: 0;
+      margin-left: auto;
     }
     #landmarkGlobalEventsGrid .attribution-box > div:first-child > a,
     #landmarkGlobalEventsGrid .attribution-box > p,
@@ -1047,7 +1202,7 @@
       <div class="header-top-row">
         <div class="badge-wrap">
           <span class="badge-pill">Chronology of Extremes</span>
-          <span class="version-tag">v2.6.0</span>
+          <span class="version-tag">v2.6.1</span>
         </div>
         <nav class="nav-links-row">
           <a href="earth_heat_trap.html" class="nav-btn nav-btn-home">← Earth's Heat Trap</a>
@@ -1150,10 +1305,17 @@
       </div>
 
       <!-- DYNAMIC EVENT INSPECTOR CARD -->
-      <div class="event-inspector-card" id="eventInspector">
-        <div class="inspector-badge" id="inspEmoji">🔥</div>
-        <div class="inspector-content">
-          <h3 id="inspTitle">19 July 2022: The 40°C Threshold Breached &amp; Wennington Wildfire</h3>
+      <div class="event-inspector-card" id="eventInspector" style="cursor: pointer;" title="Click to open expandable Climate Postcard">
+        <div class="inspector-thumb-wrap" id="inspThumbWrap">
+          <img id="inspThumbImg" class="event-thumb-img" src="https://upload.wikimedia.org/wikipedia/commons/e/ec/Kennington-Open-Space-2022-Heatwave.jpg" alt="19 July 2022 UK 40.3°C Heatwave" loading="lazy">
+          <span class="inspector-thumb-badge">📮 Postcard</span>
+        </div>
+        <div class="inspector-badge" id="inspEmoji" style="display: none;">🔥</div>
+        <div class="inspector-content" style="flex: 1; min-width: 0;">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <h3 id="inspTitle">19 July 2022: The 40°C Threshold Breached &amp; Wennington Wildfire</h3>
+            <span style="font-size: 0.72rem; font-family: var(--font-mono); font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.35); padding: 2px 8px; border-radius: 5px; white-space: nowrap;">📮 Click to Expand Postcard</span>
+          </div>
           <p id="inspText">
             For the first time in British history, thermometer temperatures crossed 40°C, reaching <strong>40.3°C at Coningsby, Lincolnshire</strong>. The London Fire Brigade experienced its busiest day since World War II Blitz as a wildfire destroyed 19 homes in Wennington. Rail tracks expanded past 60°C and buckled, runways softened, and 3,271 heat-related excess deaths occurred in England.
           </p>
@@ -2022,7 +2184,7 @@
         <a href="doughnut_economics.html" class="footer-link">Doughnut Economics</a>
       </div>
       <div>
-        <span>Calibrated empirical physics and historical climatology. <strong style="color: #38bdf8; font-family: var(--font-mono);">v2.6.0</strong></span>
+        <span>Calibrated empirical physics and historical climatology. <strong style="color: #38bdf8; font-family: var(--font-mono);">v2.6.1</strong></span>
       </div>
     </footer>
 
@@ -2874,6 +3036,9 @@
         const rainStr = rainMm !== undefined ? ` &nbsp;|&nbsp; UK Rainfall: ${Math.round(rainMm).toLocaleString()} mm` : "";
         const windStr = windMph !== undefined ? ` &nbsp;|&nbsp; Peak Storm Gust: ${Math.round(windMph)} mph` : "";
         inspText.innerHTML = `${item.desc} <span style="display:block; margin-top:4px; font-family: var(--font-mono); font-size:0.75rem; color:#38bdf8;">Central England Temp: ${(9.46 + item.a).toFixed(2)}°C (${item.a > 0 ? "+" : ""}${item.a.toFixed(2)}°C anomaly)${rainStr}${windStr}</span>`;
+        if (typeof window.syncInspectorPostcard === "function") {
+          window.syncInspectorPostcard(item);
+        }
       }
 
       canvasWrap.addEventListener("mousemove", handleMove);
@@ -3108,12 +3273,15 @@
     })();
   </script>
 
-  <!-- Impact Event Detail Modal -->
+  <!-- Impact Event Postcard Modal -->
   <div id="impactEventModalBackdrop" class="impact-event-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="impactEventModalTitle" onclick="if (event.target === this) closeImpactEventModal();">
-    <div class="impact-event-modal">
+    <div class="impact-event-modal" id="impactEventModalCard">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 8px;">
-        <strong id="impactEventModalTitle" style="font-family: var(--font-mono); font-size: 0.92rem; color: #38bdf8;"></strong>
-        <button type="button" onclick="closeImpactEventModal()" style="background: none; border: none; color: #94a3b8; font-size: 1.3rem; line-height: 1; cursor: pointer;" aria-label="Close">&times;</button>
+        <strong id="impactEventModalTitle" style="font-family: var(--font-mono); font-size: 0.94rem; color: #38bdf8;"></strong>
+        <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+          <button type="button" id="btnTogglePostcardZoom" onclick="togglePostcardZoom()" style="background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; font-size: 0.7rem; font-family: var(--font-mono); font-weight: 700; padding: 3px 8px; border-radius: 5px; cursor: pointer;" title="Expand or shrink postcard image">⛶ Expand Image</button>
+          <button type="button" onclick="closeImpactEventModal()" style="background: none; border: none; color: #94a3b8; font-size: 1.3rem; line-height: 1; cursor: pointer;" aria-label="Close">&times;</button>
+        </div>
       </div>
       <div id="impactEventModalBody"></div>
     </div>
@@ -3122,24 +3290,375 @@
   <script>
     (function initImpactEventPopups() {
       const backdrop = document.getElementById("impactEventModalBackdrop");
+      const modalCard = document.getElementById("impactEventModalCard");
       const titleEl = document.getElementById("impactEventModalTitle");
       const bodyEl = document.getElementById("impactEventModalBody");
+      const zoomBtn = document.getElementById("btnTogglePostcardZoom");
       if (!backdrop || !titleEl || !bodyEl) return;
 
-      document.querySelectorAll(".event-item, #landmarkGlobalEventsGrid .attribution-box").forEach(item => {
+      // Curated Archival Paintings, Geograph UK Photos & NASA/ESA Satellite Postcards (Verified Wikimedia Commons)
+      const POSTCARD_GALLERY = [
+        {
+          match: ["1666", "great fire of london"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/b/b6/Great_Fire_London.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Great_Fire_London.jpg",
+          postmark: "LONDON · 2 SEPT 1666",
+          stamp: "CET +0.1°C · SEVERE DROUGHT",
+          caption: "17th-century oil painting of the Great Fire of London viewed from Tower Wharf after a baking 10-month drought (Museum of London)."
+        },
+        {
+          match: ["2003", "brogdale"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/c/c9/2003_europe_summer_temperature_anomaly.png",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:2003_europe_summer_temperature_anomaly.png",
+          postmark: "FAVERSHAM, KENT · AUG 2003",
+          stamp: "38.5°C UK RECORD",
+          caption: "NASA MODIS land surface temperature anomaly during the August 2003 European mega-heatwave (38.5°C at Brogdale, Kent)."
+        },
+        {
+          match: ["2018", "saddleworth"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/d/db/Sadleworth_Moor_-_NASA_Landsat_-_2018-06-27.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Sadleworth_Moor_-_NASA_Landsat_-_2018-06-27.jpg",
+          postmark: "PENNINES · JUNE 2018",
+          stamp: "PEATLAND WILDFIRE",
+          caption: "NASA Landsat 8 satellite photograph (27 June 2018) showing smoke plumes from the Saddleworth Moor peat wildfires sweeping across Greater Manchester."
+        },
+        {
+          match: ["19 july 2022", "40.3", "wennington"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/e/ec/Kennington-Open-Space-2022-Heatwave.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Kennington-Open-Space-2022-Heatwave.jpg",
+          postmark: "CONINGSBY & LONDON · 19 JUL 2022",
+          stamp: "40.3°C ALL-TIME RECORD",
+          caption: "Desiccated tinder-dry London parkland during the historic July 2022 heatwave when UK temperatures breached 40°C (40.3°C at Coningsby)."
+        },
+        {
+          match: ["summer 2026", "5 in england"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/2/2b/Pentire_Head_towards_Hayle_Bay_and_Polzeath._1976_-_geograph.org.uk_-_62854.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Pentire_Head_towards_Hayle_Bay_and_Polzeath._1976_-_geograph.org.uk_-_62854.jpg",
+          postmark: "ENGLAND & SCOTLAND · SUMMER 2026",
+          stamp: "5 ENG / 4 SCOT HEATWAVES",
+          caption: "Sun-scorched British grassland and parched coastal fields under persistent blocking heat domes (Geograph UK)."
+        },
+        {
+          match: ["1703", "great storm"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/6/67/Great_Storm_1703_Goodwin_Sands_engraving.PNG",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Great_Storm_1703_Goodwin_Sands_engraving.PNG",
+          postmark: "GOODWIN SANDS · 26 NOV 1703",
+          stamp: "120 MPH · 15,000 LOST",
+          caption: "18th-century historical engraving of Royal Navy warships driven onto the Goodwin Sands during the Great Storm of November 1703."
+        },
+        {
+          match: ["1953", "north sea storm surge", "east coast storm"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/2/2a/Water_canvey.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Water_canvey.jpg",
+          postmark: "CANVEY ISLAND · 31 JAN 1953",
+          stamp: "+5.0m SURGE · 307 DEAD",
+          caption: "Archival photograph of inundated residential streets on Canvey Island, Essex after the catastrophic 1953 North Sea storm surge."
+        },
+        {
+          match: ["2007", "tewkesbury"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/3/3b/Barton_Road_Tewkesbury%2C_during_the_flood_of_July_2007_-_geograph.org.uk_-_2204993.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Barton_Road_Tewkesbury,_during_the_flood_of_July_2007_-_geograph.org.uk_-_2204993.jpg",
+          postmark: "TEWKESBURY · JULY 2007",
+          stamp: "WETTEST MAY–JUL SINCE 1766",
+          caption: "Submerged streets on Barton Road, Tewkesbury during the July 2007 deluge that cut clean water to 350,000 residents (Geograph UK / Philip Pankhurst)."
+        },
+        {
+          match: ["2015", "desmond"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Carlisle_Civic_Centre_amid_floodwater_%28geograph_4761015%29.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Carlisle_Civic_Centre_amid_floodwater_(geograph_4761015).jpg",
+          postmark: "CARLISLE & CUMBRIA · DEC 2015",
+          stamp: "341.4 mm IN 24 HRS",
+          caption: "Carlisle Civic Centre surrounded by deep floodwater after Storm Desmond set the UK 24-hour rainfall record at Honister Pass (Geograph UK)."
+        },
+        {
+          match: ["1976", "great modern drought"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/7/73/Burrator_Reservoir_July_1976_-_geograph.org.uk_-_62861.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Burrator_Reservoir_July_1976_-_geograph.org.uk_-_62861.jpg",
+          postmark: "DARTMOOR, DEVON · JULY 1976",
+          stamp: "16-MONTH DROUGHT",
+          caption: "Exposed, sun-cracked bed of Burrator Reservoir in Devon during the Great Drought of July 1976 (Geograph UK)."
+        },
+        {
+          match: ["1995", "driest summer"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/9/90/Thruscross_Dam_%284032038540%29.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Thruscross_Dam_(4032038540).jpg",
+          postmark: "YORKSHIRE DALES · AUG 1995",
+          stamp: "CET +1.04°C · TANKER AIRLIFT",
+          caption: "Depleted Yorkshire reservoir basin at Thruscross Dam—hundreds of road tankers hauled emergency water across the Pennines in 1995."
+        },
+        {
+          match: ["chalk stream", "summer 2022: chalk"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/e/e7/River_Misbourne_in_Chalfont_St_Giles_-_geograph.org.uk_-_1100538.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:River_Misbourne_in_Chalfont_St_Giles_-_geograph.org.uk_-_1100538.jpg",
+          postmark: "CHILTERNS · AUG 2022",
+          stamp: "85% OF WORLD CHALK STREAMS",
+          caption: "Dwindling chalk stream channel along the River Misbourne in Buckinghamshire—over 50 miles of rare English chalk streams dried out in 2022."
+        },
+        {
+          match: ["jaws of death"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/b/b5/Dry_conditions_in_the_UK_%28Copernicus_2025-05-30%29.png",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Dry_conditions_in_the_UK_(Copernicus_2025-05-30).png",
+          postmark: "ENVIRONMENT AGENCY · 2045 RISK",
+          stamp: "-50% SUMMER RIVER FLOWS",
+          caption: "ESA Copernicus satellite imagery showing acute British soil moisture deficit—illustrating the Environment Agency's 'Jaws of Death' water supply warning."
+        },
+        {
+          match: ["1683", "1684", "great thames frost fair"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/6/69/Thomas_Wyke-_Thames_frost_fair.JPG",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Thomas_Wyke-_Thames_frost_fair.JPG",
+          postmark: "RIVER THAMES · JAN 1684",
+          stamp: "CET 7.38°C (-2.1°C RECORD)",
+          caption: "Contemporary 1683–84 etching after Thomas Wyck showing streets of merchant booths, coaches, and revellers on 11-inch River Thames ice."
+        },
+        {
+          match: ["1814", "final thames frost fair"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/a/af/Frost_Fair_of_1814_by_Luke_Clenell.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Frost_Fair_of_1814_by_Luke_Clenell.jpg",
+          postmark: "BLACKFRIARS · FEB 1814",
+          stamp: "LAST THAMES FROST FAIR",
+          caption: "Luke Clennell's 1814 depiction of the final Thames Frost Fair, where an elephant was marched across the frozen river below Blackfriars Bridge."
+        },
+        {
+          match: ["cairngorms", "vanishing snow"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/b/b4/Garbh_Choire_Mor_8th_August_2008.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Garbh_Choire_Mor_8th_August_2008.jpg",
+          postmark: "BRAERIACH, CAIRNGORMS · SCOTLAND",
+          stamp: "'THE SPHINX' SNOW PATCH",
+          caption: "Remnant summer snow patch at Garbh Choire Mòr (Braeriach) in the Scottish Cairngorms—now vanishing repeatedly under alpine warming."
+        },
+        {
+          match: ["phenological mismatch", "woodlands"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/9/92/Pied_Flycatcher_-_Ficedula_hypoleuca_-_Male1.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Pied_Flycatcher_-_Ficedula_hypoleuca_-_Male1.jpg",
+          postmark: "BRITISH OAK WOODLANDS · SPRING",
+          stamp: "SPRING 2–3 WEEKS EARLIER",
+          caption: "European Pied Flycatcher (Ficedula hypoleuca)—migratory woodland songbirds increasingly miss the early spring oak-caterpillar peak."
+        },
+        {
+          match: ["1690s", "seven ill years", "1695"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/d/d7/Glencoe%2C_Scotland%2C_UK.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Glencoe,_Scotland,_UK.jpg",
+          postmark: "SCOTLAND · 1693–1699",
+          stamp: "CET 7.42°C · HARVEST FAMINE",
+          caption: "Mist-shrouded Scottish uplands at Glencoe—during the 1690s 'Seven Ill Years', freezing summers ruined oat harvests and starved 10–15% of Scotland."
+        },
+        {
+          match: ["1740", "1816", "tambora", "year without a summer"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/5/52/Chichester_canal_jmw_turner.jpeg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Chichester_canal_jmw_turner.jpeg",
+          postmark: "BRITAIN & EUROPE · 1740 & 1816",
+          stamp: "TAMBORA VOLCANIC WINTER",
+          caption: "J. M. W. Turner's luminous aerosol sunset over Chichester Canal (1828), painted in the wake of Mount Tambora's 'Year Without a Summer'."
+        },
+        {
+          match: ["1879", "victorian harvest"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/9/98/The_Harvesters_by_Pieter_Brueghel_the_Elder_at_Metropolitan_Museum_of_Art.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:The_Harvesters_by_Pieter_Brueghel_the_Elder_at_Metropolitan_Museum_of_Art.jpg",
+          postmark: "ENGLISH SHIRES · SUMMER 1879",
+          stamp: "CET 7.9°C (-1.6°C) · BLIGHT",
+          caption: "Traditional cereal harvesting prior to the cold, rain-drenched Victorian summer of 1879 that ruined English wheat crops."
+        },
+        {
+          match: ["2019–2020", "drowned autumn drilling", "2020"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/5/51/Winter_Floods_-_geograph.org.uk_-_368826.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Winter_Floods_-_geograph.org.uk_-_368826.jpg",
+          postmark: "MIDLANDS & YORKSHIRE · 2019–20",
+          stamp: "-40% WINTER WHEAT PLANTING",
+          caption: "Waterlogged arable farmland submerged under autumn floodwaters, slashing UK winter wheat drilling to a 40-year low (Geograph UK)."
+        },
+        {
+          match: ["2023–2024", "wettest 18 months", "2024"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/d/d0/Flooded_farmland_at_Fitton_End_-_geograph.org.uk_-_7711093.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Flooded_farmland_at_Fitton_End_-_geograph.org.uk_-_7711093.jpg",
+          postmark: "CAMBRIDGESHIRE · 2023–2024",
+          stamp: "WETTEST 18 MOS SINCE 1836",
+          caption: "Submerged prime arable farmland at Fitton End during the record 2023–2024 18-month deluge (Geograph UK)."
+        },
+        {
+          match: ["harvest desiccation", "five english & four scottish"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/c/cf/High_and_Dry_-_geograph.org.uk_-_451347.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:High_and_Dry_-_geograph.org.uk_-_451347.jpg",
+          postmark: "ARABLE BRITAIN · SUMMER 2026",
+          stamp: "-17% CEREAL YIELD DROP",
+          caption: "Cracked, desiccated British agricultural soil during summer flash drought and compound heatwaves (Geograph UK)."
+        },
+        {
+          match: ["breadbasket", "chatham house"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/5/55/Combine_harvester_cutting_wheat_field_-_geograph.org.uk_-_520759.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Combine_harvester_cutting_wheat_field_-_geograph.org.uk_-_520759.jpg",
+          postmark: "GLOBAL GRAIN BELTS · 2050 RISK",
+          stamp: ">10%/YR SYNCHRONOUS RISK",
+          caption: "Combine harvester working dry wheat—jet-stream wave resonance threatens simultaneous harvest shocks across global breadbaskets."
+        },
+        {
+          match: ["nepal", "rock-ice avalanche"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/6/66/Langtang_valley_12.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Langtang_valley_12.jpg",
+          postmark: "LANGTANG HIMALAYA · AUG 2026",
+          stamp: "+2.0°C PERMAFROST THAW",
+          caption: "Steep glaciated walls of the Langtang Valley, Nepal Himalaya—where rapid high-altitude warming thawed permafrost and triggered catastrophic rock-ice cascades."
+        },
+        {
+          match: ["pakistan", "2022 pakistan"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/e/e3/Flooding_in_Pakistan_%28MODIS_2022-08-24%29.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Flooding_in_Pakistan_(MODIS_2022-08-24).jpg",
+          postmark: "SINDH & INDUS BASIN · AUG 2022",
+          stamp: "WWA: +50% RAIN INTENSITY",
+          caption: "NASA Terra MODIS satellite view (24 August 2022) showing a vast inland sea submerging Sindh province during the Pakistan monsoon deluge."
+        },
+        {
+          match: ["valencia", "dana"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/9/9c/Valencia_Floods_%28153533_-_41030_lrg%29.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Valencia_Floods_(153533_-_41030_lrg).jpg",
+          postmark: "CHIVA & VALENCIA · 29 OCT 2024",
+          stamp: "491 mm IN 8 HRS · 2× LIKELY",
+          caption: "NASA Landsat 8 satellite photograph (30 October 2024) showing mud-laden floodwaters across Valencia and l'Albufera lagoon after the DANA deluge."
+        },
+        {
+          match: ["european mega-wildfire", "evros"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/5/5a/Wildfires_continue_to_rage_in_Greece_ESA25057369.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Wildfires_continue_to_rage_in_Greece_ESA25057369.jpg",
+          postmark: "SOUTHERN EUROPE · 2023–2026",
+          stamp: "3×–5× FIRE WEATHER",
+          caption: "ESA Copernicus Sentinel-2 satellite image of the massive Evros mega-wildfire (>90,000 ha burned) in Greece."
+        },
+        {
+          match: ["germany", "ahr", "bernd"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/1/12/Consequences_of_the_floodings_in_Ahrweiler%2C_Germany.22.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Consequences_of_the_floodings_in_Ahrweiler,_Germany.22.jpg",
+          postmark: "AHR VALLEY, GERMANY · JUL 2021",
+          stamp: "WWA: UP TO 9× MORE LIKELY",
+          caption: "Flood devastation in Ahrweiler, Germany after Storm Bernd unleashed 8-metre flash-flood torrents down the Ahr valley in July 2021."
+        },
+        {
+          match: ["super el niño", "blow-off valve"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/6/68/El_Ni%C3%B1o_Sea_Surface_Temperature_Anomaly-_January%2C_1997%2C_through_December%2C_1997_%28SVS156_-_sst_2d%29.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:El_Ni%C3%B1o_Sea_Surface_Temperature_Anomaly-_January,_1997,_through_December,_1997_(SVS156_-_sst_2d).jpg",
+          postmark: "EQUATORIAL PACIFIC · ONI > +2.0°C",
+          stamp: "+0.25°C GLOBAL SURGE",
+          caption: "NASA Goddard SVS visualization of the equatorial Pacific sea-surface temperature anomaly tongue during a Super El Niño event."
+        },
+        {
+          match: ["1540"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/1/17/Spatial_distribution_of_1540_documentary_data_related_to_the_occurrence_of_drought.png",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Spatial_distribution_of_1540_documentary_data_related_to_the_occurrence_of_drought.png",
+          postmark: "ENGLAND & EUROPE · 1540",
+          stamp: "11-MONTH MEGADROUGHT",
+          caption: "Historical chronicle reconstruction map of the 1540 European megadrought (Wetter et al., Climatic Change)."
+        },
+        {
+          match: ["1564", "1608", "1621", "1677", "1716"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/2/21/The_Frozen_Thames_1677.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:The_Frozen_Thames_1677.jpg",
+          postmark: "OLD LONDON BRIDGE · LITTLE ICE AGE",
+          stamp: "THAMES FROZEN SOLID",
+          caption: "Abraham Hondius (1677) painting of the frozen River Thames looking eastwards toward Old London Bridge (Museum of London)."
+        },
+        {
+          match: ["1570", "all saints"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/e/ed/Allerheiligen_Moser_1570.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Allerheiligen_Moser_1570.jpg",
+          postmark: "NORTH SEA COASTS · 1 NOV 1570",
+          stamp: "ALL SAINTS' STORM SURGE",
+          caption: "Historical depiction of the catastrophic All Saints' Flood of 1570 across the North Sea coasts."
+        },
+        {
+          match: ["1588", "armada"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/a/a0/Storm-wreck.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Storm-wreck.jpg",
+          postmark: "NORTH ATLANTIC · AUG 1588",
+          stamp: "SPANISH ARMADA GALES",
+          caption: "Gale-swept warships battered on rocky northern coasts during the Little Ice Age tempests of 1588."
+        },
+        {
+          match: ["1987"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/8/8a/Aftermath_of_the_Great_Storm_of_1987.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:Aftermath_of_the_Great_Storm_of_1987.jpg",
+          postmark: "SOUTHERN ENGLAND · 16 OCT 1987",
+          stamp: "115 MPH · 15M TREES FELLED",
+          caption: "Shattered woodland in southern England following the hurricane-force gusts of the October 1987 Great Storm."
+        },
+        {
+          match: ["2014", "dawlish"],
+          img: "https://upload.wikimedia.org/wikipedia/commons/e/ea/2014_at_Dawlish_-_damage_to_sea_wall_at_Boat_Cove.jpg",
+          creditUrl: "https://commons.wikimedia.org/wiki/File:2014_at_Dawlish_-_damage_to_sea_wall_at_Boat_Cove.jpg",
+          postmark: "DAWLISH, DEVON · FEB 2014",
+          stamp: "WETTEST WINTER ON RECORD",
+          caption: "Collapsed coastal railway sea wall at Dawlish, Devon after relentless February 2014 winter storms."
+        }
+      ];
+
+      function findPostcardMeta(text) {
+        const hay = (text || "").toLowerCase();
+        for (let i = 0; i < POSTCARD_GALLERY.length; i++) {
+          if (POSTCARD_GALLERY[i].match.some(m => hay.includes(m))) {
+            return POSTCARD_GALLERY[i];
+          }
+        }
+        if (hay.includes("frost") || hay.includes("freeze") || hay.includes("winter")) return POSTCARD_GALLERY[13];
+        if (hay.includes("flood") || hay.includes("storm") || hay.includes("wet")) return POSTCARD_GALLERY[8];
+        if (hay.includes("drought") || hay.includes("dry")) return POSTCARD_GALLERY[9];
+        if (hay.includes("harvest") || hay.includes("famine")) return POSTCARD_GALLERY[19];
+        return POSTCARD_GALLERY[3];
+      }
+
+      const allEventDomItems = Array.from(document.querySelectorAll(".event-item, #landmarkGlobalEventsGrid .attribution-box"));
+      let activeModalIdx = -1;
+
+      // Inject thumbnails into all 5 Pillars & Global Event items
+      allEventDomItems.forEach((item, idx) => {
         item.setAttribute("tabindex", "0");
         item.setAttribute("role", "button");
+        item.dataset.postcardIdx = String(idx);
+        const headingEl = item.querySelector(".event-year, h5");
+        const meta = findPostcardMeta(headingEl ? headingEl.textContent : item.textContent);
+        if (headingEl && meta) {
+          const thumbWrap = document.createElement("span");
+          thumbWrap.className = "event-thumb-wrap";
+          thumbWrap.title = "Click to expand Climate Postcard";
+          thumbWrap.innerHTML = `<img class="event-thumb-img" src="${meta.img}" alt="" loading="lazy">`;
+          if (item.matches(".attribution-box")) {
+            const firstRow = item.querySelector(":scope > div:first-child");
+            if (firstRow) firstRow.insertBefore(thumbWrap, firstRow.firstChild);
+          } else {
+            headingEl.insertBefore(thumbWrap, headingEl.firstChild);
+          }
+        }
       });
 
+      function buildPostcardHeroHtml(meta, titleText) {
+        if (!meta) return "";
+        return `
+          <div class="postcard-hero" onclick="togglePostcardZoom()" title="Click image to toggle full-size postcard view">
+            <img class="postcard-hero-img" src="${meta.img}" alt="${(titleText || "").replace(/"/g, "&quot;")}">
+            <span class="postcard-postmark">📮 ${meta.postmark}</span>
+            <span class="postcard-stamp">${meta.stamp}</span>
+          </div>
+          <div class="postcard-caption-bar">
+            <span>🖼️ ${meta.caption}</span>
+            <a href="${meta.creditUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" style="color: #38bdf8; font-weight: 700; text-decoration: none; white-space: nowrap;">📜 Wikimedia Commons ↗</a>
+          </div>
+        `;
+      }
+
       function openImpactEventModal(item) {
+        if (!item) return;
+        activeModalIdx = Number(item.dataset.postcardIdx ?? -1);
+        if (zoomBtn) zoomBtn.style.display = "inline-block";
         const yr = item.querySelector(".event-year, h5");
         const p = item.querySelector("p");
+        const quote = item.querySelector(".eyewitness-quote");
         const sources = item.querySelector(".event-sources");
         const wwaLink = item.querySelector(":scope > div:first-child > a");
         const attrSummary = item.matches(".attribution-box") ? item.querySelector(":scope > div:last-child") : null;
-        titleEl.textContent = yr ? yr.textContent.trim() : "Historical Climate Event";
+        const cleanTitle = yr ? yr.textContent.trim() : "Historical Climate Event";
+        titleEl.textContent = cleanTitle;
         if (yr && yr.style.color) titleEl.style.color = yr.style.color;
-        let html = p ? p.outerHTML : "";
+
+        const meta = findPostcardMeta(cleanTitle);
+        let html = buildPostcardHeroHtml(meta, cleanTitle);
+        if (p) html += p.outerHTML;
+        if (quote) html += quote.outerHTML;
         if (attrSummary && attrSummary.textContent.trim()) {
           html += `<div style="margin-top:8px; font-size:0.76rem; color:#38bdf8; font-family:var(--font-mono); font-weight:700;">${attrSummary.innerHTML}</div>`;
         }
@@ -3148,15 +3667,81 @@
         } else if (wwaLink) {
           html += `<div class="event-sources" style="margin-top:10px;"><span class="event-sources-label">Source:</span><a href="${wwaLink.href}" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🌐 ${wwaLink.textContent.trim()}</a></div>`;
         }
+        if (activeModalIdx >= 0 && allEventDomItems.length > 1) {
+          html += `
+            <div class="postcard-nav-bar">
+              <button type="button" class="postcard-nav-btn" onclick="stepPostcardModal(-1)">← Prev Postcard</button>
+              <span style="font-size: 0.72rem; font-family: var(--font-mono); color: #64748b;">Postcard ${activeModalIdx + 1} of ${allEventDomItems.length}</span>
+              <button type="button" class="postcard-nav-btn" onclick="stepPostcardModal(1)">Next Postcard →</button>
+            </div>
+          `;
+        }
         bodyEl.innerHTML = html;
         backdrop.classList.add("open");
       }
 
+      window.stepPostcardModal = function stepPostcardModal(delta) {
+        if (allEventDomItems.length === 0) return;
+        const nextIdx = (activeModalIdx + delta + allEventDomItems.length) % allEventDomItems.length;
+        openImpactEventModal(allEventDomItems[nextIdx]);
+      };
+
+      window.togglePostcardZoom = function togglePostcardZoom() {
+        if (!modalCard) return;
+        const expanded = modalCard.classList.toggle("postcard-expanded");
+        if (zoomBtn) zoomBtn.textContent = expanded ? "🗕 Shrink Image" : "⛶ Expand Image";
+      };
+
+      // Sync Inspector Card Thumbnail & Click-to-Open Postcard
+      let currentInspectorData = {
+        y: 2022,
+        title: "19 July 2022: The 40°C Threshold Breached & Wennington Wildfire",
+        desc: "For the first time in British history, thermometer temperatures crossed 40°C, reaching 40.3°C at Coningsby, Lincolnshire. The London Fire Brigade experienced its busiest day since World War II Blitz as a wildfire destroyed 19 homes in Wennington."
+      };
+
+      window.syncInspectorPostcard = function syncInspectorPostcard(item) {
+        currentInspectorData = item;
+        const meta = findPostcardMeta(`${item.y} ${item.title}`);
+        const imgEl = document.getElementById("inspThumbImg");
+        if (imgEl && meta) {
+          imgEl.src = meta.img;
+          imgEl.alt = `${item.y}: ${item.title}`;
+        }
+      };
+
+      const inspCard = document.getElementById("eventInspector");
+      if (inspCard) {
+        inspCard.addEventListener("click", (e) => {
+          if (e.target.closest("a")) return;
+          const fullTitle = `${currentInspectorData.y}: ${currentInspectorData.title}`;
+          const matchedDom = allEventDomItems.find(el => {
+            const h = el.querySelector(".event-year, h5");
+            return h && h.textContent.includes(String(currentInspectorData.y));
+          });
+          if (matchedDom) {
+            openImpactEventModal(matchedDom);
+            return;
+          }
+          activeModalIdx = -1;
+          if (zoomBtn) zoomBtn.style.display = "inline-block";
+          titleEl.style.color = "#38bdf8";
+          titleEl.textContent = fullTitle;
+          const meta = findPostcardMeta(fullTitle);
+          const inspTextEl = document.getElementById("inspText");
+          bodyEl.innerHTML = buildPostcardHeroHtml(meta, fullTitle) + `<p>${inspTextEl ? inspTextEl.innerHTML : currentInspectorData.desc}</p>`;
+          backdrop.classList.add("open");
+        });
+      }
+
       window.closeImpactEventModal = function closeImpactEventModal() {
         backdrop.classList.remove("open");
+        if (modalCard) modalCard.classList.remove("postcard-expanded");
+        if (zoomBtn) zoomBtn.textContent = "⛶ Expand Image";
       };
 
       window.openLittleIceAgeModal = function openLittleIceAgeModal() {
+        activeModalIdx = -1;
+        if (zoomBtn) zoomBtn.style.display = "none";
         titleEl.style.color = "#34d399";
         titleEl.textContent = "❄️ What Caused the Little Ice Age (~1300–1850 CE)?";
         bodyEl.innerHTML = `
@@ -3172,6 +3757,8 @@
       };
 
       window.openAnomalyBasisModal = function openAnomalyBasisModal() {
+        activeModalIdx = -1;
+        if (zoomBtn) zoomBtn.style.display = "none";
         titleEl.style.color = "#38bdf8";
         titleEl.textContent = "ℹ️ Why Benchmark Anomalies Differ From the Main Simulator";
         bodyEl.innerHTML = `
@@ -3219,8 +3806,16 @@
       });
 
       document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && backdrop.classList.contains("open")) {
-          window.closeImpactEventModal();
+        if (backdrop.classList.contains("open")) {
+          if (e.key === "Escape") {
+            window.closeImpactEventModal();
+          } else if (e.key === "ArrowLeft" && activeModalIdx >= 0) {
+            e.preventDefault();
+            window.stepPostcardModal(-1);
+          } else if (e.key === "ArrowRight" && activeModalIdx >= 0) {
+            e.preventDefault();
+            window.stepPostcardModal(1);
+          }
         } else if ((e.key === "Enter" || e.key === " ") && e.target && e.target.matches && e.target.matches(".event-item, #landmarkGlobalEventsGrid .attribution-box")) {
           e.preventDefault();
           openImpactEventModal(e.target);
