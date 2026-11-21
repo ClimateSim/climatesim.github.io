@@ -417,14 +417,46 @@
     .cs-hamburger-panel.open {
       display: block !important;
     }
-    .cs-hamburger-panel.open .mode-switch-group,
-    .cs-hamburger-panel.open.nav-links,
-    .cs-hamburger-panel.open.nav-links-row,
-    nav.cs-hamburger-panel.open {
-      display: grid !important;
+    .cs-hamburger-panel.open .cs-legacy-hidden {
+      display: none !important;
+    }
+    .cs-hamburger-grid {
+      display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 7px;
       width: 100%;
+    }
+    .cs-menu-item {
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: flex-start !important;
+      text-align: left !important;
+      gap: 6px;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 7px 10px !important;
+      border-radius: 7px !important;
+      border: 1px solid rgba(148, 163, 184, 0.25) !important;
+      background: rgba(15, 23, 42, 0.72) !important;
+      color: #e2e8f0 !important;
+      font-size: 0.76rem !important;
+      font-weight: 700 !important;
+      font-family: inherit !important;
+      text-decoration: none !important;
+      cursor: pointer;
+      line-height: 1.25;
+      transition: background 0.14s ease, border-color 0.14s ease, color 0.14s ease;
+    }
+    .cs-menu-item:hover {
+      background: rgba(56, 189, 248, 0.15) !important;
+      border-color: rgba(56, 189, 248, 0.5) !important;
+      color: #ffffff !important;
+    }
+    .cs-menu-item.active {
+      background: rgba(56, 189, 248, 0.22) !important;
+      border-color: #38bdf8 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.35);
     }
     .cs-hamburger-panel button,
     .cs-hamburger-panel a {
@@ -474,10 +506,7 @@
       color: #ffffff !important;
     }
     @media (max-width: 480px) {
-      .cs-hamburger-panel.open .mode-switch-group,
-      .cs-hamburger-panel.open.nav-links,
-      .cs-hamburger-panel.open.nav-links-row,
-      nav.cs-hamburger-panel.open {
+      .cs-hamburger-grid {
         grid-template-columns: 1fr !important;
       }
     }
@@ -651,9 +680,96 @@
         hamBtn.setAttribute("aria-expanded", "false");
       }
 
+      function buildCanonicalMenu() {
+        if (!navPanel) return;
+        Array.from(navPanel.children).forEach(ch => {
+          if (!ch.classList.contains("cs-hamburger-grid")) {
+            ch.classList.add("cs-legacy-hidden");
+          }
+        });
+
+        const curFile = (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
+        const isSimPage = !!document.getElementById("btnModeSimple");
+        const CANONICAL_MENU = [
+          { label: "⚡ Plain-English Intro", href: "earth_heat_trap.html", color: "#38bdf8" },
+          { label: "🟢 Earth's Energy Imbalance", href: "index.html#Intro", btnId: "btnModeSimple", color: "#38bdf8" },
+          { label: "🔬 Warming Simulator", href: "index.html#WarmingSim", btnId: "btnModeAdvanced", color: "#38bdf8" },
+          { label: "🚨 National Emergency Briefing", href: "national_emergency_briefing.html", color: "#f43f5e" },
+          { label: "🛢️ Carbon Budgets", href: "index.html#CarbonBudgets", btnId: "btnModeBudgets", color: "#fbbf24" },
+          { label: "🏭 Greenhouse Gas Sources", href: "index.html#GHGSources", btnId: "btnModeSources", color: "#fb923c" },
+          { label: "🇬🇧 UK Dünkelflaute", href: "index.html#dunkel", btnId: "btnModeDunkel", color: "#38bdf8" },
+          { label: "💡 Energy Solutions", href: "index.html#EnergySolutions", btnId: "btnModeSolutions", color: "#34d399" },
+          { label: "📊 Impacts", href: "uk_climate_impacts_500_years.html", color: "#fbbf24" },
+          { label: "🌍 Pale Blue Dot", href: "we_only_have_one_pale_blue_dot.html", color: "#34d399" },
+          { label: "🎙️ Podcasts", href: "climate_podcasts.html", color: "#c084fc" },
+          { label: "🍩 Doughnut Economics", href: "doughnut_economics.html", color: "#fbbf24" },
+          { label: "🌱 What Can I Do?", href: "what_can_i_do.html", color: "#34d399" },
+          { label: "🗣️ Denialism & Silence", href: "denialism.html", color: "#fda4af" }
+        ];
+
+        const grid = document.createElement("div");
+        grid.className = "cs-hamburger-grid";
+
+        CANONICAL_MENU.forEach(item => {
+          let el;
+          if (isSimPage && item.btnId) {
+            el = document.createElement("button");
+            el.type = "button";
+            el.setAttribute("data-cs-btn-id", item.btnId);
+            el.addEventListener("click", () => {
+              const origBtn = document.getElementById(item.btnId);
+              if (origBtn) origBtn.click();
+            });
+          } else {
+            el = document.createElement("a");
+            el.href = item.href;
+            el.setAttribute("data-cs-href", item.href.toLowerCase());
+          }
+          el.className = "cs-menu-item";
+          if (item.color) el.style.setProperty("color", item.color, "important");
+          el.textContent = item.label;
+          grid.appendChild(el);
+        });
+
+        const guideEl = isSimPage && guideBtn ? document.createElement("button") : document.createElement("a");
+        if (guideEl.tagName === "BUTTON") {
+          guideEl.type = "button";
+          guideEl.addEventListener("click", () => {
+            if (guideBtn) guideBtn.click();
+          });
+        } else {
+          guideEl.href = "index.html?guide=1";
+        }
+        guideEl.className = "cs-guide-menu-btn";
+        guideEl.textContent = "📖 Guide & Proofs";
+        grid.appendChild(guideEl);
+
+        navPanel.appendChild(grid);
+
+        function syncActiveState() {
+          grid.querySelectorAll(".cs-menu-item").forEach(el => {
+            const btnId = el.getAttribute("data-cs-btn-id");
+            const href = el.getAttribute("data-cs-href") || "";
+            if (btnId && isSimPage) {
+              const orig = document.getElementById(btnId);
+              el.classList.toggle("active", !!(orig && orig.classList.contains("active")));
+            } else {
+              const targetFile = href.split("#")[0];
+              const isMatch = targetFile && curFile === targetFile && !isSimPage;
+              el.classList.toggle("active", isMatch);
+            }
+          });
+        }
+        syncActiveState();
+        navPanel._syncCsActiveState = syncActiveState;
+      }
+
+      buildCanonicalMenu();
+
       hamBtn.addEventListener("click", (e) => {
         e.stopPropagation();
         const willOpen = !navPanel.classList.contains("open");
+        if (willOpen && navPanel._syncCsActiveState) navPanel._syncCsActiveState();
         navPanel.classList.toggle("open", willOpen);
         hamBtn.setAttribute("aria-expanded", willOpen ? "true" : "false");
         if (willOpen) positionHamburgerPanel();
@@ -676,29 +792,15 @@
       window.addEventListener("resize", positionHamburgerPanel);
     }
 
-    function ensureDenialMenuLink(targetGrid) {
-      if (!targetGrid || targetGrid.querySelector('a[href*="denialism.html"]')) return;
-      const denialLink = document.createElement("a");
-      denialLink.href = "denialism.html";
-      denialLink.className = "cs-denial-menu-link";
-      denialLink.textContent = "🗣️ Denialism & Silence";
-      targetGrid.appendChild(denialLink);
-    }
-
     if (guideBtn && guideBtn.parentElement) {
       const headerCtrlContainer = guideBtn.parentElement;
       headerCtrlContainer.style.display = "flex";
       headerCtrlContainer.style.alignItems = "center";
       headerCtrlContainer.style.gap = "8px";
       headerCtrlContainer.style.flexWrap = "wrap";
+      guideBtn.style.display = "none";
       headerCtrlContainer.appendChild(btn);
       if (hamBtn) headerCtrlContainer.appendChild(hamBtn);
-      if (navPanel) {
-        const targetGrid = navPanel.querySelector(".mode-switch-group") || navPanel;
-        ensureDenialMenuLink(targetGrid);
-        guideBtn.classList.add("cs-guide-menu-btn");
-        targetGrid.appendChild(guideBtn);
-      }
     } else if (navPanel && navPanel.parentElement) {
       const ctrlWrap = document.createElement("div");
       ctrlWrap.style.display = "flex";
@@ -708,14 +810,6 @@
       ctrlWrap.appendChild(btn);
       if (hamBtn) ctrlWrap.appendChild(hamBtn);
       navPanel.parentElement.insertBefore(ctrlWrap, navPanel);
-
-      const targetGrid = navPanel.querySelector(".mode-switch-group") || navPanel;
-      ensureDenialMenuLink(targetGrid);
-      const guideLink = document.createElement("a");
-      guideLink.href = "index.html?guide=1";
-      guideLink.className = "cs-guide-menu-btn";
-      guideLink.textContent = "📖 Guide & Proofs";
-      targetGrid.appendChild(guideLink);
     } else {
       btn.classList.add("cs-search-floating");
       document.body.appendChild(btn);
