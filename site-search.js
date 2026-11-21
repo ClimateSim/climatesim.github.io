@@ -5,6 +5,13 @@
 
   const SITE_SEARCH_INDEX = [
     {
+      title: "Met Office Climate Data Portal & Science-Based Climate Websites",
+      page: "Guide & References",
+      url: "index.html#page-methodology",
+      tags: "climate.metoffice.cloud met office hadley centre ukcp18 copernicus c3s ipcc wmo carbon brief realclimate wwa ccc showyourstripes global carbon budget",
+      desc: "Curated UK and international science-based climate portals: climate.metoffice.cloud, HadOBS, Copernicus C3S, IPCC, WMO, Carbon Brief, WWA, RealClimate, and UK CCC."
+    },
+    {
       title: "Climate Denialism, Delay & The Unreported Emergency",
       page: "Denialism & Delay",
       url: "denialism.html",
