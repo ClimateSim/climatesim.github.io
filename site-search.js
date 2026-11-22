@@ -12,6 +12,13 @@
       desc: "Curated UK and international science-based climate portals: climate.metoffice.cloud, HadOBS, Copernicus C3S, IPCC, WMO, Carbon Brief, WWA, RealClimate, and UK CCC."
     },
     {
+      title: "Arctic Sea Ice Collapse & Ice–Albedo Feedback",
+      page: "Arctic Sea Ice",
+      url: "arctic_sea_ice.html",
+      tags: "arctic sea ice nsidc piomas volume extent albedo feedback 4x amplification blue ocean ice free september kim 2023 jahn 2024 pistone rantanen",
+      desc: "Interactive 1979–2025 NSIDC September sea ice extent & PIOMAS volume tracker, ice-albedo feedback lab, 4× Arctic amplification, and ice-free projections."
+    },
+    {
       title: "Climate Denialism, Delay & The Unreported Emergency",
       page: "Denialism & Delay",
       url: "denialism.html",
@@ -704,6 +711,7 @@
           { label: "🎙️ Podcasts", href: "climate_podcasts.html", color: "#c084fc" },
           { label: "🍩 Doughnut Economics", href: "doughnut_economics.html", color: "#fbbf24" },
           { label: "🌱 What Can I Do?", href: "what_can_i_do.html", color: "#34d399" },
+          { label: "🧊 Arctic Sea Ice", href: "arctic_sea_ice.html", color: "#7dd3fc" },
           { label: "🗣️ Denialism & Silence", href: "denialism.html", color: "#fda4af" }
         ];
 

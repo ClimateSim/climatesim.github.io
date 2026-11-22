@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arctic Sea Ice Collapse &amp; Ice–Albedo Feedback — ClimateSim</title>
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#0b1120">
+  <style>
+    :root {
+      --bg-dark: #060b16;
+      --card-bg: rgba(15, 23, 42, 0.88);
+      --card-border: rgba(56, 189, 248, 0.24);
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --cyan: #38bdf8;
+      --ice: #7dd3fc;
+      --rose: #f43f5e;
+      --rose-light: #fda4af;
+      --amber: #f59e0b;
+      --amber-light: #fcd34d;
+      --emerald: #10b981;
+      --emerald-light: #6ee7b7;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text);
+      font-family: var(--font-main);
+      line-height: 1.65;
+      padding: 20px 16px 60px;
+      min-height: 100vh;
+      background-image:
+        radial-gradient(circle at 18% 8%, rgba(56, 189, 248, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 82% 22%, rgba(125, 211, 252, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 50% 85%, rgba(244, 63, 94, 0.06) 0%, transparent 50%);
+    }
+
+    .container {
+      max-width: 1120px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .header-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 24px;
+    }
+
+    .header-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .badge-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .badge-pill {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      color: var(--ice);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+    }
+
+    .version-tag {
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--cyan);
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .nav-links-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .nav-btn {
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-decoration: none;
+      padding: 5px 11px;
+      border-radius: 6px;
+      background: rgba(23, 36, 63, 0.9);
+      color: #cbd5e1;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    h1.main-title {
+      font-size: clamp(1.75rem, 4vw, 2.55rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: #fff;
+      line-height: 1.15;
+    }
+
+    h1.main-title span {
+      color: var(--ice);
+    }
+
+    .subtitle {
+      font-size: 0.96rem;
+      color: var(--text-muted);
+      max-width: 860px;
+    }
+
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .kpi-card {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.22);
+      border-radius: 12px;
+      padding: 13px 15px;
+    }
+
+    .kpi-label {
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .kpi-val {
+      font-size: 1.38rem;
+      font-weight: 900;
+      font-family: var(--font-mono);
+      color: #fff;
+      line-height: 1.15;
+    }
+
+    .kpi-sub {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+
+    .panel-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 20px 22px;
+      margin-bottom: 18px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+    }
+
+    .panel-card h2 {
+      font-size: 1.12rem;
+      font-weight: 800;
+      color: #fff;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-card p {
+      font-size: 0.92rem;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+    }
+
+    .panel-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .chart-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .mode-pills {
+      display: inline-flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .mode-pill {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      background: rgba(15, 23, 42, 0.8);
+      color: #cbd5e1;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .mode-pill.active {
+      background: rgba(56, 189, 248, 0.22);
+      border-color: var(--cyan);
+      color: #fff;
+    }
+
+    .chart-wrap {
+      position: relative;
+      width: 100%;
+      background: rgba(6, 11, 22, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 12px;
+    }
+
+    canvas#arcticChart {
+      width: 100%;
+      height: 310px;
+      display: block;
+      cursor: crosshair;
+      touch-action: pan-y;
+    }
+
+    .chart-readout {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: #e2e8f0;
+      margin-bottom: 16px;
+    }
+
+    /* Interactive Ice-Albedo Feedback Simulator */
+    .albedo-lab {
+      background: rgba(9, 14, 26, 0.82);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 14px;
+    }
+
+    .albedo-lab-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .albedo-slider-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin: 10px 0 14px;
+    }
+
+    .albedo-slider-row input[type="range"] {
+      width: 100%;
+      accent-color: var(--cyan);
+      cursor: pointer;
+    }
+
+    .albedo-visual-bar {
+      display: flex;
+      height: 26px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      margin-bottom: 12px;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 800;
+    }
+
+    .bar-ice {
+      background: linear-gradient(90deg, #e0f2fe, #bae6fd);
+      color: #0c4a6e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      overflow: hidden;
+      transition: width 0.15s ease;
+    }
+
+    .bar-ocean {
+      background: linear-gradient(90deg, #0c2340, #071326);
+      color: #7dd3fc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      overflow: hidden;
+      transition: width 0.15s ease;
+    }
+
+    .albedo-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(195px, 100%), 1fr));
+      gap: 10px;
+    }
+
+    .albedo-stat {
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .albedo-stat-lbl {
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      color: #94a3b8;
+      text-transform: uppercase;
+    }
+
+    .albedo-stat-val {
+      font-size: 1.05rem;
+      font-family: var(--font-mono);
+      font-weight: 800;
+      color: #fff;
+      margin-top: 2px;
+    }
+
+    .callout-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: 14px;
+      margin: 14px 0;
+    }
+
+    .callout-box {
+      background: rgba(9, 14, 23, 0.68);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-left: 3px solid var(--cyan);
+      border-radius: 10px;
+      padding: 13px 15px;
+    }
+
+    .callout-box.rose { border-left-color: var(--rose); }
+    .callout-box.amber { border-left-color: var(--amber); }
+    .callout-box.emerald { border-left-color: var(--emerald); }
+
+    .callout-box h3 {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: #f8fafc;
+      margin-bottom: 6px;
+    }
+
+    .callout-box p {
+      font-size: 0.84rem;
+      color: #94a3b8;
+      margin: 0;
+      line-height: 1.52;
+    }
+
+    .quote-highlight {
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-left: 4px solid var(--cyan);
+      border-radius: 10px;
+      padding: 13px 16px;
+      margin: 14px 0;
+      font-size: 0.9rem;
+      color: #f1f5f9;
+    }
+
+    .quote-highlight.amber {
+      background: rgba(245, 158, 11, 0.08);
+      border-color: rgba(245, 158, 11, 0.3);
+      border-left-color: var(--amber);
+    }
+
+    .quote-highlight.rose {
+      background: rgba(244, 63, 94, 0.08);
+      border-color: rgba(244, 63, 94, 0.3);
+      border-left-color: var(--rose);
+    }
+
+    .sources-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      margin-top: 10px;
+    }
+
+    .sources-list li {
+      background: rgba(9, 14, 23, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 10px 13px;
+      font-size: 0.84rem;
+      color: #cbd5e1;
+    }
+
+    .sources-list a {
+      color: var(--cyan);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .sources-list a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      margin-top: 32px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .footer-link {
+      color: var(--cyan);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .footer-link:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 14px 10px 44px;
+      }
+      .panel-card {
+        padding: 14px 12px;
+      }
+      canvas#arcticChart {
+        height: 260px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header-bar">
+      <div class="header-top-row">
+        <div class="badge-wrap">
+          <span class="badge-pill">Cryosphere &amp; Planetary Albedo</span>
+          <span class="version-tag">v6.0.0</span>
+        </div>
+        <nav class="nav-links-row">
+          <a href="index.html" class="nav-btn">🔬 Warming Simulator</a>
+          <a href="uk_climate_impacts_500_years.html" class="nav-btn">📊 UK Impacts</a>
+          <a href="denialism.html" class="nav-btn">🗣️ Denialism &amp; Silence</a>
+        </nav>
+      </div>
+
+      <div>
+        <h1 class="main-title">ARCTIC <span>SEA ICE</span> &amp; PLANETARY AMPLIFICATION</h1>
+        <p class="subtitle">
+          Tracking five decades of satellite observations (NSIDC) and ice-thickness modelling (PIOMAS): how replacing bright polar sea ice with dark open ocean drives nearly 4&times; Arctic warming and accelerates global climate change.
+        </p>
+      </div>
+    </header>
+
+    <!-- HEADLINE EMPIRICAL KPI STRIP -->
+    <div class="kpi-strip">
+      <div class="kpi-card">
+        <div class="kpi-label">September Extent Trend</div>
+        <div class="kpi-val" style="color: var(--ice);">&minus;12.2% / decade</div>
+        <div class="kpi-sub">NSIDC satellite record (1979–2025); lowest 19 Septembers all occurred since 2007</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Late-Summer Ice Volume</div>
+        <div class="kpi-val" style="color: var(--rose-light);">&minus;72% since 1979</div>
+        <div class="kpi-sub">PIOMAS: thick multi-year pack ice replaced by thin, fragile first-year ice</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Arctic Amplification</div>
+        <div class="kpi-val" style="color: var(--amber-light);">~3.8&times; global mean</div>
+        <div class="kpi-sub">0.73&deg;C/decade since 1979 (Rantanen et al., 2022)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Ice Lost Per Tonne CO₂</div>
+        <div class="kpi-val" style="color: var(--emerald-light);">~3 m&sup2; / t CO₂</div>
+        <div class="kpi-sub">Linear cumulative CO₂ loss (Notz &amp; Stroeve, <em>Science</em> 2016)</div>
+      </div>
+    </div>
+
+    <!-- PANEL 1: INTERACTIVE DATA & ICE-ALBEDO LAB (EXPANDED BY DEFAULT) -->
+    <section class="panel-card cs-panel" id="arctic-ice-dashboard" style="border-top: 3px solid var(--cyan);">
+      <div class="cs-panel-header" style="margin-bottom: 12px;">
+        <h2 id="satellite-extent-and-volume-record"><span>🛰️</span> 1979–2025 Satellite Record (NSIDC Extent &amp; PIOMAS Volume) &amp; Albedo Lab</h2>
+      </div>
+      <div class="cs-panel-body">
+        <div class="chart-controls">
+          <div class="mode-pills">
+            <button type="button" class="mode-pill active" id="btnModeExtent" onclick="setArcticChartMode('extent')">📉 September Extent (million km&sup2; · NSIDC)</button>
+            <button type="button" class="mode-pill" id="btnModeVolume" onclick="setArcticChartMode('volume')">🧊 September Volume (thousand km&sup3; · PIOMAS)</button>
+          </div>
+          <span style="font-size: 0.74rem; font-family: var(--font-mono); color: #94a3b8;">Hover or drag across chart to inspect any year</span>
+        </div>
+
+        <div class="chart-wrap">
+          <canvas id="arcticChart" aria-label="Arctic Sea Ice September Extent and Volume 1979 to 2025"></canvas>
+        </div>
+
+        <div class="chart-readout" id="arcticChartReadout">
+          <span><strong>2012 Record Minimum:</strong> 3.39 million km&sup2; (Extent) · 3.8 thousand km&sup3; (PIOMAS Volume)</span>
+          <span style="color: var(--ice);">1979–1988 Mean: ~7.0M km&sup2; / ~15.4k km&sup3;</span>
+        </div>
+
+        <!-- INTERACTIVE ICE-ALBEDO FEEDBACK LAB -->
+        <div class="albedo-lab">
+          <div class="albedo-lab-header">
+            <div>
+              <h3 id="interactive-ice-albedo-calculator" style="font-size: 0.96rem; color: #fff; margin: 0;">☀️ Interactive Ice–Albedo Feedback Calculator</h3>
+              <span style="font-size: 0.78rem; color: #94a3b8;">Drag to see how losing bright polar sea ice increases absorbed solar energy across the Arctic Ocean (calibrated to Pistone, Eisenman &amp; Ramanathan, <em>PNAS</em> 2014 &amp; <em>GRL</em> 2019).</span>
+            </div>
+            <button type="button" class="mode-pill" onclick="resetAlbedoSlider()" style="font-size: 0.72rem; padding: 4px 10px;">↺ Reset to 2025</button>
+          </div>
+
+          <div class="albedo-slider-row">
+            <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.78rem;">
+              <label for="sliderIceExtent" style="color: var(--ice); font-weight: 700;">September Arctic Sea Ice Extent:</label>
+              <strong id="lblSliderExtent" style="color: #fff;">4.60 million km&sup2; (Modern Regime)</strong>
+            </div>
+            <input type="range" id="sliderIceExtent" min="0.5" max="7.5" step="0.1" value="4.6">
+            <div style="display: flex; justify-content: space-between; font-size: 0.7rem; font-family: var(--font-mono); color: #64748b;">
+              <span>0.5M km&sup2; (Ice-Free Summer)</span>
+              <span>3.4M km&sup2; (2012 Record Low)</span>
+              <span>7.0M km&sup2; (1979–1988 Baseline)</span>
+            </div>
+          </div>
+
+          <div class="albedo-visual-bar" aria-label="Proportion of reflective sea ice versus dark open ocean">
+            <div class="bar-ice" id="barReflectiveIce" style="width: 61%;">❄️ Bright Ice (α ≈ 0.65)</div>
+            <div class="bar-ocean" id="barDarkOcean" style="width: 39%;">🌊 Dark Ocean (α ≈ 0.08)</div>
+          </div>
+
+          <div class="albedo-metrics">
+            <div class="albedo-stat">
+              <div class="albedo-stat-lbl">Arctic Basin Albedo (α)</div>
+              <div class="albedo-stat-val" id="valBasinAlbedo" style="color: var(--ice);">0.48</div>
+            </div>
+            <div class="albedo-stat">
+              <div class="albedo-stat-lbl">Extra Regional Solar Heating</div>
+              <div class="albedo-stat-val" id="valRegionalFlux" style="color: var(--amber-light);">+6.4 W/m&sup2;</div>
+            </div>
+            <div class="albedo-stat">
+              <div class="albedo-stat-lbl">Global-Mean Forcing Equiv.</div>
+              <div class="albedo-stat-val" id="valGlobalForcing" style="color: var(--rose-light);">+0.21 W/m&sup2;</div>
+            </div>
+            <div class="albedo-stat">
+              <div class="albedo-stat-lbl">CO₂ Equivalent Added Heat</div>
+              <div class="albedo-stat-val" id="valCo2Equiv" style="color: var(--emerald-light);">~260 Gt CO₂</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANEL 2: ICE-ALBEDO FEEDBACK & 4X ARCTIC AMPLIFICATION (COLLAPSED BY DEFAULT) -->
+    <section class="panel-card cs-panel cs-panel-collapsed" id="ice-albedo-physics" style="border-top: 3px solid var(--rose);">
+      <div class="cs-panel-header" style="margin-bottom: 12px;">
+        <h2 id="why-the-arctic-warms-4x-faster"><span>🔥</span> Why the Arctic Warms Nearly 4&times; Faster Than the Planet</h2>
+      </div>
+      <div class="cs-panel-body">
+        <p>
+          For decades, textbooks stated that the Arctic was warming roughly twice as fast as the global average. Using 43 years of high-latitude observations (1979–2021), <strong>Rantanen et al. (2022, <em>Communications Earth &amp; Environment</em>)</strong> demonstrated that the Arctic Circle (north of 66.5&deg;N) has actually warmed at <strong>0.73&deg;C per decade—nearly four times (~3.8&times;) the global mean</strong>.
+        </p>
+
+        <div class="callout-grid">
+          <div class="callout-box">
+            <h3>1. Mirror vs. Heat Sponge (Albedo)</h3>
+            <p>
+              Fresh snow-covered sea ice reflects <strong>70–85%</strong> of incoming sunlight (albedo α ≈ 0.70–0.85); bare melting sea ice reflects ~50%. Open Arctic Ocean water reflects only <strong>6–10%</strong> (α ≈ 0.06–0.10), absorbing over 90% of solar radiation straight into the upper ocean.
+            </p>
+          </div>
+          <div class="callout-box rose">
+            <h3>2. Observed CERES Radiation Shift</h3>
+            <p>
+              Combining satellite sea-ice maps with NASA CERES radiation sensors, <strong>Pistone, Eisenman &amp; Ramanathan (2014, <em>PNAS</em>)</strong> measured an Arctic planetary albedo drop from <strong>0.52 to 0.48</strong> (1979–2011), adding <strong>+6.4 W/m&sup2;</strong> of regional solar heating—roughly +0.21 W/m&sup2; averaged over the entire Earth.
+            </p>
+          </div>
+          <div class="callout-box amber">
+            <h3>3. Loss of the Latent Heat Buffer</h3>
+            <p>
+              Melting 1 kg of ice absorbs <strong>334 kJ</strong> of energy without raising water temperature (the latent heat of fusion). While ice remains, it pins surface water near 0&deg;C. Once the ice vanishes, that same sunlight heats the water directly—delaying autumn freeze-up and creating thinner ice next winter.
+            </p>
+          </div>
+          <div class="callout-box emerald">
+            <h3>4. Lapse-Rate &amp; Multi-Year Ice Loss</h3>
+            <p>
+              The cold Arctic lower atmosphere traps heat close to the surface (positive lapse-rate feedback). Meanwhile, thick <strong>multi-year sea ice</strong> (4+ years old)—which once covered ~30% of the Arctic basin in the 1980s—now accounts for <strong>less than 5%</strong>, leaving the pack vulnerable to warm storms.
+            </p>
+          </div>
+        </div>
+
+        <div class="quote-highlight rose">
+          <strong>Complete Sunlit Ice Loss Equivalent:</strong> Pistone et al. (2019, <em>Geophysical Research Letters</em>) calculated that losing Arctic sea ice completely across the sunlit summer months would add roughly <strong>+0.71 W/m&sup2;</strong> of global radiative heating—equivalent to roughly <strong>25 years of global CO₂ emissions</strong> at current rates (~1,000 Gt CO₂).
+        </div>
+      </div>
+    </section>
+
+    <!-- PANEL 3: ICE-FREE PROJECTIONS & SUMMER VS WINTER TIPPING POINT (COLLAPSED BY DEFAULT) -->
+    <section class="panel-card cs-panel cs-panel-collapsed" id="ice-free-projections" style="border-top: 3px solid var(--amber);">
+      <div class="cs-panel-header" style="margin-bottom: 12px;">
+        <h2 id="when-will-the-arctic-be-ice-free"><span>📅</span> When Does the First "Ice-Free" Arctic Occur? (Summer vs. Winter Physics)</h2>
+      </div>
+      <div class="cs-panel-body">
+        <p>
+          Climate scientists define a <strong>practically ice-free Arctic Ocean</strong> as sea-ice area falling below <strong>1.0 million km&sup2;</strong> (not literally zero ice, as residual landfast ice lingers along the Canadian Arctic Archipelago and northern Greenland).
+        </p>
+
+        <div class="callout-grid">
+          <div class="callout-box amber">
+            <h3>Kim et al. (2023) &amp; Jahn et al. (2024)</h3>
+            <p>
+              Observationally constrained projections (<strong>Kim et al., <em>Nature Communications</em> 2023</strong>) and the CMIP6 synthesis (<strong>Jahn, Holland &amp; Kay, <em>Nature Reviews Earth &amp; Environment</em> 2024</strong>) conclude that the first ice-free September day could occur within the <strong>2020s–2030s</strong>, with consistently ice-free Septembers likely by <strong>2035–2050</strong> even under low-emission pathways.
+            </p>
+          </div>
+          <div class="callout-box">
+            <h3>Direct Linear Link to Your CO₂</h3>
+            <p>
+              <strong>Notz &amp; Stroeve (2016, <em>Science</em>)</strong> showed that September Arctic sea-ice area falls almost linearly with cumulative human CO₂: every <strong>1 tonne of CO₂</strong> emitted removes roughly <strong>3 square metres</strong> of September sea ice. A single return transatlantic flight (~1.5–2 t CO₂ per passenger) costs ~5 m&sup2; of Arctic sea ice.
+            </p>
+          </div>
+        </div>
+
+        <div class="quote-highlight">
+          <strong>Crucial Scientific Nuance — Reversible Summer Loss vs. Abrupt Winter Tipping Point:</strong><br>
+          Unlike ice sheets on land, <strong>summer Arctic sea ice does not have an irreversible tipping cliff</strong>: because polar night still drops temperatures far below freezing every winter, sea ice recovers quickly within years if global temperatures are brought back down (Jahn et al., 2024). By contrast, above roughly <strong>+6.3&deg;C</strong> of global warming, the Arctic Ocean remains too warm even during polar night for winter ice to form—triggering an abrupt <strong>Arctic Winter Sea Ice collapse</strong> (Bathiany et al., 2016; Armstrong McKay et al., 2022).
+        </div>
+      </div>
+    </section>
+
+    <!-- PANEL 4: GLOBAL KNOCK-ON EFFECTS (COLLAPSED BY DEFAULT) -->
+    <section class="panel-card cs-panel cs-panel-collapsed" id="global-knock-on-effects" style="border-top: 3px solid var(--emerald);">
+      <div class="cs-panel-header" style="margin-bottom: 12px;">
+        <h2 id="what-happens-in-the-arctic-doesnt-stay-there"><span>🌍</span> Why What Happens in the Arctic Doesn't Stay in the Arctic</h2>
+      </div>
+      <div class="cs-panel-body">
+        <p>
+          Floating sea ice displaces its own weight in seawater (Archimedes' principle), so melting sea ice itself adds only a tiny direct increment to sea level (~few millimetres from salinity/density differences). The true planetary danger lies in its <strong>knock-on effects across the rest of the Earth system</strong>:
+        </p>
+
+        <div class="callout-grid">
+          <div class="callout-box rose">
+            <h3>🏔️ Greenland Ice Sheet &amp; Sea Level</h3>
+            <p>
+              Warmer Arctic air masses and ice-free coastal seas bathe the margins of the <strong>Greenland Ice Sheet</strong>—which holds <strong>7.4 metres</strong> of global sea-level rise on land—accelerating surface melt and outlet glacier retreat.
+            </p>
+          </div>
+          <div class="callout-box amber">
+            <h3>💨 Permafrost Carbon Thaw</h3>
+            <p>
+              Circumpolar permafrost locks away <strong>~1,400–1,600 Gt of organic carbon</strong>—nearly twice all carbon currently in the atmosphere. Warming the Arctic 4&times; faster thaws frozen soils, releasing CO₂ and methane (CH₄) feedbacks.
+            </p>
+          </div>
+          <div class="callout-box">
+            <h3>🌀 Jet Stream &amp; UK/European Extremes</h3>
+            <p>
+              The polar jet stream is powered by the temperature contrast between the cold Arctic and warm mid-latitudes. Rapid Arctic warming reduces this gradient, which many studies link to slower, wavier jet-stream Rossby waves and persistent blocking heat domes or stalled deluges (though the exact magnitude remains an active area of dynamical research).
+            </p>
+          </div>
+          <div class="callout-box emerald">
+            <h3>🌊 AMOC &amp; Polar Ecosystems</h3>
+            <p>
+              Increased Arctic freshwater export flows into the subpolar North Atlantic, freshening surface waters that help drive the <strong>AMOC</strong> overturning current—while collapsing the sea-ice food web supporting algae, Arctic cod, ringed seals, polar bears, and Indigenous communities.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANEL 5: PRIMARY DATA PORTALS & PEER-REVIEWED SOURCES (COLLAPSED BY DEFAULT) -->
+    <section class="panel-card cs-panel cs-panel-collapsed" id="primary-sources-arctic" style="border-top: 3px solid var(--ice);">
+      <div class="cs-panel-header" style="margin-bottom: 12px;">
+        <h2 id="arctic-primary-data-and-papers"><span>📚</span> Live Observational Portals &amp; Peer-Reviewed Papers</h2>
+      </div>
+      <div class="cs-panel-body">
+        <ul class="sources-list">
+          <li><strong>🛰️ NSIDC Sea Ice Today &amp; Charctic Interactive Graph:</strong> Daily satellite sea-ice extent tracking (1979–present) — <a href="https://nsidc.org/sea-ice-today" target="_blank" rel="noopener noreferrer">nsidc.org/sea-ice-today ↗</a></li>
+          <li><strong>🧊 University of Washington Polar Science Center (PIOMAS):</strong> Pan-Arctic Ice Ocean Modeling and Assimilation System sea-ice volume anomaly — <a href="https://psc.apl.uw.edu/research/projects/arctic-sea-ice-volume-anomaly/" target="_blank" rel="noopener noreferrer">psc.apl.uw.edu (PIOMAS) ↗</a></li>
+          <li><strong>🏛️ NOAA Arctic Report Card:</strong> Annual peer-reviewed synthesis of Arctic temperatures, sea ice, Greenland melt, and tundra — <a href="https://arctic.noaa.gov/report-card/" target="_blank" rel="noopener noreferrer">arctic.noaa.gov/report-card ↗</a></li>
+          <li><strong>🇪🇺 Copernicus Climate Change Service (C3S):</strong> Monthly Arctic &amp; Antarctic Sea Ice Bulletins — <a href="https://climate.copernicus.eu/" target="_blank" rel="noopener noreferrer">climate.copernicus.eu ↗</a></li>
+          <li><strong>📄 Pistone, Eisenman &amp; Ramanathan (2014), <em>PNAS</em>:</strong> Observational determination of albedo decrease caused by vanishing Arctic sea ice — <a href="https://doi.org/10.1073/pnas.1318201111" target="_blank" rel="noopener noreferrer">doi:10.1073/pnas.1318201111 ↗</a></li>
+          <li><strong>📄 Notz &amp; Stroeve (2016), <em>Science</em>:</strong> Observed Arctic sea-ice loss directly follows anthropogenic CO₂ emission (~3 m&sup2;/t CO₂) — <a href="https://doi.org/10.1126/science.aag2345" target="_blank" rel="noopener noreferrer">doi:10.1126/science.aag2345 ↗</a></li>
+          <li><strong>📄 Rantanen et al. (2022), <em>Communications Earth &amp; Environment</em>:</strong> The Arctic has warmed nearly four times faster than the globe since 1979 — <a href="https://doi.org/10.1038/s43247-022-00498-3" target="_blank" rel="noopener noreferrer">doi:10.1038/s43247-022-00498-3 ↗</a></li>
+          <li><strong>📄 Kim et al. (2023), <em>Nature Communications</em>:</strong> Observationally-constrained projections of an ice-free Arctic even under a low emission scenario — <a href="https://doi.org/10.1038/s41467-023-38511-8" target="_blank" rel="noopener noreferrer">doi:10.1038/s41467-023-38511-8 ↗</a></li>
+          <li><strong>📄 Jahn, Holland &amp; Kay (2024), <em>Nature Reviews Earth &amp; Environment</em>:</strong> Projections of an ice-free Arctic Ocean — <a href="https://doi.org/10.1038/s43017-023-00515-9" target="_blank" rel="noopener noreferrer">doi:10.1038/s43017-023-00515-9 ↗</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-links">
+        <a href="index.html" class="footer-link">🔬 Warming Simulator</a>
+        <span>·</span>
+        <a href="earth_heat_trap.html" class="footer-link">⚡ Earth's Heat Trap</a>
+        <span>·</span>
+        <a href="uk_climate_impacts_500_years.html" class="footer-link">📊 UK Impacts</a>
+        <span>·</span>
+        <a href="denialism.html" class="footer-link">🗣️ Denialism &amp; Silence</a>
+      </div>
+      <div>
+        <span>Empirical NSIDC, PIOMAS &amp; IPCC AR6 Cryosphere Science · <strong style="color: var(--cyan); font-family: var(--font-mono);">v6.0.0</strong></span>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (function initArcticSeaIcePage() {
+      // Calibrated NSIDC September Monthly Sea Ice Extent (million km²) & PIOMAS September Volume (thousand km³), 1979–2025
+      const ARCTIC_DATA = [
+        { y: 1979, ext: 7.05, vol: 16.5 }, { y: 1980, ext: 7.67, vol: 17.5 },
+        { y: 1981, ext: 7.14, vol: 16.0 }, { y: 1982, ext: 7.30, vol: 16.6 },
+        { y: 1983, ext: 7.39, vol: 15.8 }, { y: 1984, ext: 6.81, vol: 14.3 },
+        { y: 1985, ext: 6.70, vol: 14.1 }, { y: 1986, ext: 7.41, vol: 15.4 },
+        { y: 1987, ext: 7.28, vol: 15.5 }, { y: 1988, ext: 7.37, vol: 15.6 },
+        { y: 1989, ext: 7.01, vol: 14.5 }, { y: 1990, ext: 6.14, vol: 12.6 },
+        { y: 1991, ext: 6.47, vol: 12.8 }, { y: 1992, ext: 7.47, vol: 14.1 },
+        { y: 1993, ext: 6.40, vol: 12.1 }, { y: 1994, ext: 7.14, vol: 13.5 },
+        { y: 1995, ext: 6.08, vol: 11.4 }, { y: 1996, ext: 7.58, vol: 13.7 },
+        { y: 1997, ext: 6.69, vol: 12.0 }, { y: 1998, ext: 6.54, vol: 11.1 },
+        { y: 1999, ext: 6.12, vol: 10.6 }, { y: 2000, ext: 6.25, vol: 10.5 },
+        { y: 2001, ext: 6.73, vol: 11.2 }, { y: 2002, ext: 5.83, vol: 9.7 },
+        { y: 2003, ext: 6.12, vol: 9.6 },  { y: 2004, ext: 5.98, vol: 9.4 },
+        { y: 2005, ext: 5.50, vol: 8.6 },  { y: 2006, ext: 5.86, vol: 8.9 },
+        { y: 2007, ext: 4.27, vol: 6.0 },  { y: 2008, ext: 4.69, vol: 6.5 },
+        { y: 2009, ext: 5.26, vol: 6.9 },  { y: 2010, ext: 4.87, vol: 5.4 },
+        { y: 2011, ext: 4.56, vol: 4.6 },  { y: 2012, ext: 3.39, vol: 3.8 },
+        { y: 2013, ext: 5.21, vol: 5.9 },  { y: 2014, ext: 5.22, vol: 6.3 },
+        { y: 2015, ext: 4.62, vol: 5.6 },  { y: 2016, ext: 4.53, vol: 4.5 },
+        { y: 2017, ext: 4.82, vol: 4.8 },  { y: 2018, ext: 4.79, vol: 4.7 },
+        { y: 2019, ext: 4.36, vol: 4.3 },  { y: 2020, ext: 3.82, vol: 4.2 },
+        { y: 2021, ext: 4.95, vol: 4.9 },  { y: 2022, ext: 4.90, vol: 4.9 },
+        { y: 2023, ext: 4.37, vol: 4.4 },  { y: 2024, ext: 4.28, vol: 4.3 },
+        { y: 2025, ext: 4.85, vol: 4.6 }
+      ];
+
+      let chartMode = "extent";
+      let hoverIdx = 33; // 2012 record minimum initially highlighted
+
+      const canvas = document.getElementById("arcticChart");
+      const readoutEl = document.getElementById("arcticChartReadout");
+
+      function drawChart() {
+        if (!canvas) return;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const rect = canvas.getBoundingClientRect();
+        const w = Math.max(280, Math.round(rect.width));
+        const h = Math.max(240, Math.round(rect.height));
+        canvas.width = w * dpr;
+        canvas.height = h * dpr;
+        const ctx = canvas.getContext("2d");
+        ctx.scale(dpr, dpr);
+
+        const padL = 48, padR = 18, padT = 22, padB = 34;
+        const plotW = w - padL - padR;
+        const plotH = h - padT - padB;
+        const isExt = chartMode === "extent";
+        const yMax = isExt ? 8.5 : 19.0;
+        const yMin = 0;
+
+        const xOf = (i) => padL + (i / (ARCTIC_DATA.length - 1)) * plotW;
+        const yOf = (v) => padT + plotH - ((v - yMin) / (yMax - yMin)) * plotH;
+
+        ctx.clearRect(0, 0, w, h);
+
+        // Gridlines
+        ctx.strokeStyle = "rgba(148, 163, 184, 0.14)";
+        ctx.lineWidth = 1;
+        ctx.font = "11px ui-monospace, SFMono-Regular, Menlo, monospace";
+        ctx.fillStyle = "#94a3b8";
+        ctx.textAlign = "right";
+        ctx.textBaseline = "middle";
+        const yStep = isExt ? 1 : 3;
+        for (let yv = 0; yv <= yMax; yv += yStep) {
+          const py = yOf(yv);
+          ctx.beginPath();
+          ctx.moveTo(padL, py);
+          ctx.lineTo(w - padR, py);
+          ctx.stroke();
+          ctx.fillText(isExt ? yv.toFixed(0) + "M" : yv.toFixed(0) + "k", padL - 7, py);
+        }
+
+        // X-axis year ticks
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+        for (let i = 0; i < ARCTIC_DATA.length; i++) {
+          const yr = ARCTIC_DATA[i].y;
+          if (yr === 1979 || yr % 5 === 0 || yr === 2025) {
+            const px = xOf(i);
+            ctx.fillText(String(yr), px, h - padB + 8);
+          }
+        }
+
+        // Ice-Free Threshold (1.0M km² in extent mode)
+        if (isExt) {
+          const pyThresh = yOf(1.0);
+          ctx.save();
+          ctx.setLineDash([5, 4]);
+          ctx.strokeStyle = "rgba(244, 63, 94, 0.78)";
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(padL, pyThresh);
+          ctx.lineTo(w - padR, pyThresh);
+          ctx.stroke();
+          ctx.restore();
+          ctx.fillStyle = "#fda4af";
+          ctx.textAlign = "left";
+          ctx.textBaseline = "bottom";
+          ctx.fillText("Practically Ice-Free Threshold (<1.0M km²)", padL + 6, pyThresh - 4);
+        }
+
+        // Shaded area under curve
+        const grad = ctx.createLinearGradient(0, padT, 0, padT + plotH);
+        if (isExt) {
+          grad.addColorStop(0, "rgba(56, 189, 248, 0.34)");
+          grad.addColorStop(1, "rgba(56, 189, 248, 0.02)");
+        } else {
+          grad.addColorStop(0, "rgba(244, 63, 94, 0.34)");
+          grad.addColorStop(1, "rgba(244, 63, 94, 0.02)");
+        }
+        ctx.beginPath();
+        ARCTIC_DATA.forEach((d, i) => {
+          const px = xOf(i);
+          const py = yOf(isExt ? d.ext : d.vol);
+          if (i === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        });
+        ctx.lineTo(xOf(ARCTIC_DATA.length - 1), yOf(0));
+        ctx.lineTo(xOf(0), yOf(0));
+        ctx.closePath();
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        // Linear trendline
+        const vals = ARCTIC_DATA.map((d, i) => [i, isExt ? d.ext : d.vol]);
+        const n = vals.length;
+        const mx = vals.reduce((a, b) => a + b[0], 0) / n;
+        const my = vals.reduce((a, b) => a + b[1], 0) / n;
+        const num = vals.reduce((a, b) => a + (b[0] - mx) * (b[1] - my), 0);
+        const den = vals.reduce((a, b) => a + (b[0] - mx) ** 2, 0);
+        const slope = num / den;
+        const intercept = my - slope * mx;
+        ctx.save();
+        ctx.setLineDash([4, 4]);
+        ctx.strokeStyle = "rgba(251, 191, 36, 0.85)";
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.moveTo(xOf(0), yOf(intercept));
+        ctx.lineTo(xOf(n - 1), yOf(intercept + slope * (n - 1)));
+        ctx.stroke();
+        ctx.restore();
+
+        // Main observational line
+        ctx.strokeStyle = isExt ? "#38bdf8" : "#fb7185";
+        ctx.lineWidth = 2.4;
+        ctx.beginPath();
+        ARCTIC_DATA.forEach((d, i) => {
+          const px = xOf(i);
+          const py = yOf(isExt ? d.ext : d.vol);
+          if (i === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        });
+        ctx.stroke();
+
+        // Active hover marker & callout positioned to the LEFT of the marker line
+        if (hoverIdx >= 0 && hoverIdx < ARCTIC_DATA.length) {
+          const d = ARCTIC_DATA[hoverIdx];
+          const px = xOf(hoverIdx);
+          const py = yOf(isExt ? d.ext : d.vol);
+
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.35)";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(px, padT);
+          ctx.lineTo(px, padT + plotH);
+          ctx.stroke();
+
+          ctx.fillStyle = "#fff";
+          ctx.beginPath();
+          ctx.arc(px, py, 4.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = isExt ? "#38bdf8" : "#f43f5e";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          const labelTxt = `${d.y}: ${isExt ? d.ext.toFixed(2) + "M km²" : d.vol.toFixed(1) + "k km³"}`;
+          ctx.font = "bold 11px ui-monospace, SFMono-Regular, Menlo, monospace";
+          const tw = ctx.measureText(labelTxt).width + 14;
+          let bx = px - tw - 10;
+          if (bx < padL + 4) bx = px + 10;
+          const by = Math.max(padT + 4, Math.min(py - 12, padT + plotH - 26));
+          ctx.fillStyle = "rgba(9, 14, 23, 0.92)";
+          ctx.strokeStyle = isExt ? "rgba(56, 189, 248, 0.7)" : "rgba(244, 63, 94, 0.7)";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.roundRect(bx, by, tw, 22, 5);
+          ctx.fill();
+          ctx.stroke();
+          ctx.fillStyle = "#fff";
+          ctx.textAlign = "left";
+          ctx.textBaseline = "middle";
+          ctx.fillText(labelTxt, bx + 7, by + 11);
+
+          if (readoutEl) {
+            const pctExt = (((d.ext - 7.05) / 7.05) * 100).toFixed(0);
+            const pctVol = (((d.vol - 16.5) / 16.5) * 100).toFixed(0);
+            readoutEl.innerHTML = `
+              <span><strong>${d.y} September:</strong> ${d.ext.toFixed(2)}M km² (${Number(pctExt) > 0 ? "+" : ""}${pctExt}% vs 1979) · PIOMAS Volume: ${d.vol.toFixed(1)}k km³ (${Number(pctVol) > 0 ? "+" : ""}${pctVol}%)</span>
+              <span style="color: #fcd34d;">Linear Trend: ${isExt ? "−12.2% / decade" : "−2.7k km³ / decade"}</span>
+            `;
+          }
+        }
+      }
+
+      function handlePointer(clientX) {
+        if (!canvas) return;
+        const rect = canvas.getBoundingClientRect();
+        const padL = 48, padR = 18;
+        const frac = Math.max(0, Math.min(1, (clientX - rect.left - padL) / (rect.width - padL - padR)));
+        hoverIdx = Math.round(frac * (ARCTIC_DATA.length - 1));
+        drawChart();
+      }
+
+      if (canvas) {
+        canvas.addEventListener("mousemove", (e) => handlePointer(e.clientX));
+        canvas.addEventListener("touchstart", (e) => {
+          if (e.touches && e.touches[0]) handlePointer(e.touches[0].clientX);
+        }, { passive: true });
+        canvas.addEventListener("touchmove", (e) => {
+          if (e.touches && e.touches[0]) handlePointer(e.touches[0].clientX);
+        }, { passive: true });
+      }
+
+      window.setArcticChartMode = function setArcticChartMode(mode) {
+        chartMode = mode === "volume" ? "volume" : "extent";
+        const bExt = document.getElementById("btnModeExtent");
+        const bVol = document.getElementById("btnModeVolume");
+        if (bExt) bExt.classList.toggle("active", chartMode === "extent");
+        if (bVol) bVol.classList.toggle("active", chartMode === "volume");
+        drawChart();
+      };
+
+      // Interactive Ice-Albedo Feedback Calculator
+      const slider = document.getElementById("sliderIceExtent");
+      function updateAlbedoLab() {
+        if (!slider) return;
+        const ext = Number(slider.value);
+        const baselineExt = 7.0;
+        const lostMkm2 = Math.max(0, baselineExt - ext);
+        const icePct = Math.max(6, Math.min(94, Math.round((ext / 7.5) * 100)));
+        const oceanPct = 100 - icePct;
+
+        // Calibrated to Pistone, Eisenman & Ramanathan (2014 PNAS, 2019 GRL):
+        // ~2.4M km² loss (7.0 -> 4.6) ≈ Δα -0.04 (0.52 -> 0.48), +6.4 W/m² Arctic regional, +0.21 W/m² global
+        // ~6.5M km² loss (ice-free summer) ≈ +0.71 W/m² global (~1000 Gt CO₂ equiv)
+        const basinAlbedo = Math.max(0.28, 0.52 - (lostMkm2 / 2.4) * 0.04);
+        const regionalFlux = (lostMkm2 / 2.4) * 6.4;
+        const globalForcing = (lostMkm2 / 6.5) * 0.71;
+        const co2EquivGt = Math.round((globalForcing / 0.71) * 1000);
+
+        let tag = "Modern Low-Ice Regime";
+        if (ext >= 6.6) tag = "1979–1988 Baseline";
+        else if (ext <= 1.0) tag = "Practically Ice-Free Arctic!";
+        else if (ext <= 3.5) tag = "2012 Extreme Minimum Regime";
+
+        document.getElementById("lblSliderExtent").textContent = `${ext.toFixed(1)} million km² (${tag})`;
+        const bIce = document.getElementById("barReflectiveIce");
+        const bOcean = document.getElementById("barDarkOcean");
+        bIce.style.width = icePct + "%";
+        bOcean.style.width = oceanPct + "%";
+        bIce.textContent = icePct >= 26 ? `❄️ Ice (${icePct}%)` : "❄️";
+        bOcean.textContent = oceanPct >= 26 ? `🌊 Open Ocean (${oceanPct}%)` : "🌊";
+
+        document.getElementById("valBasinAlbedo").textContent = basinAlbedo.toFixed(2);
+        document.getElementById("valRegionalFlux").textContent = `+${regionalFlux.toFixed(1)} W/m²`;
+        document.getElementById("valGlobalForcing").textContent = `+${globalForcing.toFixed(2)} W/m²`;
+        document.getElementById("valCo2Equiv").textContent = `~${co2EquivGt.toLocaleString()} Gt CO₂`;
+      }
+
+      window.resetAlbedoSlider = function resetAlbedoSlider() {
+        if (slider) {
+          slider.value = "4.6";
+          updateAlbedoLab();
+        }
+      };
+
+      if (slider) {
+        slider.addEventListener("input", updateAlbedoLab);
+        updateAlbedoLab();
+      }
+
+      window.addEventListener("resize", drawChart);
+      drawChart();
+    })();
+  </script>
+
+  <!-- PWA Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(err => {
+          console.warn('PWA ServiceWorker registration failed:', err);
+        });
+      });
+    }
+  </script>
+  <script src="site-search.js" defer></script>
+</body>
+</html>
