@@ -75,6 +75,13 @@
       desc: "Compare remaining 1.5°C/2.0°C carbon budgets against ~3,400 Gt CO₂ of proven commercial fossil reserves."
     },
     {
+      title: "Data Centres & Hyperscale AI Emissions (#DataCentres)",
+      page: "GHG Sources",
+      url: "index.html#DataCentres",
+      tags: "datacentres datacenters ai 460 twh 1050 twh 24/7 cfe nuclear smr geothermal sector emissions",
+      desc: "Hyperscale data centres & AI power trajectory (2024 baseline vs 2030 doubling) with and without 24/7 Carbon-Free Energy."
+    },
+    {
       title: "Global Emissions by Economic Sector (Our World in Data)",
       page: "GHG Sources",
       url: "index.html#sector-emissions",

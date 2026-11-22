@@ -2686,7 +2686,7 @@
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <div class="brand-title" id="headerTitle">Earth's Energy Imbalance</div>
-              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v6.0.1</span>
+              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v6.0.2</span>
             </div>
             <div style="font-size: 0.75rem; color: var(--text-muted);" id="headerSubtitle">How greenhouse gases trap heat and warm the planet</div>
           </div>
@@ -3491,11 +3491,12 @@
                 </div>
               </div>
 
-              <div class="playbook-item">
+              <div class="playbook-item" id="playbook-datacentres">
                 <div class="playbook-header" role="button" tabindex="0">
                   <div class="playbook-title-wrap">
                     <span class="playbook-bullet">•</span>
                     <strong class="playbook-title">Data Centres &amp; Hyperscale AI (1.0% today · doubling by 2030)</strong>
+                    <a href="#DataCentres" onclick="event.stopPropagation();" style="margin-left: 6px; font-family: ui-monospace, monospace; font-size: 0.7rem; color: #c084fc; text-decoration: none; border: 1px solid rgba(192, 132, 252, 0.4); background: rgba(192, 132, 252, 0.12); padding: 1px 6px; border-radius: 4px;">#DataCentres</a>
                   </div>
                   <span class="playbook-badge-btn">(+)</span>
                 </div>
@@ -4278,7 +4279,7 @@
         <span>·</span>
         <button type="button" id="btnFeedbackFooter" onclick="openFeedbackModal()" style="background: rgba(56, 189, 248, 0.12); color: var(--cyan); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 6px; padding: 2px 10px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">💬 Send Feedback</button>
         <span>·</span>
-        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v6.0.1</span>
+        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v6.0.2</span>
       </div>
       <div style="font-size: 0.76rem; color: #64748b; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
         <span>&copy; 2026 Earth Energy Balance Simulator Project</span>
@@ -4749,7 +4750,7 @@
           <div class="toc-card">
             <h3 style="margin-top: 0; border: none; color: #fff; display: flex; align-items: center; justify-content: space-between;">
               <span>Documentation Overview</span>
-              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v6.0.1</span>
+              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v6.0.2</span>
             </h3>
             
             <!-- User Commentary & Context Note -->
@@ -11822,6 +11823,7 @@
         sectors: [
           {
             id: "energy",
+            tag: "EnergySector",
             name: "Energy (Electricity, Heat, Transport & Fuel Combustion)",
             icon: "⚡",
             color: "#00e5ff",
@@ -11830,17 +11832,18 @@
             co2Gt: 37.0,
             desc: "Burning coal, oil, and natural gas for power, heating, mobility, and industrial processing.",
             subsectors: [
-              { name: "Energy in Industry", pct: 24.2, gt: 13.2, detail: "Iron & steel (7.2%), chemicals & petrochemicals (3.6%), non-ferrous metals (0.7%), machinery, paper/pulp." },
-              { name: "Road, Shipping & Rail Transport", pct: 14.3, gt: 7.8, detail: "Road passenger cars & vans (7.2%), freight trucks & buses (4.7%), maritime shipping (1.7%), rail (0.4%), pipelines (0.3%)." },
-              { name: "Air Transport (Aviation)", pct: 1.9, gt: 1.04, detail: "Commercial passenger flights (81%) and freight/cargo (19%). Note: high-altitude contrail cirrus & NOₓ roughly double net radiative forcing to ~3.5% of all warming." },
-              { name: "Buildings (Residential & Commercial)", pct: 16.5, gt: 9.0, detail: "Residential space heating, cooking & lighting (10.9%); commercial buildings, offices, schools, retail & hospitals (5.6%, excluding dedicated hyperscale data centers)." },
-              { name: "Data Centres & Hyperscale Computing", pct: 1.0, gt: 0.55, detail: "Global cloud infrastructure, AI training/inference clusters, and cooling. Consumes ~460 TWh/yr (~1.5–2% global electricity), projected to more than double by 2030." },
-              { name: "Fugitive Emissions from Fuel Extraction", pct: 5.8, gt: 3.2, detail: "Oil & gas flaring, venting, and pipeline methane leaks (3.9%); coal mine methane venting (1.9%)." },
-              { name: "Other Energy & Agriculture Machinery", pct: 9.5, gt: 5.2, detail: "Tractors, harvesters, fishing trawlers, diesel generators, unallocated fuel combustion." }
+              { tag: "EnergyInIndustry", name: "Energy in Industry", pct: 24.2, gt: 13.2, detail: "Iron & steel (7.2%), chemicals & petrochemicals (3.6%), non-ferrous metals (0.7%), machinery, paper/pulp." },
+              { tag: "RoadTransport", name: "Road, Shipping & Rail Transport", pct: 14.3, gt: 7.8, detail: "Road passenger cars & vans (7.2%), freight trucks & buses (4.7%), maritime shipping (1.7%), rail (0.4%), pipelines (0.3%)." },
+              { tag: "Aviation", name: "Air Transport (Aviation)", pct: 1.9, gt: 1.04, detail: "Commercial passenger flights (81%) and freight/cargo (19%). Note: high-altitude contrail cirrus & NOₓ roughly double net radiative forcing to ~3.5% of all warming." },
+              { tag: "Buildings", name: "Buildings (Residential & Commercial)", pct: 16.5, gt: 9.0, detail: "Residential space heating, cooking & lighting (10.9%); commercial buildings, offices, schools, retail & hospitals (5.6%, excluding dedicated hyperscale data centers)." },
+              { tag: "DataCentres", name: "Data Centres & Hyperscale Computing", pct: 1.0, gt: 0.55, detail: "Global cloud infrastructure, AI training/inference clusters, and cooling. Consumes ~460 TWh/yr (~1.5–2% global electricity), projected to more than double by 2030." },
+              { tag: "FugitiveEmissions", name: "Fugitive Emissions from Fuel Extraction", pct: 5.8, gt: 3.2, detail: "Oil & gas flaring, venting, and pipeline methane leaks (3.9%); coal mine methane venting (1.9%)." },
+              { tag: "AgriMachinery", name: "Other Energy & Agriculture Machinery", pct: 9.5, gt: 5.2, detail: "Tractors, harvesters, fishing trawlers, diesel generators, unallocated fuel combustion." }
             ],
             cleanSolution: "Electrify with Solar, Wind, Nuclear & Hydro; 24/7 Carbon-Free Energy (CFE) for data centres; heat pumps for buildings; battery EVs for road transport; SAF e-kerosene for aviation.",
             deepDives: [
               {
+                tag: "AviationDeepDive",
                 icon: "✈️",
                 title: "Air Transport: Direct CO₂ vs. The 2× Contrail Climate Multiplier",
                 badge: "1.9% CO₂ · ~3.5% Net Warming",
@@ -11850,6 +11853,7 @@
                 content: `Direct kerosene combustion accounts for <strong>~1.04 Gt CO₂/yr (1.9% of global GHGs)</strong>. However, because aircraft fly in the cold upper troposphere (30,000–40,000 ft), water vapor and soot particles trigger persistent <strong>contrail cirrus clouds</strong> in ice-supersaturated regions (ISSRs). These artificial cirrus clouds trap outgoing terrestrial thermal infrared heat.<br><br>According to the landmark atmospheric assessment by <strong>Lee et al. (2021, <em>Atmospheric Environment</em>)</strong>, non-CO₂ effects (contrail cirrus +57 mW/m² and net NOₓ-ozone forcing) roughly <strong>double aviation's net effective radiative forcing (ERF) to ~3.5% of total anthropogenic warming</strong>.<br><br><strong style="color: #38bdf8;">Abatement & Intervention:</strong> Batteries are gravimetrically restricted to commuter flights &lt;500 km (jet fuel stores ~12,000 Wh/kg vs ~250 Wh/kg for Li-ion). Long-haul flights require <strong>Sustainable Aviation Fuels (SAF)</strong> via Power-to-Liquid e-kerosene (green H₂ + direct air captured CO₂). Critically, because just <strong>~2% of flights cause ~80% of contrail warming</strong>, operational flight altitude re-routing (diverting 2,000 ft around supersaturated air) can eliminate &gt;50% of contrail warming with &lt;1% fuel penalty.`
               },
               {
+                tag: "DataCentres",
                 icon: "🖥️",
                 title: "Hyperscale Data Centres & AI Trajectory: With vs. Without Zero-Carbon Power",
                 badge: "IEA & EPRI 2024 Analysis",
@@ -11862,6 +11866,7 @@
           },
           {
             id: "afolu",
+            tag: "AFOLU",
             name: "Agriculture, Forestry & Land Use (AFOLU)",
             icon: "🌾",
             color: "#10b981",
@@ -11870,18 +11875,19 @@
             co2Gt: 3.5,
             desc: "Biogenic methane from livestock, nitrous oxide from nitrogen fertilizers, and CO₂ from land clearance.",
             subsectors: [
-              { name: "Livestock & Manure Management (CH₄)", pct: 5.8, gt: 3.2, detail: "Enteric fermentation in ruminant digestion (cattle, sheep, goats) and manure decomposition." },
-              { name: "Agricultural Soils (N₂O)", pct: 4.1, gt: 2.2, detail: "Microbial production of nitrous oxide from synthetic nitrogen fertilizers and animal manure spread on fields." },
-              { name: "Deforestation & Forest Clearcutting", pct: 2.2, gt: 1.2, detail: "Loss of above-ground biomass carbon from tropical and temperate forest clearing for cattle pastures and soy." },
-              { name: "Crop Residues & Savanna Burning", pct: 3.5, gt: 1.9, detail: "Post-harvest field burning, agricultural fires, and seasonal savanna burning." },
-              { name: "Flooded Rice Cultivation (CH₄)", pct: 1.3, gt: 0.7, detail: "Methanogenic bacteria producing methane in permanently inundated paddy fields." },
-              { name: "Cultivated Organic Soils / Peatlands", pct: 1.5, gt: 0.8, detail: "Draining carbon-dense peatlands for agriculture, causing accelerated microbial oxidation." }
+              { tag: "LivestockMethane", name: "Livestock & Manure Management (CH₄)", pct: 5.8, gt: 3.2, detail: "Enteric fermentation in ruminant digestion (cattle, sheep, goats) and manure decomposition." },
+              { tag: "AgriculturalSoils", name: "Agricultural Soils (N₂O)", pct: 4.1, gt: 2.2, detail: "Microbial production of nitrous oxide from synthetic nitrogen fertilizers and animal manure spread on fields." },
+              { tag: "Deforestation", name: "Deforestation & Forest Clearcutting", pct: 2.2, gt: 1.2, detail: "Loss of above-ground biomass carbon from tropical and temperate forest clearing for cattle pastures and soy." },
+              { tag: "CropBurning", name: "Crop Residues & Savanna Burning", pct: 3.5, gt: 1.9, detail: "Post-harvest field burning, agricultural fires, and seasonal savanna burning." },
+              { tag: "RiceCultivation", name: "Flooded Rice Cultivation (CH₄)", pct: 1.3, gt: 0.7, detail: "Methanogenic bacteria producing methane in permanently inundated paddy fields." },
+              { tag: "Peatlands", name: "Cultivated Organic Soils / Peatlands", pct: 1.5, gt: 0.8, detail: "Draining carbon-dense peatlands for agriculture, causing accelerated microbial oxidation." }
             ],
             cleanSolution: "Halt tropical deforestation; adopt precision fertilizer application; shift diets toward plant-rich proteins; implement alternate wetting and drying in rice; use methane-reducing feed additives.",
             specialNote: "Beyond direct biogenic methane, livestock rearing imposes a massive <strong>10:1 trophic calorie penalty</strong>. Because ruminants lose ~90% of ingested plant calories to basal metabolism and heat, livestock occupies <strong>~80% of all global agricultural land (~40M km²)</strong> while providing only <strong>18% of human calories and 37% of protein</strong> (Poore & Nemecek 2018, <em>Science</em>). If human calories were consumed directly from plants, global agricultural land needs would shrink by up to <strong>75% (freeing ~30M km²—the size of Africa)</strong>. Allowing that land to naturally rewild into native forests and grasslands would draw down an estimated <strong>300–500+ Gt CO₂</strong> in carbon opportunity cost (Searchinger et al. 2018, <em>Nature</em>; Hayek et al. 2021, <em>Nature Sustainability</em>)."
           },
           {
             id: "industry",
+            tag: "IndustrialProcesses",
             name: "Direct Industrial Processes (Chemical / Non-Energy)",
             icon: "🏭",
             color: "#f59e0b",
@@ -11890,13 +11896,14 @@
             co2Gt: 2.2,
             desc: "Non-combustion chemical reactions directly releasing CO₂ during mineral decarbonation and chemical synthesis.",
             subsectors: [
-              { name: "Cement Clinker Calcination", pct: 3.0, gt: 1.6, detail: "Chemical limestone decarbonation (CaCO₃ → CaO + CO₂), entirely independent of kiln heating fuel." },
-              { name: "Chemical & Petrochemical Processes", pct: 2.2, gt: 1.2, detail: "Hydrogen production for ammonia fertilizer (steam methane reforming), petrochemical cracking, industrial solvents." }
+              { tag: "Cement", name: "Cement Clinker Calcination", pct: 3.0, gt: 1.6, detail: "Chemical limestone decarbonation (CaCO₃ → CaO + CO₂), entirely independent of kiln heating fuel." },
+              { tag: "Chemicals", name: "Chemical & Petrochemical Processes", pct: 2.2, gt: 1.2, detail: "Hydrogen production for ammonia fertilizer (steam methane reforming), petrochemical cracking, industrial solvents." }
             ],
             cleanSolution: "Substitute limestone clinker with calcined clay and pozzolans (LC3 cement); deploy green hydrogen direct reduced iron (H₂-DRI); point-source Carbon Capture & Storage (CCUS)."
           },
           {
             id: "waste",
+            tag: "Waste",
             name: "Waste & Wastewater",
             icon: "🗑️",
             color: "#ec4899",
@@ -11905,8 +11912,8 @@
             co2Gt: 0.2,
             desc: "Methane and nitrous oxide from decaying organic matter in municipal landfills and sewage treatment plants.",
             subsectors: [
-              { name: "Landfills & Solid Waste (CH₄)", pct: 1.9, gt: 1.0, detail: "Anaerobic bacterial digestion of food scraps, paper, and organic municipal waste in landfills." },
-              { name: "Wastewater Treatment (CH₄ & N₂O)", pct: 1.3, gt: 0.7, detail: "Microbial breakdown of domestic and industrial sewage in anaerobic lagoons and wastewater facilities." }
+              { tag: "Landfills", name: "Landfills & Solid Waste (CH₄)", pct: 1.9, gt: 1.0, detail: "Anaerobic bacterial digestion of food scraps, paper, and organic municipal waste in landfills." },
+              { tag: "Wastewater", name: "Wastewater Treatment (CH₄ & N₂O)", pct: 1.3, gt: 0.7, detail: "Microbial breakdown of domestic and industrial sewage in anaerobic lagoons and wastewater facilities." }
             ],
             cleanSolution: "Mandatory landfill methane gas capture and flaring/power generation; organic composting; anaerobic digestion with biomethane upgrading; aerobic sewage aeration."
           }
@@ -11986,9 +11993,10 @@
         popover.style.borderColor = sec.color;
         popover.innerHTML = `
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-            <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
               <span style="font-size: 1.3rem;">${sec.icon}</span>
               <strong style="color: ${sec.color}; font-size: 1.05rem;">${sec.name}</strong>
+              ${sec.tag ? `<a href="#${sec.tag}" style="font-family: ui-monospace, monospace; font-size: 0.7rem; color: ${sec.color}; text-decoration: none; border: 1px solid rgba(255,255,255,0.22); background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 4px;">#${sec.tag}</a>` : ""}
             </div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <span class="badge" style="background: ${sec.color}; color: #000; font-weight: 800; font-size: 0.8rem;">${pctStr}% · ${valStr} Gt</span>
@@ -12003,9 +12011,10 @@
           </div>
           <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px;">
             ${sec.subsectors.map(sub => `
-              <div class="subsector-item" style="padding: 6px 10px;">
+              <div class="subsector-item" data-sector-tag="${sub.tag || ''}" style="padding: 6px 10px;">
                 <div>
                   <strong style="color: #f1f5f9; font-size: 0.79rem;">${sub.name} (${sub.pct}%)</strong>
+                  ${sub.tag ? `<a href="#${sub.tag}" style="margin-left: 6px; font-family: ui-monospace, monospace; font-size: 0.68rem; color: ${sec.color}; text-decoration: none; border: 1px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.05); padding: 1px 5px; border-radius: 4px;">#${sub.tag}</a>` : ""}
                   <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 2px;">${sub.detail}</div>
                 </div>
                 <div style="font-family: ui-monospace, monospace; color: ${sec.color}; font-weight: 700; font-size: 0.8rem; white-space: nowrap;">
@@ -12018,10 +12027,11 @@
             <strong style="color: ${sec.color};">Clean Abatement Solutions:</strong> ${sec.cleanSolution}
           </div>
           ${sec.deepDives ? sec.deepDives.map(dd => `
-            <div style="background: ${dd.bg || 'rgba(0, 229, 255, 0.05)'}; border: 1px solid ${dd.border || 'rgba(0, 229, 255, 0.25)'}; border-left: 3px solid ${dd.color || 'var(--cyan)'}; border-radius: 6px; padding: 10px 12px; font-size: 0.77rem; line-height: 1.45; color: #cbd5e1; margin-bottom: 8px;">
+            <div data-sector-tag="${dd.tag || ''}" style="background: ${dd.bg || 'rgba(0, 229, 255, 0.05)'}; border: 1px solid ${dd.border || 'rgba(0, 229, 255, 0.25)'}; border-left: 3px solid ${dd.color || 'var(--cyan)'}; border-radius: 6px; padding: 10px 12px; font-size: 0.77rem; line-height: 1.45; color: #cbd5e1; margin-bottom: 8px;">
               <div style="font-weight: 700; color: ${dd.color || 'var(--cyan)'}; margin-bottom: 5px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
-                <div style="display: flex; align-items: center; gap: 6px;">
+                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
                   <span>${dd.icon}</span> <span>${dd.title}</span>
+                  ${dd.tag ? `<a href="#${dd.tag}" style="font-family: ui-monospace, monospace; font-size: 0.68rem; color: ${dd.color || 'var(--cyan)'}; text-decoration: none; border: 1px solid rgba(255,255,255,0.22); background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 4px;">#${dd.tag}</a>` : ""}
                 </div>
                 ${dd.badge ? `<span class="badge" style="background: rgba(255,255,255,0.08); color: ${dd.color}; font-size: 0.7rem;">${dd.badge}</span>` : ""}
               </div>
@@ -12084,6 +12094,60 @@
         popover.style.left = `${Math.round(left)}px`;
         popover.style.top = `${Math.round(top)}px`;
       }
+
+      window.openSectorTagPopup = function openSectorTagPopup(rawTag) {
+        const norm = (rawTag || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+        if (!norm) return false;
+        const aliasTag = {
+          "datacenters": "datacentres",
+          "datacentre": "datacentres",
+          "datacenter": "datacentres",
+          "airtransport": "aviation",
+          "contrails": "aviationdeepdive"
+        }[norm] || norm;
+
+        let matchedSec = null;
+        let matchedTag = null;
+        for (const sec of OWID_EMISSIONS.sectors) {
+          if (sec.tag && sec.tag.toLowerCase() === aliasTag) {
+            matchedSec = sec;
+            matchedTag = sec.tag;
+            break;
+          }
+          const sub = (sec.subsectors || []).find(s => s.tag && s.tag.toLowerCase() === aliasTag);
+          if (sub) {
+            matchedSec = sec;
+            matchedTag = sub.tag;
+          }
+          const dd = (sec.deepDives || []).find(d => d.tag && d.tag.toLowerCase() === aliasTag);
+          if (dd) {
+            matchedSec = sec;
+            matchedTag = dd.tag;
+          }
+          if (matchedSec) break;
+        }
+        if (!matchedSec) return false;
+
+        const isCo2Only = OWID_EMISSIONS.filterMode === "co2";
+        const total = isCo2Only ? OWID_EMISSIONS.totalCo2Gt : OWID_EMISSIONS.totalGhgGt;
+        const val = isCo2Only ? matchedSec.co2Gt : matchedSec.ghgGt;
+        const pctStr = ((val / total) * 100).toFixed(1);
+        const valStr = val.toFixed(1);
+        const anchorEl = document.querySelector(`.sources-legend-card[data-sector-id="${matchedSec.id}"]`);
+        showSourcesPopover(matchedSec, pctStr, valStr, anchorEl);
+
+        const pop = document.getElementById("sourcesSectorPopover");
+        if (pop && matchedTag) {
+          const targets = pop.querySelectorAll(`[data-sector-tag="${matchedTag}"]`);
+          const targetEl = targets[targets.length - 1];
+          if (targetEl) {
+            targetEl.scrollIntoView({ behavior: "smooth", block: "center" });
+            targetEl.style.boxShadow = `0 0 0 2px ${matchedSec.color}, 0 0 18px rgba(56, 189, 248, 0.35)`;
+            setTimeout(() => { targetEl.style.boxShadow = ""; }, 2800);
+          }
+        }
+        return true;
+      };
 
       function positionSourcesPopover(mouseEvent) {
         const popover = document.getElementById("sourcesSectorPopover");
@@ -16120,6 +16184,31 @@
             "country-emissions": "sources",
             "sector-emissions": "sources",
             "ghg-sectors": "sources",
+            "energysector": "sources",
+            "energyinindustry": "sources",
+            "roadtransport": "sources",
+            "aviation": "sources",
+            "airtransport": "sources",
+            "aviationdeepdive": "sources",
+            "buildings": "sources",
+            "datacentres": "sources",
+            "datacenters": "sources",
+            "data-centres": "sources",
+            "fugitiveemissions": "sources",
+            "agrimachinery": "sources",
+            "afolu": "sources",
+            "livestockmethane": "sources",
+            "agriculturalsoils": "sources",
+            "deforestation": "sources",
+            "cropburning": "sources",
+            "ricecultivation": "sources",
+            "peatlands": "sources",
+            "industrialprocesses": "sources",
+            "cement": "sources",
+            "chemicals": "sources",
+            "waste": "sources",
+            "landfills": "sources",
+            "wastewater": "sources",
             "fossil-breakdown": "sources",
             "fossil-fuel-breakdown": "sources",
             "ghgsources": "sources",
@@ -16187,6 +16276,12 @@
                 const el = document.getElementById("sector-emissions") || document.getElementById("sourcesSectorCard");
                 if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
               }, 150);
+            } else if (typeof window.openSectorTagPopup === "function") {
+              setTimeout(() => {
+                const el = document.getElementById("sector-emissions") || document.getElementById("sourcesSectorCard");
+                if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+                window.openSectorTagPopup(raw);
+              }, 180);
             } else if (raw === "1-million-year" || raw === "million-year" || raw === "1m-year" || raw === "paleo" || raw === "1-million-year-comparison") {
               setTimeout(() => {
                 const b = document.getElementById("btnMillionYear");
