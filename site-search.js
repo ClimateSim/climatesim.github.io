@@ -600,34 +600,94 @@
     }
   }
 
+  let fullTextRequested = false;
+  function ensureFullTextIndex() {
+    if (window.CLIMATESIM_FULLTEXT_INDEX || fullTextRequested) return;
+    fullTextRequested = true;
+    const s = document.createElement("script");
+    s.src = "site-search-index.js";
+    s.onload = () => {
+      const input = document.getElementById("csSearchInput");
+      if (backdrop.classList.contains("open") && input && input.value.trim()) {
+        renderResults(input.value);
+      }
+    };
+    document.head.appendChild(s);
+  }
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[ch]));
+  }
+
+  function makeSnippet(text, tokens) {
+    const clean = text || "";
+    const lower = clean.toLowerCase();
+    let firstPos = -1;
+    for (const t of tokens) {
+      const idx = lower.indexOf(t);
+      if (idx !== -1 && (firstPos === -1 || idx < firstPos)) firstPos = idx;
+    }
+    const start = firstPos > 55 ? firstPos - 55 : 0;
+    const end = Math.min(clean.length, start + 175);
+    let slice = (start > 0 ? "…" : "") + clean.slice(start, end) + (end < clean.length ? "…" : "");
+    let html = escapeHtml(slice);
+    tokens.forEach(t => {
+      if (t.length < 2) return;
+      const re = new RegExp(`(${t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
+      html = html.replace(re, '<mark style="background:rgba(56,189,248,0.28);color:#fff;border-radius:3px;padding:0 2px;">$1</mark>');
+    });
+    return html;
+  }
+
   function renderResults(query) {
     const container = document.getElementById("csSearchResults");
     if (!container) return;
     const q = (query || "").trim().toLowerCase();
     const tokens = q ? q.split(/\s+/).filter(Boolean) : [];
 
-    const pool = SITE_SEARCH_INDEX.concat(q ? getCurrentPageItems() : []);
-    currentMatches = pool.filter(item => {
-      if (tokens.length === 0) return true;
-      const hay = (item.title + " " + item.page + " " + item.url + " " + item.tags + " " + item.desc).toLowerCase();
-      return tokens.every(t => hay.includes(t));
-    }).slice(0, 18);
+    const fullTextItems = (tokens.length > 0 && Array.isArray(window.CLIMATESIM_FULLTEXT_INDEX))
+      ? window.CLIMATESIM_FULLTEXT_INDEX.map(sec => ({
+          title: sec.title,
+          page: sec.page,
+          url: sec.url,
+          tags: "",
+          _fullText: sec.text,
+          desc: sec.text
+        }))
+      : [];
+
+    const pool = SITE_SEARCH_INDEX.concat(q ? getCurrentPageItems() : []).concat(fullTextItems);
+    const seenKeys = new Set();
+    const matched = [];
+    for (const item of pool) {
+      if (tokens.length > 0) {
+        const hay = (item.title + " " + item.page + " " + item.url + " " + (item.tags || "") + " " + (item._fullText || item.desc || "")).toLowerCase();
+        if (!tokens.every(t => hay.includes(t))) continue;
+      }
+      const key = item.url + "|" + item.title;
+      if (seenKeys.has(key)) continue;
+      seenKeys.add(key);
+      matched.push(item);
+      if (matched.length >= (tokens.length > 0 ? 24 : 18)) break;
+    }
+    currentMatches = matched;
 
     selectedIdx = 0;
     if (currentMatches.length === 0) {
-      container.innerHTML = `<div style="padding: 18px; text-align: center; color: #94a3b8; font-size: 0.82rem;">No matching pages or topics found for "<strong>${q.replace(/</g, "&lt;")}</strong>".</div>`;
+      container.innerHTML = `<div style="padding: 18px; text-align: center; color: #94a3b8; font-size: 0.82rem;">No matching pages or topics found for "<strong>${escapeHtml(q)}</strong>".</div>`;
       return;
     }
 
     container.innerHTML = currentMatches.map((item, idx) => {
       const hashPart = item.url.includes("#") ? "#" + item.url.split("#")[1] : item.page;
+      const descHtml = item._fullText ? makeSnippet(item._fullText, tokens) : escapeHtml(item.desc);
       return `
         <a class="cs-search-item${idx === 0 ? " active" : ""}" data-idx="${idx}" href="${item.url}">
           <div class="cs-search-item-top">
-            <span class="cs-search-item-title">${item.title}</span>
-            <span class="cs-search-item-badge">${hashPart}</span>
+            <span class="cs-search-item-title">${escapeHtml(item.title)}</span>
+            <span class="cs-search-item-badge">${escapeHtml(hashPart)}</span>
           </div>
-          <div class="cs-search-item-desc">${item.desc}</div>
+          <div class="cs-search-item-desc">${descHtml}</div>
         </a>
       `;
     }).join("");
@@ -642,6 +702,7 @@
   }
 
   function openSearch() {
+    ensureFullTextIndex();
     backdrop.classList.add("open");
     const input = document.getElementById("csSearchInput");
     renderResults(input ? input.value : "");
