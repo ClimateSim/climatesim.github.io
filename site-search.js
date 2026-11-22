@@ -5,6 +5,13 @@
 
   const SITE_SEARCH_INDEX = [
     {
+      title: "NASA CERES Satellite Measurements (Rising Atmospheric Absorption & EEI)",
+      page: "Guide & Proofs (Page 2)",
+      url: "index.html#page-transfer",
+      tags: "nasa ceres satellite energy imbalance kramer loeb 2021 absorption co2 forcing toa radiation",
+      desc: "Multi-year NASA CERES satellite measurements (ceres.larc.nasa.gov/science/) directly observing increased atmospheric energy absorption as CO₂ rose."
+    },
+    {
       title: "Met Office Climate Data Portal & Science-Based Climate Websites",
       page: "Guide & References",
       url: "index.html#page-methodology",
