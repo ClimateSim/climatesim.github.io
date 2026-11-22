@@ -2686,7 +2686,7 @@
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <div class="brand-title" id="headerTitle">Earth's Energy Imbalance</div>
-              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v6.2.1</span>
+              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v6.2.2</span>
             </div>
             <div style="font-size: 0.75rem; color: var(--text-muted);" id="headerSubtitle">How greenhouse gases trap heat and warm the planet</div>
           </div>
@@ -4279,7 +4279,7 @@
         <span>·</span>
         <button type="button" id="btnFeedbackFooter" onclick="openFeedbackModal()" style="background: rgba(56, 189, 248, 0.12); color: var(--cyan); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 6px; padding: 2px 10px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">💬 Send Feedback</button>
         <span>·</span>
-        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v6.2.1</span>
+        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v6.2.2</span>
       </div>
       <div style="font-size: 0.76rem; color: #64748b; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
         <span>&copy; 2026 Earth Energy Balance Simulator Project</span>
@@ -4750,7 +4750,7 @@
           <div class="toc-card">
             <h3 style="margin-top: 0; border: none; color: #fff; display: flex; align-items: center; justify-content: space-between;">
               <span>Documentation Overview</span>
-              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v6.2.1</span>
+              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v6.2.2</span>
             </h3>
             
             <!-- User Commentary & Context Note -->
@@ -10807,13 +10807,65 @@
         requestAnimationFrame(update);
       }
 
+      const SOLAR_ROYGBIV_DIAGRAM_HTML = `<div style="margin-top:10px;padding:8px 10px;background:rgba(15,23,42,0.85);border:1px solid rgba(56,189,248,0.35);border-radius:8px;">
+        <div style="font-size:0.7rem;font-weight:700;color:#38bdf8;margin-bottom:5px;display:flex;justify-content:space-between;align-items:center;">
+          <span>🌈 Inbound Solar Spectrum vs. Visible Light (ROYGBIV)</span>
+          <span style="font-family:ui-monospace,monospace;color:#94a3b8;font-weight:600;">0.2 – 4.0 µm</span>
+        </div>
+        <svg viewBox="0 0 360 88" style="width:100%;height:auto;display:block;" role="img" aria-label="Inbound solar wavelengths relative to ROYGBIV visible light">
+          <defs>
+            <linearGradient id="roygbivGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#7c3aed"/>
+              <stop offset="16%" stop-color="#4f46e5"/>
+              <stop offset="34%" stop-color="#2563eb"/>
+              <stop offset="52%" stop-color="#16a34a"/>
+              <stop offset="68%" stop-color="#eab308"/>
+              <stop offset="84%" stop-color="#f97316"/>
+              <stop offset="100%" stop-color="#dc2626"/>
+            </linearGradient>
+            <linearGradient id="uvGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#1e1b4b"/>
+              <stop offset="100%" stop-color="#6d28d9"/>
+            </linearGradient>
+            <linearGradient id="nirGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#b91c1c"/>
+              <stop offset="55%" stop-color="#7f1d1d"/>
+              <stop offset="100%" stop-color="#271217"/>
+            </linearGradient>
+          </defs>
+          <!-- Inbound bracket -->
+          <path d="M 8 16 L 8 11 L 266 11 L 266 16" fill="none" stroke="#38bdf8" stroke-width="1.3"/>
+          <text x="137" y="8" fill="#38bdf8" font-size="8.2" font-weight="700" text-anchor="middle" font-family="system-ui,sans-serif">☀️ Inbound Sunlight (Passes straight through CO₂)</text>
+          <!-- Spectrum bands -->
+          <rect x="8" y="20" width="44" height="22" rx="3" fill="url(#uvGrad)" stroke="rgba(255,255,255,0.2)" stroke-width="0.6"/>
+          <rect x="54" y="20" width="114" height="22" rx="3" fill="url(#roygbivGrad)" stroke="rgba(255,255,255,0.45)" stroke-width="0.9"/>
+          <rect x="170" y="20" width="96" height="22" rx="3" fill="url(#nirGrad)" stroke="rgba(255,255,255,0.2)" stroke-width="0.6"/>
+          <!-- Outbound thermal contrast block -->
+          <line x1="274" y1="20" x2="274" y2="42" stroke="#475569" stroke-dasharray="2,2" stroke-width="1"/>
+          <rect x="282" y="20" width="70" height="22" rx="3" fill="rgba(244,63,94,0.2)" stroke="#f43f5e" stroke-width="1" stroke-dasharray="3,2"/>
+          <!-- Band labels inside/below -->
+          <text x="30" y="34" fill="#ddd6fe" font-size="8" font-weight="700" text-anchor="middle" font-family="system-ui,sans-serif">UV</text>
+          <text x="111" y="34" fill="#ffffff" font-size="8.5" font-weight="800" text-anchor="middle" font-family="ui-monospace,monospace" style="text-shadow:0 1px 2px #000;">V I B G Y O R</text>
+          <text x="218" y="34" fill="#fecaca" font-size="8" font-weight="700" text-anchor="middle" font-family="system-ui,sans-serif">Near-IR</text>
+          <text x="317" y="34" fill="#fda4af" font-size="7.8" font-weight="700" text-anchor="middle" font-family="system-ui,sans-serif">Thermal IR</text>
+          <!-- Wavelengths & energy shares -->
+          <text x="30" y="54" fill="#94a3b8" font-size="7.2" text-anchor="middle" font-family="ui-monospace,monospace">&lt;0.4 µm (~8%)</text>
+          <text x="111" y="54" fill="#e2e8f0" font-size="7.2" font-weight="700" text-anchor="middle" font-family="ui-monospace,monospace">0.4–0.7 µm (~43%)</text>
+          <text x="218" y="54" fill="#94a3b8" font-size="7.2" text-anchor="middle" font-family="ui-monospace,monospace">0.7–4 µm (~49%)</text>
+          <text x="317" y="54" fill="#fda4af" font-size="7.2" font-weight="700" text-anchor="middle" font-family="ui-monospace,monospace">~15 µm (~30×)</text>
+          <!-- Bottom caption -->
+          <text x="137" y="72" fill="#cbd5e1" font-size="7.4" text-anchor="middle" font-family="system-ui,sans-serif">Shortwave solar peak sits right in visible ROYGBIV light</text>
+          <text x="317" y="72" fill="#f43f5e" font-size="7.3" font-weight="700" text-anchor="middle" font-family="system-ui,sans-serif">Trapped by CO₂</text>
+        </svg>
+      </div>`;
+
       // Speech Bubble Sequential Data (1 to 6)
       // Dynamic content tailored for Reading Age 14 (Simple Intro) vs Scientific Rigor (Simulator Mode)
       const speechDataIntro = [
         {
           pinId: "pin1",
           title: "Step 1: Sunlight Arrives (Shortwave Solar Radiation)",
-          html: "Sunlight streams down from space. Because the Sun is blisteringly hot (~5,500°C), its energy arrives as <strong>shortwave solar radiation</strong>—spanning ultraviolet, visible light, and near-infrared.<br><br>The atmosphere is broadly transparent to incoming solar radiation because greenhouse gases like CO₂ cannot absorb these short solar wavelengths (their molecular shape only responds to much longer heat wavelengths). As a result, incoming solar radiation passes straight through the atmosphere without heating it, travelling unimpeded down to warm Earth's surface."
+          html: "Sunlight streams down from space. Because the Sun is blisteringly hot (~5,500°C), its energy arrives as <strong>shortwave solar radiation</strong>—spanning ultraviolet, visible light (ROYGBIV), and near-infrared.<br><br>The atmosphere is broadly transparent to incoming solar radiation because greenhouse gases like CO₂ cannot absorb these short solar wavelengths (their molecular shape only responds to much longer heat wavelengths). As a result, incoming solar radiation passes straight through the atmosphere without heating it, travelling unimpeded down to warm Earth's surface." + SOLAR_ROYGBIV_DIAGRAM_HTML
         },
         {
           pinId: "pin2",
@@ -10841,7 +10893,7 @@
         {
           pinId: "pin1",
           title: "Step 1: Solar Inflow (Shortwave Solar Radiation)",
-          html: "Because the Sun's photosphere is ~5,778 K, Wien's displacement law concentrates incoming solar emission into the high-energy <strong>shortwave spectrum</strong> (ultraviolet, visible light at 0.4–0.7 µm, and near-infrared).<br><br>The atmosphere is broadly transparent to incoming solar radiation across this entire spectrum—not just visible light—because triatomic greenhouse gases like CO₂ lack vibrational resonance modes at these high frequencies. This allows ~239 W/m² (post-albedo) of solar irradiance to reach Earth's planetary surface unimpeded."
+          html: "Because the Sun's photosphere is ~5,778 K, Wien's displacement law concentrates incoming solar emission into the high-energy <strong>shortwave spectrum</strong> (ultraviolet, visible light at 0.4–0.7 µm, and near-infrared).<br><br>The atmosphere is broadly transparent to incoming solar radiation across this entire spectrum—not just visible light—because triatomic greenhouse gases like CO₂ lack vibrational resonance modes at these high frequencies. This allows ~239 W/m² (post-albedo) of solar irradiance to reach Earth's planetary surface unimpeded." + SOLAR_ROYGBIV_DIAGRAM_HTML
         },
         {
           pinId: "pin2",
