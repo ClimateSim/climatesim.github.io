@@ -173,6 +173,13 @@
       desc: "Annual UK rainfall stripes with 5-year rolling mean, 1766 instrumental boundary, and Little Ice Age popups."
     },
     {
+      title: "Snow in Scotland — Historical Snow Days Map (1940–2025)",
+      page: "Snow in Scotland",
+      url: "snow_in_scotland.html",
+      tags: "snow scotland winter map towns municipalities population 2000 1940 2025 era5 climate change highlands edinburgh glasgow aberdeen inverness",
+      desc: "Interactive map of 350 Scottish towns & municipalities (population 2,000+): click any town to graph historical snow days per year back to 1940."
+    },
+    {
       title: "UK Peak Storm Wind Stripes (1500–2025)",
       page: "UK Impacts",
       url: "uk_climate_impacts_500_years.html#storm-wind-stripes",

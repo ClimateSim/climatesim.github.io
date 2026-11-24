@@ -1614,6 +1614,16 @@
               <a href="https://www.theguardian.com/uk-news/2015/dec/06/storm-desmond-uk-rain-record-broken-cumbria-floods" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 The Guardian</a>
             </div>
           </li>
+          <li class="event-item" style="border-left-color: #38bdf8;">
+            <span class="event-year" style="color: #7dd3fc;">2000–2026: Global Glacier Melting &amp; Rising UK Seas (~267 Gt/yr Ice Loss)</span>
+            <p>Mountain glaciers worldwide (Alps, Andes, Himalayas, Alaska) are losing ~267 billion tonnes of ice per year—contributing ~21% of observed global sea-level rise alongside accelerating Greenland and Antarctic ice-sheet melt. Around the UK, sea level has already risen ~16–20 cm since 1900 (Met Office UKCP18), turning historic 1-in-100-year coastal storm surges into near-annual flooding events for low-lying towns and estuaries.</p>
+            <div class="event-sources">
+              <span class="event-sources-label">Sources:</span>
+              <a href="https://wgms.ch/" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ World Glacier Monitoring Service</a>
+              <a href="https://www.nature.com/articles/s41586-021-03436-z" target="_blank" rel="noopener noreferrer" class="event-source-link sci">📄 Hugonnet et al. (Nature 2021)</a>
+              <a href="https://www.metoffice.gov.uk/research/approach/collaboration/ukcp" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ Met Office UKCP18</a>
+            </div>
+          </li>
         </ul>
       </article>
 
@@ -2051,6 +2061,53 @@
           <div class="proj-source">Sources: Defra Arable Statistics · Chatham House · IPCC WGII Food Systems</div>
         </div>
 
+        <!-- GRAPH 4: GLACIER MELT & UK SEA-LEVEL RISE -->
+        <div class="projection-card" style="border-top: 3px solid #22d3ee;">
+          <div class="proj-header">
+            <div class="proj-title-row">
+              <div class="proj-title">🏔️ Glacier Melt &amp; Sea-Level Rise</div>
+              <span class="proj-badge" style="background: rgba(34, 211, 238, 0.2); color: #67e8f9; border: 1px solid rgba(34, 211, 238, 0.4);">+0.3 to +1.1 m by 2100</span>
+            </div>
+            <span class="proj-subtitle">Global glacier/ice-sheet mass loss &amp; UK coastal sea level</span>
+          </div>
+
+          <div class="proj-chart-wrap">
+            <svg class="proj-chart-svg" viewBox="0 0 320 130" preserveAspectRatio="none">
+              <line x1="30" y1="20" x2="310" y2="20" stroke="rgba(255,255,255,0.08)" stroke-dasharray="2,3" />
+              <line x1="30" y1="55" x2="310" y2="55" stroke="rgba(255,255,255,0.08)" stroke-dasharray="2,3" />
+              <line x1="30" y1="90" x2="310" y2="90" stroke="rgba(255,255,255,0.2)" />
+              <text x="25" y="24" fill="#64748b" font-size="8" font-family="monospace" text-anchor="end">+1.0m</text>
+              <text x="25" y="59" fill="#64748b" font-size="8" font-family="monospace" text-anchor="end">+0.5m</text>
+              <text x="25" y="94" fill="#64748b" font-size="8" font-family="monospace" text-anchor="end">0.0m</text>
+              <text x="35" y="122" fill="#64748b" font-size="8" font-family="monospace">1960</text>
+              <text x="110" y="122" fill="#64748b" font-size="8" font-family="monospace">1990</text>
+              <text x="180" y="122" fill="#22d3ee" font-size="8" font-family="monospace" font-weight="bold">2026</text>
+              <text x="245" y="122" fill="#64748b" font-size="8" font-family="monospace">2050</text>
+              <text x="305" y="122" fill="#64748b" font-size="8" font-family="monospace" text-anchor="end">2100</text>
+              <polygon points="180,76 245,56 305,18 305,68 245,70 180,76" fill="rgba(34, 211, 238, 0.14)" />
+              <path d="M 180,76 Q 245,50 305,18" fill="none" stroke="#f43f5e" stroke-width="1.8" stroke-dasharray="3,3" />
+              <path d="M 180,76 Q 245,62 305,44" fill="none" stroke="#22d3ee" stroke-width="2" stroke-dasharray="4,3" />
+              <path d="M 180,76 Q 245,71 305,68" fill="none" stroke="#10b981" stroke-width="1.5" stroke-dasharray="2,2" />
+              <path d="M 35,88 Q 110,84 180,76" fill="none" stroke="#22d3ee" stroke-width="2.5" />
+              <line x1="180" y1="15" x2="180" y2="90" stroke="rgba(255,255,255,0.25)" stroke-dasharray="2,2" />
+              <text x="183" y="20" fill="#22d3ee" font-size="7" font-weight="bold">2026 (+20cm)</text>
+              <text x="235" y="15" fill="#f43f5e" font-size="7">High +1.1m</text>
+            </svg>
+          </div>
+
+          <div class="proj-stats-row">
+            <div>
+              <div class="proj-stat-label">Global Glacier Loss:</div>
+              <div class="proj-stat-val" style="color: #67e8f9;">~267 Gt/yr (accelerating)</div>
+            </div>
+            <div>
+              <div class="proj-stat-label">UK Coastal Surge Risk:</div>
+              <div class="proj-stat-val" style="color: #f43f5e;">1-in-100yr → Annual</div>
+            </div>
+          </div>
+          <div class="proj-source">Sources: WGMS · Hugonnet et al. (Nature 2021) · IPCC AR6 · Met Office UKCP18</div>
+        </div>
+
       </div>
       </div>
     </section>
@@ -2335,6 +2392,8 @@
         <a href="climate_podcasts.html" class="footer-link">Podcasts</a>
         <span>·</span>
         <a href="doughnut_economics.html" class="footer-link">Doughnut Economics</a>
+        <span>·</span>
+        <a href="snow_in_scotland.html" class="footer-link" style="color: #7dd3fc;">❄️ Snow in Scotland</a>
       </div>
       <div>
         <span>Calibrated empirical physics and historical climatology. <strong style="color: #38bdf8; font-family: var(--font-mono);">v2.10.0</strong></span>
