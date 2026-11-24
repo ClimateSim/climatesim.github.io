@@ -175,7 +175,7 @@
     {
       title: "Snow in Scotland — Historical Snow Days Map (1940–2025)",
       page: "Snow in Scotland",
-      url: "snow_in_scotland.html",
+      url: "uk_climate_impacts_500_years.html#snow-in-scotland",
       tags: "snow scotland winter map towns municipalities population 2000 1940 2025 era5 climate change highlands edinburgh glasgow aberdeen inverness",
       desc: "Interactive map of 350 Scottish towns & municipalities (population 2,000+): click any town to graph historical snow days per year back to 1940."
     },
@@ -794,7 +794,7 @@
           { label: "🍩 Doughnut Economics", href: "doughnut_economics.html", color: "#fbbf24" },
           { label: "🌱 What Can I Do?", href: "what_can_i_do.html", color: "#34d399" },
           { label: "🧊 Arctic Sea Ice", href: "arctic_sea_ice.html", color: "#7dd3fc" },
-          { label: "❄️ Snow in Scotland", href: "snow_in_scotland.html", color: "#7dd3fc" },
+          { label: "❄️ Snow in Scotland", href: "uk_climate_impacts_500_years.html#snow-in-scotland", color: "#7dd3fc" },
           { label: "🗣️ Denialism & Silence", href: "denialism.html", color: "#fda4af" }
         ];
 
