@@ -154,7 +154,7 @@
   <div class="container">
     <header>
       <div class="title-block">
-        <h1>❄️ Snow in Scotland <span class="version-badge">v7.1.0</span></h1>
+        <h1>❄️ Snow in Scotland <span class="version-badge">v7.1.1</span></h1>
         <p class="subtitle">
           Interactive map of <strong>350 Scottish towns &amp; municipalities</strong> with population &ge; 2,000. Click any town to graph historical <strong>snow days per year (1940–2025)</strong>—86 years of daily weather records.
         </p>
@@ -248,7 +248,11 @@
       </div>
 
       <div class="chart-controls">
-        <span>Annual Snow Days (1940–2025) &amp; 10-Year Rolling Mean</span>
+        <div class="pill-group" id="metricGroup">
+          <button type="button" class="pill-btn active" data-metric="days">❄️ Snow Days / Year</button>
+          <button type="button" class="pill-btn" data-metric="accum">📏 Snowfall Accumulation (cm/yr)</button>
+          <button type="button" class="pill-btn" data-metric="depth">🏔️ Peak Snow Depth (cm, 1950–2025)</button>
+        </div>
         <div class="pill-group" id="thresholdGroup">
           <button type="button" class="pill-btn" data-thresh="0.2">&ge; 0.2 cm (Trace)</button>
           <button type="button" class="pill-btn active" data-thresh="0.5">&ge; 0.5 cm (Snow Day)</button>
@@ -364,12 +368,23 @@
       let chartInstance = null;
       let activeTown = null;
       let currentThreshold = 0.5;
+      let currentMetric = "days";
       const dailyCache = new Map();
 
       function closeModal() { modal.classList.remove("open"); }
       document.getElementById("closeModalBtn").addEventListener("click", closeModal);
       modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
       document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+
+      document.querySelectorAll("#metricGroup .pill-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll("#metricGroup .pill-btn").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          currentMetric = btn.dataset.metric;
+          document.getElementById("thresholdGroup").style.display = currentMetric === "days" ? "flex" : "none";
+          if (activeTown) renderTownChart(activeTown);
+        });
+      });
 
       document.querySelectorAll("#thresholdGroup .pill-btn").forEach(btn => {
         btn.addEventListener("click", () => {
@@ -394,13 +409,13 @@
         const [name, lat, lon] = town;
         const cacheKey = lat.toFixed(2) + "," + lon.toFixed(2);
         loadingEl.style.display = "flex";
-        loadingEl.textContent = "Loading 86 years (1940–2025) of daily snowfall records for " + name + "...";
+        loadingEl.textContent = "Loading 86 years (1940–2025) of daily snowfall & depth records for " + name + "...";
 
         try {
           let daily = dailyCache.get(cacheKey);
           if (!daily) {
             const url = "https://archive-api.open-meteo.com/v1/archive?latitude=" + lat +
-              "&longitude=" + lon + "&start_date=1940-01-01&end_date=2025-12-31&daily=snowfall_sum&timezone=Europe%2FLondon";
+              "&longitude=" + lon + "&start_date=1940-01-01&end_date=2025-12-31&daily=snowfall_sum,snow_depth_max&timezone=Europe%2FLondon";
             const resp = await fetch(url);
             if (!resp.ok) throw new Error("HTTP " + resp.status);
             const json = await resp.json();
@@ -408,41 +423,77 @@
             dailyCache.set(cacheKey, daily);
           }
 
-          const countsByYear = {};
-          for (let y = 1940; y <= 2025; y++) countsByYear[y] = 0;
+          const daysByYear = {}, accumByYear = {}, depthByYear = {};
+          for (let y = 1940; y <= 2025; y++) {
+            daysByYear[y] = 0;
+            accumByYear[y] = 0;
+            depthByYear[y] = y >= 1950 ? 0 : null;
+          }
           const times = daily.time || [];
           const snow = daily.snowfall_sum || [];
+          const depth = daily.snow_depth_max || [];
           for (let i = 0; i < times.length; i++) {
-            const val = snow[i];
-            if (val !== null && val >= currentThreshold) {
-              const yr = Number(times[i].slice(0, 4));
-              if (countsByYear[yr] !== undefined) countsByYear[yr]++;
+            const yr = Number(times[i].slice(0, 4));
+            if (daysByYear[yr] === undefined) continue;
+            const sf = snow[i];
+            if (sf !== null && sf !== undefined) {
+              accumByYear[yr] += sf;
+              if (sf >= currentThreshold) daysByYear[yr]++;
+            }
+            const sd = depth[i];
+            if (sd !== null && sd !== undefined && depthByYear[yr] !== null) {
+              const cm = sd * 100;
+              if (cm > depthByYear[yr]) depthByYear[yr] = cm;
             }
           }
 
-          const years = Object.keys(countsByYear).map(Number);
-          const counts = years.map(y => countsByYear[y]);
+          const years = Object.keys(daysByYear).map(Number);
+          let series, unit, barLabel, yTitle, barColor, barBorder;
+          if (currentMetric === "accum") {
+            series = years.map(y => +accumByYear[y].toFixed(1));
+            unit = " cm/yr";
+            barLabel = "Annual Snowfall Accumulation (cm)";
+            yTitle = "Total Snowfall (cm / year)";
+            barColor = "rgba(125, 211, 252, 0.45)";
+            barBorder = "rgba(125, 211, 252, 0.9)";
+          } else if (currentMetric === "depth") {
+            series = years.map(y => depthByYear[y] === null ? null : +depthByYear[y].toFixed(1));
+            unit = " cm";
+            barLabel = "Peak Snow Depth on Ground (cm, 1950–2025)";
+            yTitle = "Max Snow Depth (cm)";
+            barColor = "rgba(52, 211, 153, 0.45)";
+            barBorder = "rgba(52, 211, 153, 0.9)";
+          } else {
+            series = years.map(y => daysByYear[y]);
+            unit = " d/yr";
+            barLabel = "Snow Days (≥ " + currentThreshold + " cm)";
+            yTitle = "Snow Days / Year";
+            barColor = "rgba(56, 189, 248, 0.45)";
+            barBorder = "rgba(56, 189, 248, 0.85)";
+          }
+
           const rolling10 = years.map((_, idx) => {
+            if (series[idx] === null) return null;
             const start = Math.max(0, idx - 9);
-            const slice = counts.slice(start, idx + 1);
-            return +(slice.reduce((a, b) => a + b, 0) / slice.length).toFixed(1);
+            const slice = series.slice(start, idx + 1).filter(v => v !== null);
+            return slice.length ? +(slice.reduce((a, b) => a + b, 0) / slice.length).toFixed(1) : null;
           });
 
-          const baseSlice = years.filter(y => y >= 1961 && y <= 1990).map(y => countsByYear[y]);
-          const recentSlice = years.filter(y => y >= 2015 && y <= 2025).map(y => countsByYear[y]);
+          const baseSlice = years.map((y, i) => (y >= 1961 && y <= 1990 ? series[i] : null)).filter(v => v !== null);
+          const recentSlice = years.map((y, i) => (y >= 2015 && y <= 2025 ? series[i] : null)).filter(v => v !== null);
           const baseMean = baseSlice.reduce((a, b) => a + b, 0) / baseSlice.length;
           const recentMean = recentSlice.reduce((a, b) => a + b, 0) / recentSlice.length;
           const pct = baseMean > 0 ? ((recentMean - baseMean) / baseMean) * 100 : 0;
 
           let maxVal = -1, maxYear = 1940;
-          years.forEach((y, i) => { if (counts[i] > maxVal) { maxVal = counts[i]; maxYear = y; } });
+          years.forEach((y, i) => { if (series[i] !== null && series[i] > maxVal) { maxVal = series[i]; maxYear = y; } });
 
-          document.getElementById("kpiBaseline").textContent = baseMean.toFixed(1) + " d/yr";
-          document.getElementById("kpiRecent").textContent = recentMean.toFixed(1) + " d/yr";
+          document.getElementById("kpiBaseline").textContent = baseMean.toFixed(1) + unit;
+          document.getElementById("kpiRecent").textContent = recentMean.toFixed(1) + unit;
           const chEl = document.getElementById("kpiChange");
           chEl.textContent = (pct >= 0 ? "+" : "") + pct.toFixed(0) + "%";
           chEl.style.color = pct <= 0 ? "#f43f5e" : "#34d399";
-          document.getElementById("kpiMaxYear").textContent = maxYear + " (" + maxVal + " d)";
+          document.getElementById("kpiMaxYear").textContent = maxYear + " (" + maxVal + (currentMetric === "days" ? " d)" : " cm)");
 
           if (chartInstance) chartInstance.destroy();
           const ctx = document.getElementById("snowChart").getContext("2d");
@@ -452,10 +503,10 @@
               datasets: [
                 {
                   type: "bar",
-                  label: "Snow Days (≥ " + currentThreshold + " cm)",
-                  data: counts,
-                  backgroundColor: "rgba(56, 189, 248, 0.45)",
-                  borderColor: "rgba(56, 189, 248, 0.85)",
+                  label: barLabel,
+                  data: series,
+                  backgroundColor: barColor,
+                  borderColor: barBorder,
                   borderWidth: 1,
                   borderRadius: 2
                 },
@@ -480,7 +531,7 @@
               },
               scales: {
                 x: { ticks: { color: "#94a3b8", maxTicksLimit: 12 }, grid: { color: "rgba(255,255,255,0.05)" } },
-                y: { beginAtZero: true, title: { display: true, text: "Snow Days / Year", color: "#94a3b8" }, ticks: { color: "#94a3b8" }, grid: { color: "rgba(255,255,255,0.08)" } }
+                y: { beginAtZero: true, title: { display: true, text: yTitle, color: "#94a3b8" }, ticks: { color: "#94a3b8" }, grid: { color: "rgba(255,255,255,0.08)" } }
               }
             }
           });
