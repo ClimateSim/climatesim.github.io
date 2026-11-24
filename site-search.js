@@ -47,7 +47,7 @@
       desc: "Standalone plain-English guide explaining why our planet is warming and practical pathways to restore balance."
     },
     {
-      title: "Warming Simulator (1D Radiative Transfer & 500-Year Trajectory)",
+      title: "Warming Simulator (Earth Energy Balance & 500-Year Trajectory)",
       page: "Warming Simulator",
       url: "index.html#WarmingSim",
       tags: "1d radiative transfer keeling curve temperature projection 1750 2100 climate sensitivity",
