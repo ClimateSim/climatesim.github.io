@@ -794,6 +794,7 @@
           { label: "🍩 Doughnut Economics", href: "doughnut_economics.html", color: "#fbbf24" },
           { label: "🌱 What Can I Do?", href: "what_can_i_do.html", color: "#34d399" },
           { label: "🧊 Arctic Sea Ice", href: "arctic_sea_ice.html", color: "#7dd3fc" },
+          { label: "❄️ Snow in Scotland", href: "snow_in_scotland.html", color: "#7dd3fc" },
           { label: "🗣️ Denialism & Silence", href: "denialism.html", color: "#fda4af" }
         ];
 
