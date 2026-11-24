@@ -2219,6 +2219,23 @@
           Interactive map of <strong>351 Scottish towns &amp; municipalities</strong> with population &ge; 2,000. Click any town to graph historical <strong>snow days per year (1940–2025)</strong>, <strong>annual snowfall accumulation (cm/yr)</strong>, and <strong>peak snow depth (cm, 1950–2025)</strong>.
         </p>
 
+        <div style="background: rgba(15, 23, 42, 0.72); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 12px 14px; margin-bottom: 12px;">
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px;">
+            <span style="font-size: 0.84rem; font-weight: 700; color: #f8fafc;">🟦 Scotland-Wide Average Annual Snowfall Stripes (1940–2025)</span>
+            <span id="scotlandStripeReadout" style="font-size: 0.78rem; font-family: var(--font-mono); color: #7dd3fc;">Hover or tap any year stripe (8-region ERA5 mean)</span>
+          </div>
+          <div id="scotlandSnowStripes" style="display: flex; width: 100%; height: 56px; border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); cursor: crosshair;"></div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 0.72rem; color: #94a3b8; font-family: var(--font-mono);">
+            <span>1940</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px;">
+              <span style="display: inline-block; width: 12px; height: 10px; background: #ffffff; border: 1px solid rgba(255,255,255,0.3); border-radius: 2px;"></span> 0 cm
+              <span style="display: inline-block; width: 42px; height: 10px; background: linear-gradient(90deg, #ffffff, #6baed6, #08306b); border-radius: 2px;"></span>
+              <span style="display: inline-block; width: 12px; height: 10px; background: #08306b; border: 1px solid rgba(255,255,255,0.3); border-radius: 2px;"></span> Heaviest (60.9 cm)
+            </span>
+            <span>2025</span>
+          </div>
+        </div>
+
         <div class="snow-controls-panel">
           <div class="snow-search-wrap">
             <input type="text" id="townSearch" class="snow-search-input" placeholder="Search Scottish town (e.g. Inverness, Stirling, Lerwick)..." autocomplete="off">
@@ -4416,6 +4433,7 @@
           <button type="button" class="snow-pill-btn active" data-metric="days">❄️ Snow Days / Year</button>
           <button type="button" class="snow-pill-btn" data-metric="accum">📏 Snowfall Accumulation (cm/yr)</button>
           <button type="button" class="snow-pill-btn" data-metric="depth">🏔️ Peak Snow Depth (cm, 1950–2025)</button>
+          <button type="button" class="snow-pill-btn" data-metric="stripes">🟦 Snowfall Stripes (cm)</button>
         </div>
         <div class="snow-pill-group" id="thresholdGroup">
           <button type="button" class="snow-pill-btn" data-thresh="0.2">&ge; 0.2 cm (Trace)</button>
@@ -4439,6 +4457,38 @@
     (function() {
       "use strict";
       const TOWNS = [["Glasgow", 55.8651, -4.2576, 626410, 40], ["Edinburgh", 55.9521, -3.1965, 514990, 66], ["Aberdeen", 57.1437, -2.0981, 198590, 13], ["Dundee", 56.4691, -2.9749, 148210, 77], ["Paisley", 55.8317, -4.4325, 77270, 50], ["East Kilbride", 55.7641, -4.1767, 75310, 161], ["Livingston", 55.9029, -3.5226, 56840, 157], ["Dunfermline", 56.0716, -3.4589, 54990, 107], ["Meikle Earnock", 55.75, -4.0333, 54480, 134], ["Hamilton", 55.7667, -4.0333, 54480, 68], ["Cumbernauld", 55.9468, -3.9905, 50530, 149], ["Kirkcaldy", 56.1168, -3.16, 50370, 39], ["Inverness", 57.4791, -4.224, 47790, 15], ["Perth", 56.3952, -3.4314, 47350, 10], ["Kilmarnock", 55.6117, -4.4958, 46970, 39], ["Dumfries", 55.0696, -3.6114, 46500, 21], ["Ayr", 55.4627, -4.6339, 46260, 13], ["Coatbridge", 55.8622, -4.0247, 43950, 88], ["Greenock", 55.9484, -4.7612, 41280, 12], ["Glenrothes", 56.1951, -3.1732, 38360, 92], ["Stirling", 56.119, -3.9368, 37910, 24], ["Airdrie", 55.866, -3.9802, 36390, 130], ["Falkirk", 56.0021, -3.7854, 35310, 25], ["Irvine", 55.6194, -4.6551, 34130, 14], ["Motherwell", 55.7892, -3.9919, 32840, 83], ["Rutherglen", 55.8289, -4.2138, 30950, 23], ["Cambuslang", 55.8097, -4.161, 30790, 76], ["Wishaw", 55.7667, -3.9167, 30050, 138], ["Bearsden", 55.9154, -4.3328, 28470, 49], ["Newton Mearns", 55.7733, -4.3334, 28210, 137], ["Clydebank", 55.9014, -4.4057, 25620, 9], ["Elgin", 57.6495, -3.3184, 25040, 20], ["Vale of Leven", 55.9713, -4.5793, 24640, 9], ["Renfrew", 55.872, -4.3925, 24270, 7], ["Bishopbriggs", 55.9067, -4.2187, 23680, 60], ["Arbroath", 56.5632, -2.5874, 23640, 10], ["Musselburgh", 55.9417, -3.0499, 23620, 9], ["Bathgate", 55.902, -3.644, 23600, 141], ["Alloa", 56.1159, -3.79, 20390, 22], ["Dumbarton", 55.9443, -4.5706, 19950, 4], ["Bellshill", 55.8167, -4.0167, 19700, 76], ["Kirkintilloch", 55.9393, -4.1526, 19630, 51], ["Peterhead", 57.5052, -1.7844, 19060, 11], ["Isle of Lewis", 58.219, -6.388, 18500, 14], ["Saint Andrews", 56.3387, -2.799, 18410, 22], ["Bonnyrigg", 55.8733, -3.1051, 18320, 103], ["Dalserf", 55.7333, -3.9167, 17985, 54], ["Barrhead", 55.7992, -4.3929, 17890, 58], ["Blantyre", 55.7963, -4.0949, 17090, 68], ["High Blantyre", 55.7844, -4.1001, 16739, 78], ["Nigg", 57.116, -2.0925, 16400, 84], ["Penicuik", 55.8312, -3.2261, 16150, 187], ["Grangemouth", 56.0114, -3.7218, 16120, 6], ["Kilwinning", 55.6533, -4.7067, 16100, 22], ["Viewpark", 55.8274, -4.0573, 16020, 71], ["Broxburn", 55.9342, -3.4713, 15970, 70], ["Johnstone", 55.8291, -4.516, 15930, 36], ["Fort William", 56.8165, -5.1121, 15757, 24], ["Erskine", 55.9005, -4.4503, 15530, 25], ["Larkhall", 55.7333, -3.9667, 15030, 117], ["Troon", 55.5436, -4.6634, 14950, 5], ["Prestwick", 55.4833, -4.6167, 14880, 14], ["Bo\u2019ness", 56.0167, -3.6167, 14840, 3], ["Inverurie", 57.2845, -2.3774, 14660, 63], ["Port Glasgow", 55.9346, -4.6895, 14200, 7], ["Forfar", 56.6438, -2.89, 13970, 63], ["Carluke", 55.736, -3.8302, 13810, 210], ["Mayfield", 55.8717, -3.0387, 13690, 156], ["Rosyth", 56.0369, -3.438, 13570, 32], ["Hawick", 55.4227, -2.7867, 13512, 116], ["Mossend", 55.8167, -4.0, 13480, 78], ["Helensburgh", 56.0061, -4.7265, 13230, 27], ["Milngavie", 55.9407, -4.3231, 12840, 66], ["Linlithgow", 55.9764, -3.6036, 12840, 50], ["Dalkeith", 55.8932, -3.0681, 12720, 58], ["Armadale", 55.8833, -3.7, 12720, 187], ["Fraserburgh", 57.6874, -2.0184, 12570, 25], ["Saltcoats", 55.6362, -4.7859, 12250, 10], ["Westhill", 57.1526, -2.2797, 12110, 127], ["Giffnock", 55.8037, -4.2949, 12070, 45], ["Cowdenbeath", 56.1119, -3.3443, 12030, 128], ["Tranent", 55.9444, -2.9541, 11910, 90], ["Montrose", 56.7168, -2.467, 11730, 11], ["Whitburn", 55.8667, -3.6833, 11490, 173], ["Carnoustie", 56.5026, -2.7053, 11310, 15], ["Stonehaven", 56.9637, -2.2118, 11150, 11], ["Largs", 55.7963, -4.8634, 11030, 13], ["Methil", 56.1854, -3.0216, 10890, 26], ["Stranraer", 54.9023, -5.0273, 10510, 12], ["Ardrossan", 55.6502, -4.8066, 10500, 21], ["Dunbar", 56.0006, -2.5142, 10270, 21], ["Gourock", 55.9616, -4.8179, 10210, 10], ["Nairn", 57.5809, -3.8797, 10190, 20], ["Ellon", 57.364, -2.0731, 10070, 12], ["Galashiels", 55.6146, -2.807, 10060, 119], ["Forres", 57.61, -3.6212, 9900, 11], ["Kilsyth", 55.976, -4.0592, 9860, 56], ["Dalgety Bay", 56.035, -3.3505, 9810, 13], ["Stenhousemuir", 56.0268, -3.8146, 9620, 28], ["Larbert", 56.0225, -3.8287, 9530, 34], ["Prestonpans", 55.9594, -2.9804, 9490, 18], ["Clarkston", 55.7859, -4.2765, 9460, 95], ["Dunblane", 56.1884, -3.9642, 9310, 64], ["Stevenston", 55.6397, -4.7534, 9290, 9], ["Cupar", 56.3188, -3.012, 9270, 28], ["Bonhill", 55.9794, -4.5638, 9180, 59], ["Haddington", 55.9561, -2.7833, 9020, 55], ["Queensferry", 55.9909, -3.3985, 8960, 9], ["Leven", 56.2, -3.0, 8960, 13], ["Dalmuir", 55.9109, -4.4292, 8933, 10], ["Cumnock", 55.4545, -4.2664, 8920, 115], ["Blairgowrie and Rattray", 56.5916, -3.3405, 8890, 80], ["Lanark", 55.6737, -3.7817, 8880, 199], ["Annan", 54.9884, -3.2565, 8760, 20], ["Tullibody", 56.1336, -3.8384, 8710, 33], ["Linwood", 55.8483, -4.4934, 8590, 11], ["Lenzie", 55.9276, -4.154, 8580, 61], ["Buckie", 57.6757, -2.9624, 8430, 28], ["Peebles", 55.6519, -3.1888, 8380, 170], ["Shotts", 55.8195, -3.7975, 8235, 216], ["Monifieth", 56.4823, -2.8173, 8210, 16], ["Portlethen", 57.0694, -2.1325, 8200, 80], ["Dunoon", 55.9503, -4.9273, 8160, 17], ["Oban", 56.4153, -5.4718, 8140, 17], ["Denny", 56.0235, -3.9081, 7860, 49], ["North Berwick", 56.0583, -2.7229, 7840, 8], ["Colinton", 55.9074, -3.2561, 7637, 112], ["Kilbirnie", 55.7508, -4.6879, 7520, 56], ["Stornoway", 58.2092, -6.3865, 7500, 12], ["Strathaven", 55.6771, -4.0668, 7480, 182], ["Banchory", 57.0517, -2.4882, 7440, 60], ["Thurso", 58.5927, -3.5259, 7390, 22], ["Crieff", 56.3727, -3.8389, 7280, 84], ["Brechin", 56.7299, -2.6573, 7230, 40], ["Isle of Bute", 55.8366, -5.0559, 7228, 8], ["Kirkwall", 58.9848, -2.9587, 7150, 3], ["Wick", 58.4391, -3.0942, 7140, 17], ["Stewarton", 55.6799, -4.5144, 7140, 97], ["Cove", 57.1, -2.0833, 7060, 76], ["Bannockburn", 56.0898, -3.9109, 7040, 41], ["Duntocher", 55.9244, -4.4154, 7036, 57], ["Alexandria", 55.9938, -4.5864, 6940, 23], ["Moodiesburn", 55.915, -4.0833, 6900, 81], ["Kelso", 55.5981, -2.4338, 6870, 40], ["Lossiemouth", 57.7214, -3.2834, 6840, 22], ["Lerwick", 60.1534, -1.1443, 6760, -9999], ["Stepps", 55.889, -4.1521, 6730, 85], ["Girvan", 55.2426, -4.8555, 6650, 12], ["Kelty", 56.1336, -3.3869, 6590, 157], ["Lochgelly", 56.1283, -3.3096, 6586, 143], ["Chapelhall", 55.8435, -3.9488, 6560, 139], ["Currie", 55.8964, -3.3085, 6500, 146], ["Newarthill", 55.8151, -3.9373, 6480, 155], ["Houston", 55.8686, -4.552, 6420, 41], ["Bothwell", 55.8027, -4.0683, 6410, 59], ["Burntisland", 56.0587, -3.2366, 6370, 7], ["Loanhead", 55.8794, -3.1587, 6350, 152], ["Gorebridge", 55.8459, -3.0456, 6330, 187], ["Sauchie", 56.1287, -3.7661, 6310, 40], ["Beith", 55.7492, -4.6368, 6170, 93], ["Kirriemuir", 56.674, -3.0034, 6160, 133], ["Balerno", 55.8844, -3.3397, 6000, 165], ["Locharbriggs", 55.1034, -3.5844, 5960, 21], ["Ballingry", 56.1639, -3.3284, 5940, 122], ["Auchterarder", 56.2961, -3.7069, 5840, 108], ["Selkirk", 55.5474, -2.8391, 5730, 178], ["Dyce", 57.2052, -2.1768, 5730, 53], ["Newmains", 55.7851, -3.8746, 5710, 156], ["Alness", 57.696, -4.2551, 5700, 26], ["Elderslie", 55.8333, -4.486, 5690, 32], ["Cockenzie", 55.9682, -2.9656, 5660, 7], ["Uddingston", 55.8197, -4.0836, 5610, 47], ["Dalry", 55.7096, -4.7217, 5560, 44], ["Stonehouse", 55.6944, -3.9878, 5500, 153], ["Blackburn", 55.8667, -3.6333, 5480, 160], ["New Stevenston", 55.8167, -3.9736, 5450, 93], ["Westhill", 57.4732, -4.1489, 5410, 92], ["Dingwall", 57.5953, -4.4272, 5360, 9], ["Bridge of Allan", 56.154, -3.9463, 5320, 13], ["Neilston", 55.7857, -4.4264, 5310, 136], ["Bonnybridge", 56.0015, -3.8886, 5280, 29], ["Inverkeithing", 56.033, -3.3956, 5220, 20], ["Tillicoultry", 56.1525, -3.7401, 5160, 21], ["Holytown", 55.8201, -3.9727, 5080, 102], ["Turriff", 57.5384, -2.4593, 5060, 55], ["Isle of Arran", 55.5814, -5.2123, 5058, 287], ["Polmont", 55.9905, -3.7074, 5040, 46], ["Scone", 56.4194, -3.4051, 5030, 52], ["Faifley", 55.9285, -4.3851, 5030, 104], ["Cardenden", 56.1431, -3.2569, 4913, 71], ["Kinross", 56.2047, -3.4214, 4910, 121], ["Bridge of Weir", 55.8558, -4.5789, 4860, 65], ["Old Kilpatrick", 55.9224, -4.4557, 4850, 26], ["Fauldhouse", 55.8275, -3.7074, 4840, 230], ["West Kilbride", 55.69, -4.8577, 4760, 51], ["Maybole", 55.355, -4.6803, 4750, 84], ["Kingswells", 57.158, -2.2243, 4750, 147], ["Kirkliston", 55.9536, -3.4029, 4740, 37], ["Keith", 57.5363, -2.9481, 4740, 152], ["Alva", 56.1528, -3.8051, 4720, 22], ["East Calder", 55.8919, -3.4637, 4710, 125], ["Brightons", 55.9803, -3.7161, 4700, 101], ["Galston", 55.6009, -4.3817, 4690, 52], ["Kintore", 57.2372, -2.3454, 4680, 51], ["Bishopton", 55.9097, -4.5056, 4640, 31], ["Kennoway", 56.2108, -3.0492, 4600, 75], ["Peterculter", 57.0993, -2.2659, 4560, 71], ["Huntly", 57.4474, -2.7861, 4550, 127], ["Netherlee", 55.8016, -4.2732, 4550, 55], ["Camelon", 56.003, -3.8207, 4508, 36], ["Campbeltown", 55.4258, -5.6076, 4500, 5], ["Lesmahagow", 55.6367, -3.8874, 4380, 176], ["Buckhaven", 56.1715, -3.0338, 4340, 28], ["Rothesay", 55.8365, -5.0551, 4310, 9], ["Dalbeattie", 54.9328, -3.8227, 4260, 12], ["Culloden", 57.487, -4.1415, 4240, 38], ["Newport-on-Tay", 56.4391, -2.9367, 4203, 43], ["Lockerbie", 55.123, -3.3563, 4190, 85], ["Thornliebank", 55.8045, -4.3175, 4190, 48], ["Mauchline", 55.516, -4.3793, 4130, 145], ["Castle Douglas", 54.941, -3.9278, 4070, 59], ["Lennoxtown", 55.9726, -4.2, 4060, 65], ["Macduff", 57.6701, -2.4969, 4030, 17], ["Newton Stewart", 54.9578, -4.4832, 4010, 17], ["Kilmacolm", 55.8947, -4.6264, 4000, 101], ["Banff", 57.6648, -2.5296, 4000, 51], ["Milton of Campsie", 55.9612, -4.1651, 3950, 63], ["Invergordon", 57.6886, -4.1674, 3930, 9], ["Tayport", 56.447, -2.8797, 3920, 19], ["Jedburgh", 55.48, -2.552, 3860, 77], ["Darvel", 55.6098, -4.2814, 3860, 104], ["Kemnay", 57.2357, -2.444, 3830, 88], ["Auchinleck", 55.4716, -4.2934, 3760, 157], ["Cairnryan", 54.971, -5.0198, 3757, 5], ["Harthill", 55.8607, -3.7517, 3710, 197], ["Tain", 57.812, -4.0552, 3690, 29], ["Dreghorn", 55.6081, -4.6223, 3640, 18], ["Stamperland", 55.7949, -4.2733, 3630, 71], ["Kilbarchan", 55.8362, -4.5536, 3580, 54], ["Eyemouth", 55.8713, -2.0901, 3580, 11], ["Cults", 57.1167, -2.1667, 3500, 16], ["Mid Calder", 55.8926, -3.48, 3460, 110], ["Isle of Islay", 55.7853, -6.2389, 3457, 20], ["Clackmannan", 56.1074, -3.751, 3450, 39], ["Anstruther", 56.2234, -2.7028, 3420, 13], ["Kirkcudbright", 54.8383, -4.0491, 3350, 4], ["Law", 55.75, -3.8833, 3250, 170], ["Oldmeldrum", 57.3349, -2.3199, 3230, 116], ["Cambusbarron", 56.1089, -3.9675, 3224, 38], ["Busby", 55.7799, -4.2771, 3220, 97], ["Caol", 56.8372, -5.1006, 3220, 6], ["Hallglen", 55.9857, -3.7854, 3200, 103], ["Maddiston", 55.9736, -3.699, 3190, 108], ["Drongan", 55.435, -4.4555, 3170, 106], ["Eaglesham", 55.7412, -4.2746, 3150, 163], ["Aviemore", 57.1955, -3.8259, 3150, 216], ["Callander", 56.2441, -4.2164, 3120, 75], ["Gretna", 54.9938, -3.0659, 3110, 17], ["West Calder", 55.8519, -3.5698, 3100, 177], ["Inverkip", 55.9083, -4.8705, 3060, 9], ["Leslie", 56.2, -3.2167, 3050, 128], ["Newtonhill", 57.0333, -2.15, 3040, 64], ["Innerleithen", 55.6193, -3.063, 3040, 148], ["Carronshore", 56.0315, -3.7829, 3040, 9], ["Cleland", 55.8024, -3.9142, 3000, 149], ["Newmilns", 55.6075, -4.3242, 2980, 73], ["Blackburn", 57.2038, -2.2884, 2980, 80], ["Laurencekirk", 56.8334, -2.4654, 2920, 85], ["Lochwinnoch", 55.7952, -4.6303, 2900, 36], ["Chryston", 55.9028, -4.1076, 2900, 89], ["Pitlochry", 56.7051, -3.7343, 2880, 120], ["Kinghorn", 56.069, -3.1761, 2870, 33], ["Menstrie", 56.1514, -3.8547, 2870, 22], ["Crosshouse", 55.6126, -4.5509, 2850, 33], ["Fallin", 56.1048, -3.8762, 2850, 13], ["New Cumnock", 55.3956, -4.1846, 2840, 187], ["Kincardine", 56.0695, -3.7196, 2810, 5], ["Kilmaurs", 55.638, -4.5273, 2800, 61], ["Bridge of Earn", 56.3484, -3.4065, 2790, 11], ["Glenboig", 55.8942, -4.0462, 2780, 89], ["Danderhall", 55.9143, -3.1106, 2770, 83], ["Dollar", 56.1624, -3.6713, 2740, 45], ["Plains", 55.8804, -3.9235, 2740, 170], ["Mintlaw", 57.5241, -2.001, 2720, 54], ["Duns", 55.777, -2.3457, 2680, 134], ["Dundonald", 55.5794, -4.5947, 2670, 38], ["Bargeddie", 55.8537, -4.0785, 2670, 80], ["Laurieston", 55.9956, -3.748, 2670, 41], ["Isle Of Mull", 56.447, -5.774, 2667, 431], ["Milltimber", 57.1042, -2.241, 2660, 65], ["Aboyne", 57.0755, -2.7802, 2650, 128], ["Cowie", 56.0797, -3.8675, 2640, 43], ["Muir of Ord", 57.5198, -4.4594, 2620, 35], ["Wemyss Bay", 55.8761, -4.8895, 2580, 10], ["Dunipace", 56.027, -3.9147, 2580, 44], ["Gullane", 56.0365, -2.8283, 2570, 34], ["Moffat", 55.3353, -3.4414, 2550, 123], ["Redding", 55.9886, -3.7323, 2540, 72], ["Crossgates", 56.0837, -3.3771, 2530, 121], ["Carron", 56.0261, -3.7925, 2530, 8], ["Balmedie", 57.2505, -2.0616, 2520, 34], ["Newmacher", 57.2667, -2.1833, 2510, 99], ["Carfin", 55.805, -3.9608, 2510, 116], ["Melrose", 55.5997, -2.7277, 2500, 97], ["Winchburgh", 55.9579, -3.4646, 2500, 85], ["Stromness", 58.965, -3.296, 2490, 7], ["Renton", 55.972, -4.584, 2490, 12], ["Cairneyhill", 56.0591, -3.5352, 2480, 38], ["Shieldhill", 55.9728, -3.7679, 2470, 166], ["Grantown on Spey", 57.3305, -3.6087, 2440, 223], ["Caldercruix", 55.8889, -3.8866, 2440, 190], ["Markinch", 56.2021, -3.1352, 2430, 69], ["Longniddry", 55.9754, -2.8959, 2430, 22], ["Alyth", 56.6221, -3.23, 2410, 99], ["Greenhill", 55.992, -3.891, 2410, 55], ["Lochgilphead", 56.038, -5.4321, 2390, 8], ["Banknock", 55.9897, -3.9561, 2370, 59], ["Torrance", 55.94, -4.2103, 2370, 49], ["Crossford", 56.063, -3.4967, 2350, 45], ["Coupar Angus", 56.5455, -3.2677, 2350, 57], ["Polbeth", 55.8607, -3.549, 2350, 165], ["Biggar", 55.623, -3.5246, 2330, 215], ["Insch", 57.3427, -2.6132, 2320, 129], ["Portree", 57.4129, -6.1942, 2310, 15], ["Inverbervie", 56.8446, -2.28, 2310, 30], ["Alford", 57.2326, -2.703, 2290, 149], ["Glenmavis", 55.8891, -3.9873, 2290, 176], ["Oakley", 56.0842, -3.5631, 2280, 77], ["High Valleyfield", 56.0636, -3.5991, 2280, 31], ["Langholm", 55.151, -2.9989, 2250, 80], ["Forth", 55.765, -3.6887, 2240, 281], ["Catrine", 55.5042, -4.3303, 2210, 96], ["Kirknewton", 55.8875, -3.419, 2200, 171], ["Leuchars", 56.3817, -2.8825, 2200, 18], ["Patna", 55.3641, -4.5059, 2190, 171], ["Coylton", 55.4453, -4.5195, 2180, 73], ["Cardross", 55.9618, -4.6532, 2130, 8], ["Gartcosh", 55.8884, -4.0817, 2130, 93], ["Lundin Links", 56.214, -2.9517, 2124, 32], ["Auchtermuchty", 56.2916, -3.2343, 2120, 63], ["Thornton", 56.1667, -3.15, 2110, 56], ["Overtown", 55.7572, -3.9165, 2110, 138], ["Garelochhead", 56.082, -4.8291, 2110, 21], ["Lochmaben", 55.1301, -3.4429, 2100, 57], ["Tweedbank", 55.6045, -2.7669, 2100, 100], ["Smithton", 57.4796, -4.1514, 2090, 48], ["Mossblown", 55.4894, -4.5279, 2090, 50], ["Kirkconnel", 55.3856, -3.9984, 2070, 153], ["Newburgh", 56.3508, -3.2365, 2060, 21], ["Ormiston", 55.913, -2.9398, 2040, 88], ["Rosewell", 55.8507, -3.1362, 2020, 154]];
+      const SCOTLAND_AVG_SNOW_CM = [31.6, 56.9, 58.3, 13.4, 18.9, 33.0, 15.4, 51.2, 23.6, 26.0, 24.5, 47.1, 37.8, 12.5, 40.2, 48.2, 26.0, 13.5, 44.2, 10.8, 38.2, 36.3, 37.5, 35.0, 15.6, 43.1, 39.8, 22.4, 55.4, 41.6, 41.9, 20.2, 24.0, 40.0, 22.4, 23.1, 33.9, 35.9, 60.9, 57.1, 47.6, 50.4, 43.1, 31.7, 57.1, 42.2, 37.4, 27.2, 28.5, 15.6, 30.2, 23.0, 19.3, 34.6, 43.6, 43.5, 45.8, 7.9, 32.0, 26.8, 20.0, 40.8, 17.4, 14.5, 14.6, 18.8, 20.2, 10.9, 29.5, 30.8, 56.5, 28.0, 19.4, 38.5, 14.9, 23.5, 17.3, 16.0, 25.7, 9.7, 15.8, 26.9, 20.9, 14.9, 18.9, 11.7];
+      function snowStripeColor(val, maxVal) {
+        if (val === null || val <= 0 || maxVal <= 0) return "#ffffff";
+        const t = Math.min(1, Math.max(0, val / maxVal));
+        // Smooth white (#ffffff) -> sky (#6baed6) -> dark navy (#08306b)
+        const r = Math.round(255 * (1 - t) + 8 * t);
+        const g = Math.round(255 * (1 - t) + 48 * t);
+        const b = Math.round(255 * (1 - t) + 107 * t);
+        return "rgb(" + r + "," + g + "," + b + ")";
+      }
+      (function renderScotlandStripes() {
+        const wrap = document.getElementById("scotlandSnowStripes");
+        const readout = document.getElementById("scotlandStripeReadout");
+        if (!wrap) return;
+        const maxAvg = Math.max(...SCOTLAND_AVG_SNOW_CM);
+        SCOTLAND_AVG_SNOW_CM.forEach((val, i) => {
+          const yr = 1940 + i;
+          const bar = document.createElement("div");
+          bar.style.flex = "1 1 0";
+          bar.style.height = "100%";
+          bar.style.background = snowStripeColor(val, maxAvg);
+          bar.title = yr + ": " + val.toFixed(1) + " cm (Scotland 8-region mean)";
+          bar.addEventListener("mouseenter", () => {
+            if (readout) readout.textContent = yr + ": " + val.toFixed(1) + " cm (Scotland average)";
+          });
+          bar.addEventListener("click", () => {
+            if (readout) readout.textContent = yr + ": " + val.toFixed(1) + " cm (Scotland average)";
+          });
+          wrap.appendChild(bar);
+        });
+      })();
+
       const mapEl = document.getElementById("scotlandMap");
       if (!mapEl || typeof L === "undefined") return;
 
@@ -4611,10 +4661,10 @@
 
           const years = Object.keys(daysByYear).map(Number);
           let series, unit, barLabel, yTitle, barColor, barBorder;
-          if (currentMetric === "accum") {
+          if (currentMetric === "accum" || currentMetric === "stripes") {
             series = years.map(y => +accumByYear[y].toFixed(1));
             unit = " cm/yr";
-            barLabel = "Annual Snowfall Accumulation (cm)";
+            barLabel = currentMetric === "stripes" ? "Annual Snowfall Stripes (cm)" : "Annual Snowfall Accumulation (cm)";
             yTitle = "Total Snowfall (cm / year)";
             barColor = "rgba(125, 211, 252, 0.45)";
             barBorder = "rgba(125, 211, 252, 0.9)";
@@ -4659,42 +4709,77 @@
 
           if (chartInstance) chartInstance.destroy();
           const ctx = document.getElementById("snowChart").getContext("2d");
-          chartInstance = new Chart(ctx, {
-            data: {
-              labels: years,
-              datasets: [
-                {
-                  type: "bar",
-                  label: barLabel,
-                  data: series,
-                  backgroundColor: barColor,
-                  borderColor: barBorder,
-                  borderWidth: 1,
-                  borderRadius: 2
+          if (currentMetric === "stripes") {
+            const stripeColors = series.map(v => snowStripeColor(v, maxVal));
+            chartInstance = new Chart(ctx, {
+              type: "bar",
+              data: {
+                labels: years,
+                datasets: [{
+                  label: "Snowfall Accumulation (cm)",
+                  data: years.map(() => 1),
+                  backgroundColor: stripeColors,
+                  borderWidth: 0,
+                  categoryPercentage: 1.0,
+                  barPercentage: 1.0
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: "index", intersect: false },
+                plugins: {
+                  legend: { display: false },
+                  tooltip: {
+                    callbacks: {
+                      label: (ctxItem) => "Snowfall: " + series[ctxItem.dataIndex].toFixed(1) + " cm (Dark blue = " + maxVal.toFixed(1) + " cm, White = 0 cm)"
+                    }
+                  }
                 },
-                {
-                  type: "line",
-                  label: "10-Year Rolling Mean",
-                  data: rolling10,
-                  borderColor: "#fbbf24",
-                  backgroundColor: "#fbbf24",
-                  borderWidth: 2.4,
-                  pointRadius: 0,
-                  tension: 0.25
+                scales: {
+                  x: { ticks: { color: "#94a3b8", maxTicksLimit: 12 }, grid: { display: false } },
+                  y: { display: false, min: 0, max: 1 }
                 }
-              ]
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              interaction: { mode: "index", intersect: false },
-              plugins: { legend: { labels: { color: "#cbd5e1", font: { size: 11 } } } },
-              scales: {
-                x: { ticks: { color: "#94a3b8", maxTicksLimit: 12 }, grid: { color: "rgba(255,255,255,0.05)" } },
-                y: { beginAtZero: true, title: { display: true, text: yTitle, color: "#94a3b8" }, ticks: { color: "#94a3b8" }, grid: { color: "rgba(255,255,255,0.08)" } }
               }
-            }
-          });
+            });
+          } else {
+            chartInstance = new Chart(ctx, {
+              data: {
+                labels: years,
+                datasets: [
+                  {
+                    type: "bar",
+                    label: barLabel,
+                    data: series,
+                    backgroundColor: barColor,
+                    borderColor: barBorder,
+                    borderWidth: 1,
+                    borderRadius: 2
+                  },
+                  {
+                    type: "line",
+                    label: "10-Year Rolling Mean",
+                    data: rolling10,
+                    borderColor: "#fbbf24",
+                    backgroundColor: "#fbbf24",
+                    borderWidth: 2.4,
+                    pointRadius: 0,
+                    tension: 0.25
+                  }
+                ]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: "index", intersect: false },
+                plugins: { legend: { labels: { color: "#cbd5e1", font: { size: 11 } } } },
+                scales: {
+                  x: { ticks: { color: "#94a3b8", maxTicksLimit: 12 }, grid: { color: "rgba(255,255,255,0.05)" } },
+                  y: { beginAtZero: true, title: { display: true, text: yTitle, color: "#94a3b8" }, ticks: { color: "#94a3b8" }, grid: { color: "rgba(255,255,255,0.08)" } }
+                }
+              }
+            });
+          }
           loadingEl.style.display = "none";
         } catch (err) {
           loadingEl.textContent = "Could not load historical snowfall data (" + err.message + "). Please check your connection.";
