@@ -30,7 +30,7 @@
       page: "Denialism & Delay",
       url: "denialism.html",
       tags: "denialism delay media silence headlines too expensive only 1 percent 1958 ipcc ar6 tipping points net zero",
-      desc: "Why climate change rarely leads the news, why 'too expensive' and 'only 1%' fail, and why 60 years of verified physics show even immediate Net Zero crosses tipping points."
+      desc: "Why climate change rarely leads the news, why 'too expensive' and 'only 1%' fail, and why 60 years of verified physical reality show even immediate Net Zero crosses tipping points."
     },
     {
       title: "Earth's Energy Imbalance (Plain-English Intro)",
