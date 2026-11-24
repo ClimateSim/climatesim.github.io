@@ -154,7 +154,7 @@
   <div class="container">
     <header>
       <div class="title-block">
-        <h1>❄️ Snow in Scotland <span class="version-badge">v7.0.1</span></h1>
+        <h1>❄️ Snow in Scotland <span class="version-badge">v7.1.0</span></h1>
         <p class="subtitle">
           Interactive map of <strong>350 Scottish towns &amp; municipalities</strong> with population &ge; 2,000. Click any town to graph historical <strong>snow days per year (1940–2025)</strong>—86 years of daily weather records.
         </p>
@@ -259,6 +259,10 @@
       <div class="chart-wrap">
         <div class="loading-state" id="chartLoading">Loading 86 years (1940–2025) of daily snowfall records...</div>
         <canvas id="snowChart"></canvas>
+      </div>
+
+      <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.76rem; color: #94a3b8; line-height: 1.5;">
+        <strong style="color: #7dd3fc;">📊 Snow Data Source:</strong> Daily snowfall (1940–2025) fetched live from the <a href="https://open-meteo.com/en/docs/historical-weather-api" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: underline;">Open-Meteo Historical Weather API ↗</a> using <strong>Copernicus / ECMWF ERA5 Reanalysis</strong> (hourly/daily gridded atmospheric records back to 1940, ~11–25 km resolution). Town coordinates &amp; populations (&ge; 2,000) from <a href="https://www.geonames.org/" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: underline;">GeoNames ↗</a>.
       </div>
     </div>
   </div>
