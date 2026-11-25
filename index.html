@@ -2686,7 +2686,7 @@
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <div class="brand-title" id="headerTitle">Earth's Energy Imbalance</div>
-              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v7.2.0</span>
+              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v7.2.1</span>
             </div>
             <div style="font-size: 0.75rem; color: var(--text-muted);" id="headerSubtitle">How greenhouse gases trap heat and warm the planet</div>
           </div>
@@ -4280,7 +4280,7 @@
         <span>·</span>
         <button type="button" id="btnFeedbackFooter" onclick="openFeedbackModal()" style="background: rgba(56, 189, 248, 0.12); color: var(--cyan); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 6px; padding: 2px 10px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">💬 Send Feedback</button>
         <span>·</span>
-        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v7.2.0</span>
+        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v7.2.1</span>
       </div>
       <div style="font-size: 0.76rem; color: #64748b; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
         <span>&copy; 2026 Earth Energy Balance Simulator Project</span>
@@ -4592,6 +4592,9 @@
               </div>
               <div style="font-size: 0.78rem; color: #cbd5e1; line-height: 1.45;">
                 Coal and gas power plants burn fuel to boil water to spin a steam turbine, wasting <strong>55% to 65% of chemical energy</strong> into cooling towers and rivers. Solar PV, wind turbines, and hydro generators convert sunlight, wind kinetics, and gravitational water head directly into electricity without thermal Carnot smokestack waste.
+                <div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(255,255,255,0.12); color: #94a3b8;">
+                  <strong style="color: #fde68a;">Thermodynamic Ceiling:</strong> This waste is dictated by the fundamental laws of thermodynamics (Carnot limits). While incremental engineering tweaks to engine designs or materials can still squeeze out fractions of a percent, physical law prevents getting much more useful work out of any process built on exothermic reactions between oxygen and fossilised carbon.
+                </div>
               </div>
             </div>
 
@@ -4751,7 +4754,7 @@
           <div class="toc-card">
             <h3 style="margin-top: 0; border: none; color: #fff; display: flex; align-items: center; justify-content: space-between;">
               <span>Documentation Overview</span>
-              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v7.2.0</span>
+              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v7.2.1</span>
             </h3>
             
             <!-- User Commentary & Context Note -->
@@ -6423,7 +6426,7 @@
             • <b>Thermal Power Plants (Coal/Gas):</b> Reject 50% to 65% of chemical energy into cooling towers and rivers.
           </div>
           <p>
-            <strong>The Bottom Line:</strong> Because electrified devices waste far less energy, fully replacing 135,000 TWh of fossil primary energy requires only <strong>~70,000 to ~80,000 TWh/yr of clean useful electricity</strong> (we adopt <strong>75,000 TWh/yr</strong> as the central planetary benchmark).
+            <strong>The Bottom Line:</strong> Because electrified devices bypass these Carnot limits and waste far less energy, fully replacing 135,000 TWh of fossil primary energy requires only <strong>~70,000 to ~80,000 TWh/yr of clean useful electricity</strong> (we adopt <strong>75,000 TWh/yr</strong> as the central planetary benchmark). This gap is governed by the fundamental laws of thermodynamics: although incremental design or material improvements can still yield fractions of a percent, you cannot extract much more useful work from a process relying on exothermic reactions between oxygen and fossilised carbon.
             <button type="button" class="btn btn-secondary" onclick="openWhy75kModal()" style="font-size: 0.74rem; padding: 3px 10px; margin-left: 8px; color: var(--cyan); border-color: rgba(0, 229, 255, 0.4); display: inline-flex; align-items: center; gap: 4px; vertical-align: middle;">
               ⚡ Open 75,000 TWh Explainer Popup ⓘ
             </button>
@@ -7116,7 +7119,7 @@
           </div>
 
           <p>
-            <strong>The Electrification Efficiency Dividend:</strong> Although electricity generation must roughly double by 2050, <em>total British primary energy input falls by approximately 35% to 45%</em>. Burning petrol in an internal combustion engine wastes ~75% of energy as friction and tailpipe heat; an electric motor converts >90% into motion. A condensing gas boiler burns 1.1 kWh of methane for every 1.0 kWh of heat; an air-to-water heat pump consumes 1.0 kWh of electricity to extract 3.0 to 4.0 kWh of heat from outside air (COP 3.0–4.0). Electrifying the UK eliminates the combustion of over <strong>300 billion kWh/year of imported oil and natural gas</strong>, replacing it with ~90 billion kWh of clean electricity.
+            <strong>The Electrification Efficiency Dividend:</strong> Although electricity generation must roughly double by 2050, <em>total British primary energy input falls by approximately 35% to 45%</em>. Burning petrol in an internal combustion engine wastes ~75% of energy as friction and tailpipe heat—an unavoidable consequence of the laws of thermodynamics, where new designs or materials can only ever add fractions of a percent because you cannot get much more out of exothermic reactions between oxygen and fossilised carbon. An electric motor, by contrast, converts &gt;90% into motion. A condensing gas boiler burns 1.1 kWh of methane for every 1.0 kWh of heat; an air-to-water heat pump consumes 1.0 kWh of electricity to extract 3.0 to 4.0 kWh of heat from outside air (COP 3.0–4.0). Electrifying the UK eliminates the combustion of over <strong>300 billion kWh/year of imported oil and natural gas</strong>, replacing it with ~90 billion kWh of clean electricity.
           </p>
 
           <h4>3. Diurnal Profiles, Peak Demand &amp; The Winter "Dünkelflaute"</h4>
