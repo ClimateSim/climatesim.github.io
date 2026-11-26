@@ -1581,6 +1581,30 @@
       </div>
     </section>
 
+    <!-- COLLAPSIBLE PANEL: ARCTIC SEA ICE COLLAPSE & ICE-ALBEDO FEEDBACK -->
+    <section id="arctic-sea-ice" class="projections-section cs-panel cs-panel-collapsed">
+      <div class="cs-panel-header">
+        <h2 class="section-title" style="margin: 0;"><span>🧊</span> Arctic Sea Ice Collapse &amp; Ice–Albedo Feedback</h2>
+        <button type="button" class="cs-panel-toggle-btn" aria-expanded="false"><span class="cs-panel-chevron">▾</span><span class="cs-panel-toggle-label">Show</span></button>
+      </div>
+      <div class="cs-panel-body" style="margin-top: 14px;">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px;">
+          <span style="font-size: 0.74rem; font-family: var(--font-mono); font-weight: 700; color: #7dd3fc; background: rgba(56, 189, 248, 0.14); border: 1px solid rgba(56, 189, 248, 0.35); padding: 3px 10px; border-radius: 999px;">
+            −42% Sept Extent · −72% Ice Volume (1979–2025) · 4× Arctic Amplification
+          </span>
+          <a href="arctic_sea_ice.html" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 13px; border-radius: 7px; background: rgba(56, 189, 248, 0.16); border: 1.5px solid #38bdf8; color: #7dd3fc; font-weight: 700; font-size: 0.78rem; text-decoration: none;">
+            🧊 Open Interactive Arctic Sea Ice &amp; Albedo Lab →
+          </a>
+        </div>
+        <p style="font-size: 0.88rem; color: #cbd5e1; line-height: 1.6; margin: 0 0 10px 0;">
+          Bright snow-covered sea ice reflects <strong>~60–85%</strong> of incoming sunlight, whereas dark open Arctic ocean absorbs <strong>~90–94%</strong>. As greenhouse warming melts summer sea ice, the exposed dark ocean absorbs extra solar heat, accelerating regional warming to nearly <strong>4× the global average</strong> (Rantanen et al. 2022) and weakening the polar jet stream that steers UK weather systems. Satellite records (NSIDC) and PIOMAS volume models show September sea-ice volume has fallen by over <strong>70% since 1979</strong>, with first practically ice-free Septembers projected in the 2030s–2050s.
+        </p>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; font-size: 0.76rem; color: #94a3b8; align-items: center;">
+          <span>Sources: <a href="https://nsidc.org/sea-ice-today" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: underline;">NSIDC Sea Ice Index ↗</a> · <a href="https://psc.apl.uw.edu/research/projects/arctic-sea-ice-volume-anomaly/" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: underline;">PIOMAS Ice Volume ↗</a> · <a href="https://doi.org/10.1038/s43247-022-00498-3" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: underline;">Rantanen et al. (2022) ↗</a> · <a href="https://doi.org/10.1038/s41467-023-38511-8" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: underline;">Kim et al. (2023) ↗</a></span>
+        </div>
+      </div>
+    </section>
+
     <!-- SECTION: THE 5 MAJOR CONSEQUENCE PILLARS OVER 500 YEARS -->
     <section class="cs-pillars-section cs-panel cs-panel-collapsed">
       <div class="cs-panel-header">
@@ -4485,8 +4509,9 @@
       });
 
       function openSnowHash() {
-        if (window.location.hash === "#snow-in-scotland") {
-          const sp = document.getElementById("snow-in-scotland");
+        const hashId = window.location.hash.replace(/^#/, "");
+        if (hashId === "snow-in-scotland" || hashId === "arctic-sea-ice" || hashId === "glacier-melting") {
+          const sp = document.getElementById(hashId);
           if (sp) {
             setPanelExpanded(sp, true);
             setTimeout(() => sp.scrollIntoView({ behavior: "smooth", block: "start" }), 120);
