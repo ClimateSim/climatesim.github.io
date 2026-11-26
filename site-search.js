@@ -5,11 +5,11 @@
 
   const SITE_SEARCH_INDEX = [
     {
-      title: "What's New on ClimateSim (Recent 10-Day Changelog)",
+      title: "What's New on ClimateSim (Changelog & Recent Updates)",
       page: "What's New",
       url: "whats_new.html",
       tags: "whats new changelog updates releases frost days 30c stripes million year slider snow scotland arctic sea ice denialism",
-      desc: "Rolling 10-day summary of new ClimateSim charts, Met Office datasets, and interactive features with direct links."
+      desc: "Running changelog of new ClimateSim charts, Met Office datasets, and interactive features with direct links."
     },
     {
       title: "UK Air Frost Days Stripes (1931–2025) & CET Days ≥ 30°C Stripes (1878–2025)",
