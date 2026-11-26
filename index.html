@@ -1619,6 +1619,105 @@
       color: #fff;
       box-shadow: 0 0 16px rgba(245, 158, 11, 0.45);
     }
+    /* Time Span Selector Bar Below Main Warming Chart */
+    .chart-span-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 10px;
+      margin-top: 8px;
+      padding: 8px 12px;
+      border-radius: 7px;
+      background: rgba(11, 19, 32, 0.88);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+    }
+    .chart-span-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .chart-span-readout {
+      font-family: ui-monospace, monospace;
+      color: var(--cyan);
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .chart-span-presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      align-items: center;
+    }
+    .span-preset-btn {
+      padding: 4px 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      font-family: ui-monospace, monospace;
+      border-radius: 5px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border);
+      color: #cbd5e1;
+      cursor: pointer;
+      transition: all 0.14s ease;
+      white-space: nowrap;
+    }
+    .span-preset-btn:hover {
+      border-color: var(--cyan);
+      color: #fff;
+      background: rgba(0, 229, 255, 0.14);
+    }
+    .span-preset-btn.active {
+      background: var(--cyan);
+      border-color: var(--cyan);
+      color: #020617;
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+    }
+    .span-slider-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 1 1 200px;
+      min-width: 175px;
+    }
+    .span-step-btn {
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--border);
+      color: var(--cyan);
+      font-weight: 800;
+      font-size: 0.85rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0;
+      transition: all 0.14s ease;
+    }
+    .span-step-btn:hover {
+      border-color: var(--cyan);
+      background: rgba(0, 229, 255, 0.18);
+      color: #fff;
+    }
+    #chartSpanSlider {
+      flex: 1;
+      accent-color: #00e5ff;
+      cursor: pointer;
+      margin: 0;
+    }
+    .span-bound-lbl {
+      font-size: 0.68rem;
+      font-family: ui-monospace, monospace;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .app-wrapper.simple-mode .chart-span-bar,
     .app-wrapper.simple-mode .chart-actions-bottom,
     .app-wrapper.simple-mode #btnZoomKeeling {
       display: none !important;
@@ -2686,7 +2785,7 @@
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <div class="brand-title" id="headerTitle">Earth's Energy Imbalance</div>
-              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v7.3.0</span>
+              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v7.3.1</span>
             </div>
             <div style="font-size: 0.75rem; color: var(--text-muted);" id="headerSubtitle">How greenhouse gases trap heat and warm the planet</div>
           </div>
@@ -2888,6 +2987,30 @@
               <span style="font-size: 0.7rem; color: var(--text-muted);" id="bubbleStepCount">Step 1 of 5</span>
               <button class="bubble-nav-btn" id="bubbleNextBtn">Next →</button>
             </div>
+          </div>
+        </div>
+
+        <!-- Time Span Selector Bar (500 yr to 100,000 yr in 500-yr increments) -->
+        <div class="chart-span-bar" id="chartSpanBar">
+          <div class="chart-span-label">
+            <span>⏳ Span:</span>
+            <span class="chart-span-readout" id="chartSpanReadout">500 yrs (1750–2250 CE)</span>
+          </div>
+          <div class="chart-span-presets" id="chartSpanPresets">
+            <button type="button" class="span-preset-btn active" data-span="500" title="Default 500-year span (1750–2250 CE)">500y</button>
+            <button type="button" class="span-preset-btn" data-span="1000" title="1,000-year span (1250–2250 CE)">1,000y</button>
+            <button type="button" class="span-preset-btn" data-span="1500" title="1,500-year span (750–2250 CE)">1,500y</button>
+            <button type="button" class="span-preset-btn" data-span="2000" title="2,000-year span (250–2250 CE)">2,000y</button>
+            <button type="button" class="span-preset-btn" data-span="10000" title="10,000-year Holocene span (7,750 BCE–2250 CE)">10ky</button>
+            <button type="button" class="span-preset-btn" data-span="25000" title="25,000-year Last Glacial Maximum span (22,750 BCE–2250 CE)">25ky</button>
+            <button type="button" class="span-preset-btn" data-span="100000" title="100,000-year full glacial cycle span (97,750 BCE–2250 CE)">100ky</button>
+          </div>
+          <div class="span-slider-wrap" title="Adjust chart time span in 500-year increments (500 to 100,000 years)">
+            <button type="button" class="span-step-btn" id="btnSpanMinus" title="Decrease span by 500 years" aria-label="Decrease span by 500 years">−</button>
+            <span class="span-bound-lbl">500y</span>
+            <input type="range" id="chartSpanSlider" min="500" max="100000" step="500" value="500" aria-label="Chart time span in years">
+            <span class="span-bound-lbl">100ky</span>
+            <button type="button" class="span-step-btn" id="btnSpanPlus" title="Increase span by 500 years" aria-label="Increase span by 500 years">+</button>
           </div>
         </div>
 
@@ -4280,7 +4403,7 @@
         <span>·</span>
         <button type="button" id="btnFeedbackFooter" onclick="openFeedbackModal()" style="background: rgba(56, 189, 248, 0.12); color: var(--cyan); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 6px; padding: 2px 10px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">💬 Send Feedback</button>
         <span>·</span>
-        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v7.3.0</span>
+        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v7.3.1</span>
       </div>
       <div style="font-size: 0.76rem; color: #64748b; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
         <span>&copy; 2026 Earth Energy Balance Simulator Project</span>
@@ -4754,7 +4877,7 @@
           <div class="toc-card">
             <h3 style="margin-top: 0; border: none; color: #fff; display: flex; align-items: center; justify-content: space-between;">
               <span>Documentation Overview</span>
-              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v7.3.0</span>
+              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v7.3.1</span>
             </h3>
             
             <!-- User Commentary & Context Note -->
@@ -7754,6 +7877,7 @@
         rate: 2.5,
         isNZ2050: false,
         isZoomed: false, // Instrumental Keeling Era zoom view (1958–2026)
+        chartSpanYears: 500, // Configurable historical span ending 2250 CE (500 to 100,000 yrs in 500-yr steps)
         showEnergy: false, // Optional bright blue curve for Atmospheric Heat Energy (ZJ)
         deltaTs: BASELINE_1958_PT.deltaTs,
         deltaTd: BASELINE_1958_PT.deltaTd,
@@ -9450,12 +9574,31 @@
         const tGridW = tGridRight - tGridLeft;
 
         // Chart Title (Placed cleanly in dedicated header band ABOVE the grid)
+        const activeSpan = state.chartSpanYears || 500;
+        const isExtendedSpan = !state.isZoomed && activeSpan > 500;
+        const yrStart = state.isZoomed ? 1958 : (2250 - activeSpan);
+        const yrEnd = state.isZoomed ? 2026 : 2250;
+        const yrSpan = yrEnd - yrStart;
+
+        function formatSimYear(yr, compact) {
+          const r = Math.round(yr);
+          if (r > 0) return compact ? `${r}` : `${r} CE`;
+          if (r === 0) return compact ? "0" : "1 BCE";
+          const absYr = Math.abs(r);
+          if (compact && absYr >= 10000) {
+            const kVal = absYr / 1000;
+            return `${Number.isInteger(kVal) ? kVal : kVal.toFixed(1)}k BCE`;
+          }
+          return `${absYr.toLocaleString()} BCE`;
+        }
+
         const titleFontSize = tGridW < 400 ? 11 : (tGridW < 600 ? 13 : 15);
         ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
         ctx.font = `bold ${titleFontSize}px system-ui, -apple-system, sans-serif`;
+        const spanRangeStr = yrStart > 0 ? `${yrStart}–${yrEnd} CE` : `${formatSimYear(yrStart, false)}–${yrEnd} CE`;
         const chartTitle = state.isZoomed
           ? "INSTRUMENTAL ERA ZOOM (1958–2026 CE) · KEELING OBSERVATIONAL ERA"
-          : "500-YEAR WARMING TRAJECTORY (1750–2250 CE)";
+          : `${activeSpan.toLocaleString()}-YEAR WARMING TRAJECTORY (${spanRangeStr})`;
         ctx.fillText(chartTitle, tGridLeft, 16);
 
         // Subtitle Legend (Placed cleanly in header band ABOVE the grid)
@@ -9481,27 +9624,35 @@
             ctx.fillText("■ Atmospheric CO₂ (ppm)", co2X, legY);
           }
         } else {
+          let curLegX = legLeft;
+          if (isExtendedSpan) {
+            ctx.fillStyle = "#10b981";
+            const paleoLbl = "■ Paleoclimate Proxy (Ice Cores)";
+            ctx.fillText(paleoLbl, curLegX, legY);
+            curLegX += ctx.measureText(paleoLbl).width + 12;
+          }
+
           ctx.fillStyle = "#f59e0b";
-          ctx.fillText("■ Actual Observed History (1750–2026, 5-yr smoothed)", legLeft, legY);
-          const dtHistLegendW = ctx.measureText("■ Actual Observed History (1750–2026, 5-yr smoothed)").width;
+          const obsLbl = isExtendedSpan ? "■ Observed (1750–2026)" : "■ Actual Observed History (1750–2026, 5-yr smoothed)";
+          ctx.fillText(obsLbl, curLegX, legY);
+          curLegX += ctx.measureText(obsLbl).width + 12;
 
           ctx.fillStyle = "#f43f5e";
-          const dtSimLegendX = legLeft + dtHistLegendW + 14;
-          ctx.fillText("■ Simulated Warming (1958–2250)", dtSimLegendX, legY);
-          const dtSimLegendW = ctx.measureText("■ Simulated Warming (1958–2250)").width;
+          const simLbl = "■ Simulated Warming (1958–2250)";
+          ctx.fillText(simLbl, curLegX, legY);
+          curLegX += ctx.measureText(simLbl).width + 12;
 
           ctx.fillStyle = "#c084fc";
           if (isHeaderTwoLine) {
             ctx.fillText("■ Atmospheric CO₂ (ppm)", legLeft, 44);
           } else {
-            const co2LegendX = dtSimLegendX + dtSimLegendW + 14;
-            ctx.fillText("■ Atmospheric CO₂ (ppm)", co2LegendX, legY);
+            ctx.fillText("■ Atmospheric CO₂ (ppm)", curLegX, legY);
             const co2LegendW = ctx.measureText("■ Atmospheric CO₂ (ppm)").width;
 
-            if (tGridW > 960) {
+            if (tGridW > 960 && !isExtendedSpan) {
               ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
               ctx.font = "italic 9px system-ui, -apple-system, sans-serif";
-              ctx.fillText("(IPCC AR6 Observational Baseline · 1750 starts at -0.12°C)", co2LegendX + co2LegendW + 14, legY);
+              ctx.fillText("(IPCC AR6 Observational Baseline · 1750 starts at -0.12°C)", curLegX + co2LegendW + 14, legY);
             }
           }
         }
@@ -9512,11 +9663,25 @@
         ctx.strokeStyle = "rgba(51, 65, 85, 0.55)";
         ctx.strokeRect(tGridLeft, tGridTop, tGridW, tGridH);
 
-        const yrStart = state.isZoomed ? 1958 : 1750;
-        const yrEnd = state.isZoomed ? 2026 : 2250;
-        const yrSpan = yrEnd - yrStart;
+        // Compute dynamic lower bounds when extended into paleoclimate ice-age epochs
+        let minPaleoDt = 0;
+        let minPaleoCo2 = 278;
+        const hasPaleoData = isExtendedSpan && typeof paleoKeyframes !== "undefined";
+        if (hasPaleoData) {
+          const bpStart = yrStart - 1750;
+          const sampleSteps = 140;
+          for (let i = 0; i <= sampleSteps; i++) {
+            const bp = bpStart + (i / sampleSteps) * (0 - bpStart);
+            const p = getPaleoAtYear(bp);
+            const dtIpcc = p.dt - OFFSET_1850_1900;
+            if (dtIpcc < minPaleoDt) minPaleoDt = dtIpcc;
+            if (p.co2 < minPaleoCo2) minPaleoCo2 = p.co2;
+          }
+        }
 
-        const tempMin = state.isZoomed ? 0.0 : -0.5;
+        const tempMin = state.isZoomed
+          ? 0.0
+          : (hasPaleoData && minPaleoDt < -0.35 ? Math.max(-6.8, Math.floor((minPaleoDt - 0.5) * 2) / 2) : -0.5);
         const tempMax = state.isZoomed ? 1.6 : 6.0;
         const tempSpan = tempMax - tempMin;
 
@@ -9545,7 +9710,7 @@
           expectedPeakCo2 = state.co2;
         }
 
-        const co2Min = state.isZoomed ? 300 : 200;
+        const co2Min = state.isZoomed ? 300 : (hasPaleoData && minPaleoCo2 < 210 ? 160 : 200);
         // Default to 600 ppm minimum; smoothly scale up in 50 ppm increments if expected peak exceeds 570 ppm
         const targetMax = Math.max(600, Math.ceil((expectedPeakCo2 + 25) / 50) * 50);
         const co2Max = state.isZoomed ? 440 : targetMax;
@@ -9563,7 +9728,8 @@
           [320, 340, 360, 380, 400, 420].forEach(c => co2Ticks.push(c));
         } else {
           const step = co2Max <= 700 ? 50 : 100;
-          for (let c = 250; c <= co2Max; c += step) {
+          const startTick = co2Min < 200 ? 200 : 250;
+          for (let c = startTick; c <= co2Max; c += step) {
             if (c >= co2Min && c <= co2Max) co2Ticks.push(c);
           }
         }
@@ -9646,7 +9812,7 @@
               ctx.textAlign = "left";
             }
           }
-        } else {
+        } else if (!isExtendedSpan) {
           const yearStep = tGridW < 550 ? 50 : 25;
           for (let yr = 1750; yr <= 2250; yr += 25) {
             const x = yrToX(yr);
@@ -9666,10 +9832,53 @@
               ctx.textAlign = "left";
             }
           }
+        } else {
+          // Adaptive X-axis ticks for extended historical spans (1,000 yr to 100,000 yr)
+          const maxLabels = Math.max(4, Math.floor(tGridW / (yrSpan >= 10000 ? 84 : 68)));
+          const niceSteps = [100, 200, 250, 500, 1000, 2000, 2500, 5000, 10000, 20000, 25000];
+          let majorStep = niceSteps[niceSteps.length - 1];
+          for (const s of niceSteps) {
+            if (yrSpan / s <= maxLabels) { majorStep = s; break; }
+          }
+          const minorStep = majorStep / 2;
+          const firstTick = Math.ceil(yrStart / minorStep) * minorStep;
+          let lastLabelRight = -999;
+          for (let yr = firstTick; yr <= yrEnd; yr += minorStep) {
+            const x = yrToX(yr);
+            const isMajor = Math.abs(yr % majorStep) < 1e-6;
+            ctx.strokeStyle = isMajor ? "rgba(148, 163, 184, 0.45)" : "rgba(148, 163, 184, 0.18)";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(x, tGridBottom);
+            ctx.lineTo(x, tGridBottom + (isMajor ? 5 : 2.5));
+            ctx.stroke();
+
+            if (isMajor) {
+              const lbl = formatSimYear(yr, true);
+              ctx.font = "10.5px ui-monospace, monospace";
+              const lw = ctx.measureText(lbl).width;
+              if (x - lw / 2 > lastLabelRight + 6 && x + lw / 2 <= tGridRight + 8) {
+                ctx.fillStyle = "rgba(148, 163, 184, 0.88)";
+                ctx.textAlign = "center";
+                ctx.fillText(lbl, x, tGridBottom + 16);
+                ctx.textAlign = "left";
+                lastLabelRight = x + lw / 2;
+              }
+            }
+          }
         }
 
         // Threshold Reference Lines (Evaluated directly on standard 1850–1900 baseline)
-        const tempThresholds = state.isZoomed ? [0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.5] : [0.0, 1.5, 2.0, 3.0, 4.0, 5.0];
+        let tempThresholds;
+        if (state.isZoomed) {
+          tempThresholds = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.5];
+        } else {
+          tempThresholds = [];
+          [-6.0, -4.0, -2.0].forEach(negTh => {
+            if (negTh >= tempMin + 0.15) tempThresholds.push(negTh);
+          });
+          [0.0, 1.5, 2.0, 3.0, 4.0, 5.0].forEach(posTh => tempThresholds.push(posTh));
+        }
         tempThresholds.forEach(th => {
           const y = dtToY(th);
           const isParis = th === 1.5;
@@ -9677,16 +9886,21 @@
           if (isParis) ctx.setLineDash([3, 3]);
           ctx.beginPath(); ctx.moveTo(tGridLeft, y); ctx.lineTo(tGridRight, y); ctx.stroke();
           if (isParis) ctx.setLineDash([]);
-          ctx.fillStyle = th === 0.0 ? "#94a3b8" : (isParis ? "#f59e0b" : "#94a3b8");
+          ctx.fillStyle = th === 0.0 ? "#94a3b8" : (isParis ? "#f59e0b" : (th < 0 ? "#6ee7b7" : "#94a3b8"));
           ctx.font = "bold 9px ui-monospace, monospace";
-          const label = th === 0.0 ? "0.0°C (Baseline)" : (isParis ? "+1.5°C (Paris)" : `+${th.toFixed(1)}°C`);
+          const label = th === 0.0 ? "0.0°C (Baseline)" : (isParis ? "+1.5°C (Paris)" : `${th > 0 ? "+" : ""}${th.toFixed(1)}°C`);
           ctx.fillText(label, tGridLeft + 3, y - 2);
         });
 
         // 1958 Keeling Boundary Marker
         const keelingX = yrToX(1958);
+        const present2026X = yrToX(2026);
+        const nz2050X = yrToX(2050);
         const keelingFontSize = tGridW < 400 ? 10 : 12;
-        if (!state.isZoomed) {
+        const showKeelingMarker = !state.isZoomed && activeSpan <= 2000 && (present2026X - keelingX >= 16);
+        const showNZ2050Marker = !state.isZoomed && activeSpan <= 1500 && (nz2050X - present2026X >= 14);
+
+        if (showKeelingMarker) {
           ctx.strokeStyle = "rgba(245, 158, 11, 0.55)";
           ctx.setLineDash([3, 3]);
           ctx.beginPath();
@@ -9705,7 +9919,6 @@
         }
 
         // 2026 Present-Day Static Boundary Marker
-        const present2026X = yrToX(2026);
         if (!state.isZoomed) {
           ctx.strokeStyle = "rgba(245, 158, 11, 0.55)";
           ctx.setLineDash([3, 3]);
@@ -9720,13 +9933,12 @@
           ctx.rotate(Math.PI / 2);
           ctx.fillStyle = "#f59e0b";
           ctx.font = `bold ${keelingFontSize}px ui-monospace, monospace`;
-          ctx.fillText("2026", 0, 0);
+          ctx.fillText(activeSpan > 2000 ? "2026 (Modern)" : "2026", 0, 0);
           ctx.restore();
         }
 
         // 2050 Paris Net Zero Target Boundary Marker
-        const nz2050X = yrToX(2050);
-        if (!state.isZoomed) {
+        if (showNZ2050Marker) {
           ctx.strokeStyle = state.isNZ2050 ? "rgba(16, 185, 129, 0.85)" : "rgba(16, 185, 129, 0.28)";
           ctx.lineWidth = state.isNZ2050 ? 1.5 : 1;
           ctx.setLineDash([3, 3]);
@@ -9748,7 +9960,7 @@
         // Floating action button position near 2050 Net Zero marker (or top right in zoom mode)
         const btnWhat = document.getElementById("btnWhatCanIDo");
         if (btnWhat) {
-          if (!state.isZoomed) {
+          if (!state.isZoomed && !isExtendedSpan) {
             const btnW = 195;
             let btnLeft = nz2050X + 14;
             if (btnLeft + btnW > tGridRight - 8) {
@@ -9764,6 +9976,59 @@
             btnWhat.style.top = "14px";
             btnWhat.style.display = "inline-flex";
           }
+        }
+
+        // 0. Pre-1750 Paleoclimate Proxy Curves (when span > 500 years)
+        if (hasPaleoData) {
+          const bpStart = yrStart - 1750;
+          const nSamples = Math.min(600, Math.max(160, Math.round(tGridW * 0.75)));
+
+          // 0a. Paleoclimate Ice-Core CO2 Curve (Dashed Purple, seamlessly joining 1750 CE at 278 ppm)
+          ctx.save();
+          ctx.strokeStyle = "rgba(192, 132, 252, 0.72)";
+          ctx.lineWidth = 1.6;
+          ctx.setLineDash([4, 3]);
+          ctx.beginPath();
+          for (let i = 0; i <= nSamples; i++) {
+            const frac = i / nSamples;
+            const bp = bpStart + frac * (0 - bpStart);
+            const calYr = 1750 + bp;
+            const p = getPaleoAtYear(bp);
+            const cx = yrToX(calYr);
+            const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, co2ToY(p.co2)));
+            if (i === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
+          }
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          // 0b. Paleoclimate Surface Temperature Curve (Emerald #10b981, seamlessly joining 1750 CE)
+          ctx.strokeStyle = "#10b981";
+          ctx.lineWidth = 2.0;
+          ctx.beginPath();
+          for (let i = 0; i <= nSamples; i++) {
+            const frac = i / nSamples;
+            const bp = bpStart + frac * (0 - bpStart);
+            const calYr = 1750 + bp;
+            const p = getPaleoAtYear(bp);
+            const dtIpcc = p.dt - OFFSET_1850_1900;
+            const cx = yrToX(calYr);
+            const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, dtToY(dtIpcc)));
+            if (i === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
+          }
+          ctx.stroke();
+
+          // Subtle landmark callout for Last Glacial Maximum when in view
+          const lgmCalYr = 1750 - 21000;
+          if (lgmCalYr > yrStart + yrSpan * 0.06 && lgmCalYr < 1750 - yrSpan * 0.06) {
+            const lgmX = yrToX(lgmCalYr);
+            const lgmY = dtToY(-6.0 - OFFSET_1850_1900);
+            ctx.fillStyle = "rgba(16, 185, 129, 0.88)";
+            ctx.font = "bold 9px ui-monospace, monospace";
+            ctx.textAlign = "center";
+            ctx.fillText("❄ Last Glacial Maximum (~21k BP · -6.0°C)", lgmX, Math.max(tGridTop + 14, lgmY - 8));
+            ctx.textAlign = "left";
+          }
+          ctx.restore();
         }
 
         // Plot Accumulated History: Static Historical Baseline vs Dynamic Simulation
@@ -9935,9 +10200,13 @@
           ctx.restore();
         }
 
-        // Helper to find temperature delta at a given year along the static historical curve (relative to 1850–1900 baseline)
+        // Helper to find temperature delta at a given year along the static historical or paleoclimate curve (relative to 1850–1900 baseline)
         function getHistoricalDeltaAt(yr) {
-          if (yr < 1750 || yr > 2026) return null;
+          if (yr < 1750) {
+            if (hasPaleoData) return getPaleoAtYear(yr - 1750).dt - OFFSET_1850_1900;
+            return null;
+          }
+          if (yr > 2026) return null;
           const pt = STATIC_HISTORICAL_RUN.find(p => Math.abs(p.year - yr) < 0.6);
           if (pt) return pt.deltaTs - OFFSET_1850_1900;
           for (let i = 0; i < STATIC_HISTORICAL_RUN.length - 1; i++) {
@@ -9973,9 +10242,12 @@
           return null;
         }
 
-        // Helper to find atmospheric CO2 (ppm) at a given year along the history curve
+        // Helper to find atmospheric CO2 (ppm) at a given year along the history or paleoclimate curve
         function getHistoricalCO2At(yr) {
-          if (yr < 1750) return null;
+          if (yr < 1750) {
+            if (hasPaleoData) return getPaleoAtYear(yr - 1750).co2;
+            return null;
+          }
           if (yr <= 2026) return getHistoricalCO2(yr);
           if (state.isZoomed || !state.history || state.history.length === 0 || state.year <= 2026) return null;
           const maxSimYr = state.history[state.history.length - 1].year;
@@ -10006,6 +10278,8 @@
             { yr: 2024 },
             { yr: 2026 }
           ];
+        } else if (activeSpan > 2000) {
+          markerTargets = [{ yr: 2026 }];
         } else {
           markerTargets = (state.isNZ2050 && state.year >= 2050)
             ? [{ yr: 1958 }, { yr: 2026 }, { yr: 2050 }]
@@ -10057,10 +10331,10 @@
                 bx = ix - bw - 8; by = iy - 22;
               }
             } else {
-              // Main 500-Year chart: Move labels for 1958 and today back to below and to the right!
-              if (targetYr === 2050) {
-                bx = Math.max(tGridLeft + 4, ix - bw - 8);
-                by = Math.min(tGridBottom - bh - 6, iy + 24);
+              // Main chart: place 2050 or wide-span 2026 badge to the LEFT of the curve so it never clips or obscures rising trajectories
+              if (targetYr === 2050 || activeSpan > 2000) {
+                bx = Math.max(tGridLeft + 4, ix - bw - 10);
+                by = Math.min(tGridBottom - bh - 6, iy + 20);
               } else {
                 bx = Math.min(tGridRight - bw - 4, ix + 10);
                 by = (targetYr === 1958)
@@ -10271,8 +10545,8 @@
           const measLineY = (measDt !== null && hoverYr >= 1958 && hoverYr <= 2026) ? dtToY(measDt) : -999;
           const co2LineY = hoverCo2 !== null ? co2ToY(hoverCo2) : -999;
 
-          // Emissions Altitude (z_eff) is drawn up to 2026, and beyond 2026 only if sim has reached hoverYr
-          const hasZeffLine = (!state.isZoomed || hoverYr >= 1958) && (hoverYr <= 2026 || (state.year > 2026 && hoverYr <= maxSimYr));
+          // Emissions Altitude (z_eff) is drawn from 1750 to 2026, and beyond 2026 only if sim has reached hoverYr
+          const hasZeffLine = hoverYr >= 1750 && (!state.isZoomed || hoverYr >= 1958) && (hoverYr <= 2026 || (state.year > 2026 && hoverYr <= maxSimYr));
           const curDeltaTs = (simDt !== null) ? (simDt + OFFSET_1850_1900) : ((hoverDt !== null) ? (hoverDt + OFFSET_1850_1900) : 0);
           const hoverZeff = hasZeffLine ? getEmissionsAltitudeM(hoverYr, curDeltaTs, hoverCo2 || 427.0) : null;
           const zeffLineY = hoverZeff !== null ? zEffToY(hoverZeff) : -999;
@@ -10403,11 +10677,17 @@
             isPointerHover = true;
             let tipText = "";
             let tipStroke = "#f59e0b";
-            if (hoverYr > 2026 && simDt !== null) {
+            if (hoverYr < 1750 && hoverDt !== null) {
+              const dtSign = hoverDt >= 0 ? "+" : "";
+              const co2Str = hoverCo2 !== null ? ` · CO₂: ${Math.round(hoverCo2)} ppm` : "";
+              tipText = `${formatSimYear(hoverYr, false)} · Paleo ΔT: ${dtSign}${hoverDt.toFixed(2)}°C${co2Str}`;
+              tipStroke = "#10b981";
+            } else if (hoverYr > 2026 && simDt !== null) {
               tipText = `${Math.round(hoverYr)} CE · Projected ΔT: +${simDt.toFixed(2)}°C`;
               tipStroke = "#f43f5e";
             } else if (hoverDt !== null) {
-              tipText = `${Math.round(hoverYr)} CE · Observed ΔT: +${hoverDt.toFixed(2)}°C`;
+              const dtSign = hoverDt >= 0 ? "+" : "";
+              tipText = `${Math.round(hoverYr)} CE · Observed ΔT: ${dtSign}${hoverDt.toFixed(2)}°C`;
               tipStroke = "#f59e0b";
             } else if (simDt !== null) {
               tipText = `${Math.round(hoverYr)} CE · Projected ΔT: +${simDt.toFixed(2)}°C`;
@@ -10430,7 +10710,7 @@
             active350Hitbox = false;
             isPointerHover = true;
             activeTip = {
-              text: `${Math.round(hoverYr)} CE · CO₂: ${Math.round(hoverCo2)} ppm`,
+              text: `${formatSimYear(hoverYr, false)} · ${hoverYr < 1750 ? "Ice-Core " : ""}CO₂: ${Math.round(hoverCo2)} ppm`,
               stroke: "#c084fc",
               compact: true,
               pointX: mousePos.x,
@@ -15476,6 +15756,65 @@
 
       const btnZoomKeeling = document.getElementById("btnZoomKeeling");
       if (btnZoomKeeling) btnZoomKeeling.addEventListener("click", toggleZoomKeeling);
+
+      // Configurable Historical Time Span Controls (500 to 100,000 years in 500-yr increments)
+      function formatSpanReadout(spanYears) {
+        const startYr = 2250 - spanYears;
+        const startStr = startYr > 0
+          ? `${startYr} CE`
+          : (startYr === 0 ? "1 BCE" : `${Math.abs(startYr).toLocaleString()} BCE`);
+        return `${spanYears.toLocaleString()} yrs (${startStr}–2250 CE)`;
+      }
+
+      function setChartSpan(years) {
+        const clamped = Math.max(500, Math.min(100000, Math.round(years / 500) * 500));
+        state.chartSpanYears = clamped;
+
+        // Exit Keeling instrumental zoom if active so the selected span is immediately visible
+        if (state.isZoomed) {
+          state.isZoomed = false;
+          const mainGrid = document.querySelector(".main-grid");
+          const appWrapper = document.getElementById("appWrapper");
+          if (mainGrid) mainGrid.classList.remove("chart-zoomed");
+          if (appWrapper) appWrapper.classList.remove("chart-zoomed");
+          const lbl = document.getElementById("lblZoomKeeling");
+          if (lbl) lbl.textContent = "Zoom: 1958–Today (Keeling Era)";
+          if (btnZoomKeeling) btnZoomKeeling.classList.remove("active");
+        }
+
+        const slider = document.getElementById("chartSpanSlider");
+        if (slider) slider.value = String(clamped);
+
+        const readout = document.getElementById("chartSpanReadout");
+        if (readout) readout.textContent = formatSpanReadout(clamped);
+
+        document.querySelectorAll("#chartSpanPresets .span-preset-btn").forEach(btn => {
+          const btnSpan = parseInt(btn.dataset.span, 10);
+          btn.classList.toggle("active", btnSpan === clamped);
+        });
+
+        requestAnimationFrame(() => draw());
+      }
+
+      const chartSpanSlider = document.getElementById("chartSpanSlider");
+      if (chartSpanSlider) {
+        chartSpanSlider.addEventListener("input", e => {
+          setChartSpan(parseInt(e.target.value, 10));
+        });
+      }
+      document.querySelectorAll("#chartSpanPresets .span-preset-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          setChartSpan(parseInt(btn.dataset.span, 10));
+        });
+      });
+      const btnSpanMinus = document.getElementById("btnSpanMinus");
+      if (btnSpanMinus) {
+        btnSpanMinus.addEventListener("click", () => setChartSpan((state.chartSpanYears || 500) - 500));
+      }
+      const btnSpanPlus = document.getElementById("btnSpanPlus");
+      if (btnSpanPlus) {
+        btnSpanPlus.addEventListener("click", () => setChartSpan((state.chartSpanYears || 500) + 500));
+      }
 
       // Atmospheric Energy Trajectory Curve Checkbox Toggle
       const chkShowEnergy = document.getElementById("chkShowEnergy");
