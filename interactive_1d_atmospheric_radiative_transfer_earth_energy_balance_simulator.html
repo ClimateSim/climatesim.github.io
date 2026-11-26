@@ -2818,7 +2818,7 @@
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <div class="brand-title" id="headerTitle">Earth's Energy Imbalance</div>
-              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v7.9.6</span>
+              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v7.9.7</span>
             </div>
             <div style="font-size: 0.75rem; color: var(--text-muted);" id="headerSubtitle">How greenhouse gases trap heat and warm the planet</div>
           </div>
@@ -4298,71 +4298,73 @@
               </div>
             </div>
 
-            <!-- Table of Fleet Breakdown -->
-            <table class="data-table" style="font-size: 0.76rem; margin-bottom: 8px;">
-              <thead>
-                <tr>
-                  <th>Technology</th>
-                  <th>Allocated Capacity</th>
-                  <th>Delivered Output</th>
-                  <th>Round-Trip Eff.</th>
-                  <th>Est. Build Capex</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>Pumped Hydro (PHS)</strong></td>
-                  <td id="dunkelRowPHSCap">30 GWh</td>
-                  <td id="dunkelRowPHSDel">0.023 TWh</td>
-                  <td>~75%</td>
-                  <td id="dunkelRowPHSCapex">£3.0 B</td>
-                </tr>
-                <tr>
-                  <td><strong>Grid Batteries (BESS)</strong></td>
-                  <td id="dunkelRowBESSCap">10 GWh</td>
-                  <td id="dunkelRowBESSDel">0.009 TWh</td>
-                  <td>~86%</td>
-                  <td id="dunkelRowBESSCapex">£1.3 B</td>
-                </tr>
-                <tr>
-                  <td><strong>Compressed Air (CAES)</strong></td>
-                  <td id="dunkelRowCAESCap">200 GWh</td>
-                  <td id="dunkelRowCAESDel">0.124 TWh</td>
-                  <td>~62%</td>
-                  <td id="dunkelRowCAESCapex">£0.1 B</td>
-                </tr>
-                <tr>
-                  <td><strong>Hydrogen Salt Caverns</strong></td>
-                  <td id="dunkelRowH2Cap">32.0 TWh</td>
-                  <td id="dunkelRowH2Del">12.16 TWh</td>
-                  <td>~38%</td>
-                  <td id="dunkelRowH2Capex">£22.0 B</td>
-                </tr>
-              </tbody>
-            </table>
+            <!-- Annotated SVG Chart: Target Storage Fleet vs. Required Deficit -->
+            <div style="background: rgba(15, 23, 42, 0.55); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px 12px; margin-bottom: 10px;">
+              <svg id="dunkelChartBalanceSvg" viewBox="0 0 540 138" style="width: 100%; height: auto; display: block;" aria-label="Annotated Storage Fleet vs Deficit Chart"></svg>
+            </div>
+
+            <details style="margin-bottom: 8px;">
+              <summary style="cursor: pointer; font-size: 0.75rem; color: #7dd3fc; font-weight: 700; user-select: none;">📋 Show Detailed Engineering Breakdown Table</summary>
+              <table class="data-table" style="font-size: 0.76rem; margin-top: 8px;">
+                <thead>
+                  <tr>
+                    <th>Technology</th>
+                    <th>Allocated Capacity</th>
+                    <th>Delivered Output</th>
+                    <th>Round-Trip Eff.</th>
+                    <th>Est. Build Capex</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Pumped Hydro (PHS)</strong></td>
+                    <td id="dunkelRowPHSCap">30 GWh</td>
+                    <td id="dunkelRowPHSDel">0.023 TWh</td>
+                    <td>~75%</td>
+                    <td id="dunkelRowPHSCapex">£3.0 B</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Grid Batteries (BESS)</strong></td>
+                    <td id="dunkelRowBESSCap">10 GWh</td>
+                    <td id="dunkelRowBESSDel">0.009 TWh</td>
+                    <td>~86%</td>
+                    <td id="dunkelRowBESSCapex">£1.3 B</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Compressed Air (CAES)</strong></td>
+                    <td id="dunkelRowCAESCap">200 GWh</td>
+                    <td id="dunkelRowCAESDel">0.124 TWh</td>
+                    <td>~62%</td>
+                    <td id="dunkelRowCAESCapex">£0.1 B</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Hydrogen Salt Caverns</strong></td>
+                    <td id="dunkelRowH2Cap">32.0 TWh</td>
+                    <td id="dunkelRowH2Del">12.16 TWh</td>
+                    <td>~38%</td>
+                    <td id="dunkelRowH2Capex">£22.0 B</td>
+                  </tr>
+                </tbody>
+              </table>
+            </details>
 
             <div id="dunkelFleetRealityNotice" style="margin-top: 8px; padding: 8px 12px; border-radius: 6px; font-size: 0.74rem; line-height: 1.45; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); color: #cbd5e1;">
               <!-- Populated dynamically by JS -->
             </div>
           </div>
 
-          <!-- Card 2: The "What if We Used Batteries Alone?" Eye-Opener -->
+          <!-- Card 2: The "What if We Used Batteries Alone?" Annotated Chart -->
           <div style="background: rgba(244, 63, 94, 0.05); border: 1.5px solid rgba(244, 63, 94, 0.35); border-radius: 8px; padding: 12px 16px;">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
               <strong style="color: #f43f5e; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;">
-                <span>⚠️</span> The "All-Battery Storage" Fallacy (Why We Need Hydrogen)
+                <span>⚠️</span> All-Battery vs. Hydrogen Caverns (<span id="dunkelTxtBatDeficit">12.5 TWh</span>)
               </strong>
               <span id="dunkelBadgeBatDiff" style="font-size: 0.68rem; font-family: ui-monospace, monospace; color: #f43f5e; background: rgba(244,63,94,0.15); padding: 1px 6px; border-radius: 4px;">71× More Expensive</span>
             </div>
-            <p style="font-size: 0.78rem; color: #cbd5e1; margin: 0 0 8px 0; line-height: 1.45;">
-              If Great Britain attempted to meet this <span id="dunkelTxtBatDeficit" style="font-weight: 700; color: #fff;">12.5 TWh</span> Dünkelflaute deficit using <strong>grid-scale lithium-ion batteries alone</strong>, the capital cost would be:
-            </p>
-            <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; flex-wrap: wrap;">
-              <span id="dunkelValAllBat" style="font-size: 1.4rem; font-weight: 800; color: #f43f5e; font-family: ui-monospace, monospace;">£1,890 Billion</span>
-              <span id="dunkelValAllBatNote" style="font-size: 0.78rem; color: #fda4af;">(£1.89 Trillion — comparable to UK national debt)</span>
-            </div>
-            <div style="font-size: 0.74rem; color: #94a3b8; line-height: 1.4;">
-              By contrast, storing green hydrogen in <strong>underground salt caverns</strong> provides the same multi-week energy security for <strong id="dunkelValH2Compare" style="color: #34d399;">~£26 Billion</strong>. Batteries are vital for fast 2-to-4 hour intraday balancing, but chemically and economically impossible for multi-week seasonal storage.
+            <svg id="dunkelChartCapexSvg" viewBox="0 0 540 112" style="width: 100%; height: auto; display: block; margin-bottom: 6px;" aria-label="Annotated Capex Comparison: Batteries Alone vs Hydrogen Caverns"></svg>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; font-size: 0.74rem; color: #94a3b8;">
+              <span>Batteries alone: <strong id="dunkelValAllBat" style="color: #fda4af;">£1,890 Billion</strong> <span id="dunkelValAllBatNote"></span></span>
+              <span>H₂ caverns: <strong id="dunkelValH2Compare" style="color: #34d399;">~£26 Billion</strong></span>
             </div>
           </div>
 
@@ -4401,9 +4403,7 @@
               </div>
             </div>
 
-            <div style="font-size: 0.72rem; color: #94a3b8; line-height: 1.35;">
-              💡 <em>Whether funded through general taxation (+0.37p on the basic rate) or through a regulated grid standing charge on electricity bills (~£7/month per household), this represents the insurance premium guaranteeing 100% continuous power during freezing, windless winter blocks.</em>
-            </div>
+            <svg id="dunkelChartFiscalSvg" viewBox="0 0 540 84" style="width: 100%; height: auto; display: block; margin-top: 4px;" aria-label="Annotated Household Cost vs Typical UK Energy Bill"></svg>
           </div>
 
         </div>
@@ -4436,7 +4436,7 @@
         <span>·</span>
         <button type="button" id="btnFeedbackFooter" onclick="openFeedbackModal()" style="background: rgba(56, 189, 248, 0.12); color: var(--cyan); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 6px; padding: 2px 10px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">💬 Send Feedback</button>
         <span>·</span>
-        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v7.9.6</span>
+        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v7.9.7</span>
       </div>
       <div style="font-size: 0.76rem; color: #64748b; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
         <span>&copy; 2026 Earth Energy Balance Simulator Project</span>
@@ -4910,7 +4910,7 @@
           <div class="toc-card">
             <h3 style="margin-top: 0; border: none; color: #fff; display: flex; align-items: center; justify-content: space-between;">
               <span>Documentation Overview</span>
-              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v7.9.6</span>
+              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v7.9.7</span>
             </h3>
             
             <!-- User Commentary & Context Note -->
@@ -13736,6 +13736,81 @@
         if (fiscalPerTaxpayer) fiscalPerTaxpayer.textContent = `£${Math.round(costPerTaxpayer)} / year`;
         const fiscalPerHousehold = document.getElementById("dunkelFiscalPerHousehold");
         if (fiscalPerHousehold) fiscalPerHousehold.textContent = `£${(costPerHousehold / 12).toFixed(2)} / month`;
+
+        // Annotated SVG Chart 1: Storage Fleet vs Required Deficit
+        const balSvg = document.getElementById("dunkelChartBalanceSvg");
+        if (balSvg) {
+          const maxScale = Math.max(reqEnergy, delTotal, 1);
+          const barW = 350;
+          const x0 = 115;
+          const reqW = (reqEnergy / maxScale) * barW;
+          const wH2 = (delH2 / maxScale) * barW;
+          const wCAES = (delCAES / maxScale) * barW;
+          const wBESS = (delBESS / maxScale) * barW;
+          const wPHS = (delPHS / maxScale) * barW;
+          const gapTWh = Math.max(0, reqEnergy - delTotal);
+          const gapW = (gapTWh / maxScale) * barW;
+          let curX = x0;
+          const segH2 = `<rect x="${curX}" y="66" width="${Math.max(0, wH2)}" height="24" rx="3" fill="#c084fc"/>`; curX += wH2;
+          const segCAES = `<rect x="${curX}" y="66" width="${Math.max(0, wCAES)}" height="24" fill="#10b981"/>`; curX += wCAES;
+          const segBESS = `<rect x="${curX}" y="66" width="${Math.max(0, wBESS)}" height="24" fill="#38bdf8"/>`; curX += wBESS;
+          const segPHS = `<rect x="${curX}" y="66" width="${Math.max(0, wPHS)}" height="24" fill="#f59e0b"/>`; curX += wPHS;
+          const segGap = gapW > 1 ? `<rect x="${curX}" y="66" width="${gapW}" height="24" rx="3" fill="rgba(244,63,94,0.22)" stroke="#f43f5e" stroke-width="1.2" stroke-dasharray="3,2"/>` : "";
+          balSvg.innerHTML = `
+            <text x="8" y="34" fill="#fda4af" font-size="11" font-weight="700" font-family="system-ui,sans-serif">Winter Deficit</text>
+            <rect x="${x0}" y="18" width="${reqW}" height="24" rx="4" fill="rgba(244,63,94,0.75)"/>
+            <text x="${x0 + reqW + 8}" y="34" fill="#fda4af" font-size="11" font-weight="700" font-family="ui-monospace,monospace">${reqEnergy.toFixed(1)} TWh (~${Math.round(peakGW)} GW peak)</text>
+            <text x="8" y="82" fill="#7dd3fc" font-size="11" font-weight="700" font-family="system-ui,sans-serif">Clean Fleet</text>
+            ${segH2}${segCAES}${segBESS}${segPHS}${segGap}
+            <text x="${x0 + delTotal / maxScale * barW + gapW + 8}" y="82" fill="${gapTWh > 0.1 ? '#fbbf24' : '#34d399'}" font-size="11" font-weight="700" font-family="ui-monospace,monospace">${delFmt} TWh${gapTWh > 0.1 ? ' (-' + gapTWh.toFixed(1) + ' gas)' : ' (100%)'}</text>
+            <line x1="${x0 + reqW}" y1="12" x2="${x0 + reqW}" y2="98" stroke="rgba(255,255,255,0.35)" stroke-dasharray="3,3"/>
+            <text x="${x0}" y="122" fill="#c084fc" font-size="10" font-family="system-ui,sans-serif">■ H₂ Caverns: ${delH2.toFixed(1)} TWh</text>
+            <text x="${x0 + 135}" y="122" fill="#10b981" font-size="10" font-family="system-ui,sans-serif">■ CAES: ${delCAES.toFixed(2)}</text>
+            <text x="${x0 + 230}" y="122" fill="#38bdf8" font-size="10" font-family="system-ui,sans-serif">■ BESS: ${delBESS.toFixed(2)}</text>
+            <text x="${x0 + 320}" y="122" fill="#f59e0b" font-size="10" font-family="system-ui,sans-serif">■ PHS: ${delPHS.toFixed(2)}</text>
+          `;
+        }
+
+        // Annotated SVG Chart 2: All-Battery vs Hydrogen Caverns Capex
+        const capexSvg = document.getElementById("dunkelChartCapexSvg");
+        if (capexSvg) {
+          const maxCap = Math.max(capexAllBat, capexAllH2, 1);
+          const bw = 320;
+          const x0 = 125;
+          const wBat = (capexAllBat / maxCap) * bw;
+          const wH2 = Math.max(4, (capexAllH2 / maxCap) * bw);
+          capexSvg.innerHTML = `
+            <text x="6" y="30" fill="#fda4af" font-size="11" font-weight="700" font-family="system-ui,sans-serif">Batteries Alone</text>
+            <rect x="${x0}" y="14" width="${wBat}" height="24" rx="4" fill="rgba(244,63,94,0.8)"/>
+            <text x="${x0 + 8}" y="30" fill="#fff" font-size="11" font-weight="800" font-family="ui-monospace,monospace">£${Math.round(capexAllBat).toLocaleString()}B</text>
+            <text x="${x0 + wBat + 6}" y="30" fill="#fda4af" font-size="10" font-weight="700" font-family="system-ui,sans-serif">${Math.round(batMultiplier)}× cost</text>
+            <text x="6" y="72" fill="#34d399" font-size="11" font-weight="700" font-family="system-ui,sans-serif">H₂ Salt Caverns</text>
+            <rect x="${x0}" y="56" width="${wH2}" height="24" rx="3" fill="#10b981"/>
+            <text x="${x0 + wH2 + 8}" y="72" fill="#34d399" font-size="11" font-weight="800" font-family="ui-monospace,monospace">~£${Math.round(capexAllH2)}B (Same ${reqEnergy.toFixed(1)} TWh security)</text>
+            <text x="${x0}" y="102" fill="#94a3b8" font-size="10" font-family="system-ui,sans-serif">Batteries handle 2–4 hr peaks; salt caverns store multi-week winter reserves.</text>
+          `;
+        }
+
+        // Annotated SVG Chart 3: Household Monthly Insurance vs Typical UK Energy Bill
+        const fiscalSvg = document.getElementById("dunkelChartFiscalSvg");
+        if (fiscalSvg) {
+          const monthly = costPerHousehold / 12;
+          const typBill = 140;
+          const maxB = Math.max(typBill, monthly, 10);
+          const bw = 320;
+          const x0 = 130;
+          const wTyp = (typBill / maxB) * bw;
+          const wIns = Math.max(4, (monthly / maxB) * bw);
+          fiscalSvg.innerHTML = `
+            <text x="6" y="24" fill="#94a3b8" font-size="10.5" font-weight="600" font-family="system-ui,sans-serif">Typical UK Bill</text>
+            <rect x="${x0}" y="11" width="${wTyp}" height="18" rx="3" fill="rgba(148,163,184,0.35)"/>
+            <text x="${x0 + wTyp + 8}" y="24" fill="#cbd5e1" font-size="10.5" font-family="ui-monospace,monospace">~£140/mo</text>
+            <text x="6" y="56" fill="#34d399" font-size="10.5" font-weight="700" font-family="system-ui,sans-serif">Storage Insurance</text>
+            <rect x="${x0}" y="43" width="${wIns}" height="18" rx="3" fill="#34d399"/>
+            <text x="${x0 + wIns + 8}" y="56" fill="#34d399" font-size="10.5" font-weight="800" font-family="ui-monospace,monospace">£${monthly.toFixed(2)}/mo (+${taxRatePence.toFixed(2)}p basic tax)</text>
+            <text x="${x0}" y="77" fill="#94a3b8" font-size="9.5" font-family="system-ui,sans-serif">25-yr life @ 5% WACC + 2% O&amp;M — prevents winter blackouts without gas.</text>
+          `;
+        }
       }
 
       
