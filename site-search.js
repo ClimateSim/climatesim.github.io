@@ -117,11 +117,11 @@
       desc: "Interactive treemap & ranked table of annual, cumulative historical, and per-capita emissions with Top 20 exclusions."
     },
     {
-      title: "Climate Change Performance Index (CCPI Country Ranking ↗)",
-      page: "External · ccpi.org",
-      url: "https://ccpi.org/ranking/",
+      title: "Climate Change Performance Index (CCPI Country Ranking)",
+      page: "GHG Sources",
+      url: "index.html#country-emissions",
       tags: "ccpi ranking climate change performance index country comparison policy renewables germanwatch",
-      desc: "Independent monitoring tool comparing 63 countries & EU across emissions, renewables, energy use, and climate policy."
+      desc: "Independent monitoring tool comparing 63 countries & EU across emissions, renewables, energy use, and climate policy (linked in Country Emissions)."
     },
     {
       title: "Fossil Fuel Breakdown & What Replaces It",
