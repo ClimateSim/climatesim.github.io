@@ -2785,7 +2785,7 @@
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <div class="brand-title" id="headerTitle">Earth's Energy Imbalance</div>
-              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v7.3.2</span>
+              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v7.3.3</span>
             </div>
             <div style="font-size: 0.75rem; color: var(--text-muted);" id="headerSubtitle">How greenhouse gases trap heat and warm the planet</div>
           </div>
@@ -4403,7 +4403,7 @@
         <span>·</span>
         <button type="button" id="btnFeedbackFooter" onclick="openFeedbackModal()" style="background: rgba(56, 189, 248, 0.12); color: var(--cyan); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 6px; padding: 2px 10px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">💬 Send Feedback</button>
         <span>·</span>
-        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v7.3.2</span>
+        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v7.3.3</span>
       </div>
       <div style="font-size: 0.76rem; color: #64748b; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
         <span>&copy; 2026 Earth Energy Balance Simulator Project</span>
@@ -4877,7 +4877,7 @@
           <div class="toc-card">
             <h3 style="margin-top: 0; border: none; color: #fff; display: flex; align-items: center; justify-content: space-between;">
               <span>Documentation Overview</span>
-              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v7.3.2</span>
+              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v7.3.3</span>
             </h3>
             
             <!-- User Commentary & Context Note -->
@@ -7706,6 +7706,17 @@
     </button>
   </div>
 
+  <!-- PALEOCLIMATE INTERGLACIAL PEAK RESEARCH POPOVER -->
+  <div class="safe-350-popover" id="paleoPeakPopover" style="border-color: rgba(245, 158, 11, 0.55); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85), 0 0 18px rgba(245, 158, 11, 0.25); max-width: 340px;">
+    <div class="s350-header">
+      <div class="s350-title" id="paleoPeakTitle" style="color: #fbbf24;">☀️ Interglacial Peak</div>
+      <button class="s350-close" id="paleoPeakCloseBtn" title="Close">&times;</button>
+    </div>
+    <div class="s350-stats" id="paleoPeakStats"></div>
+    <div class="s350-note" id="paleoPeakNote" style="font-size: 0.77rem; line-height: 1.48; color: #cbd5e1;"></div>
+    <div id="paleoPeakLinks" style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px;"></div>
+  </div>
+
   <!-- SNOWBALL EARTH & EUNICE FOOTE POPOVER (Outside canvas-container, never truncated) -->
   <div class="snowball-foote-popover" id="snowballFootePopover">
     <div class="sf-header">
@@ -8501,6 +8512,186 @@
       let isHoveringPaleoTpBadge = false;
       let tpHideTimer = null;
       let mainChartTpHitboxes = [];
+      let paleoPeakHitboxes = [];
+      const PALEO_PEAKS = [
+        {
+          yrBP: -6000,
+          shortLabel: "Holocene",
+          title: "Holocene Thermal Maximum (~6,000 BP)",
+          priority: 2,
+          note: "Mid-Holocene warmth driven by Northern Hemisphere summer orbital insolation (Milankovitch precession). Global mean warmth peaked near +0.3 °C above 1850–1900, rising slowly over millennia before gradual Neoglacial cooling.",
+          links: [
+            { label: "Kaufman et al. (2020) · Nature Scientific Data (Temp12k)", url: "https://doi.org/10.1038/s41597-020-0530-7" },
+            { label: "Marcott et al. (2013) · Science (11,300-Yr Reconstruction)", url: "https://doi.org/10.1126/science.1228026" }
+          ]
+        },
+        {
+          yrBP: -95000,
+          shortLabel: "MIS 5c",
+          title: "MIS 5c Interstadial (~95,000 BP)",
+          priority: 3,
+          note: "Warm interstadial rebound during the early last glacial cycle, driven by rising Northern Hemisphere summer insolation before cooling into MIS 4.",
+          links: [
+            { label: "PAGES Past Interglacials (2016) · Reviews of Geophysics", url: "https://doi.org/10.1002/2015RG000482" }
+          ]
+        },
+        {
+          yrBP: -125000,
+          shortLabel: "Eemian (MIS 5e)",
+          title: "Eemian Interglacial Peak (MIS 5e · ~125,000 BP)",
+          priority: 1,
+          note: "The warmest interglacial of the last 800,000 years (~+1.3 °C above 1850–1900), with global sea level 6–9 m higher than today due to partial Greenland and Antarctic ice-sheet melt—yet warming took ~10,000 years.",
+          links: [
+            { label: "Hoffman et al. (2017) · Science (Last Interglacial SST)", url: "https://doi.org/10.1126/science.aai8464" },
+            { label: "Dutton et al. (2015) · Science (Past Warm Period Sea Level)", url: "https://doi.org/10.1126/science.aaa4019" }
+          ]
+        },
+        {
+          yrBP: -200000,
+          shortLabel: "MIS 7a",
+          title: "MIS 7a Interglacial Sub-Peak (~200,000 BP)",
+          priority: 3,
+          note: "Secondary warm substage of Marine Isotope Stage 7 preceding the penultimate glacial maximum (MIS 6).",
+          links: [
+            { label: "PAGES Past Interglacials (2016) · Reviews of Geophysics", url: "https://doi.org/10.1002/2015RG000482" }
+          ]
+        },
+        {
+          yrBP: -242000,
+          shortLabel: "MIS 7e",
+          title: "MIS 7e Interglacial Peak (~242,000 BP)",
+          priority: 1,
+          note: "Sharp, relatively brief interglacial peak following Termination III, reaching near-pre-industrial CO₂ (~276 ppm) and moderate global warmth.",
+          links: [
+            { label: "PAGES Past Interglacials (2016) · Reviews of Geophysics", url: "https://doi.org/10.1002/2015RG000482" },
+            { label: "Jouzel et al. (2007) · Science (EPICA Dome C 800 kyr)", url: "https://doi.org/10.1126/science.1141038" }
+          ]
+        },
+        {
+          yrBP: -325000,
+          shortLabel: "MIS 9",
+          title: "MIS 9 Interglacial Peak (~325,000 BP)",
+          priority: 1,
+          note: "Pronounced warm interglacial following Termination IV with the highest pre-industrial Pleistocene ice-core CO₂ (~295–300 ppm) and global temperatures ~+1.0 °C above 1850–1900.",
+          links: [
+            { label: "Lüthi et al. (2008) · Nature (800-kyr Ice-Core CO₂)", url: "https://doi.org/10.1038/nature06949" },
+            { label: "PAGES Past Interglacials (2016) · Reviews of Geophysics", url: "https://doi.org/10.1002/2015RG000482" }
+          ]
+        },
+        {
+          yrBP: -410000,
+          shortLabel: "MIS 11",
+          title: "MIS 11 Super-Interglacial (~410,000 BP)",
+          priority: 1,
+          note: "Exceptionally long (~30,000-yr) interglacial following Termination V, often studied as an orbital analogue for the Holocene; sea level reached +6 to +13 m above present.",
+          links: [
+            { label: "Raymo & Mitrovica (2012) · Nature (MIS 11 Ice Sheet Collapse)", url: "https://doi.org/10.1038/nature10891" },
+            { label: "PAGES Past Interglacials (2016) · Reviews of Geophysics", url: "https://doi.org/10.1002/2015RG000482" }
+          ]
+        },
+        {
+          yrBP: -490000,
+          shortLabel: "MIS 13",
+          title: "MIS 13 Interglacial (~490,000 BP)",
+          priority: 2,
+          note: "Cooler 'lukewarm' interglacial of the mid-Pleistocene with lower atmospheric CO₂ (~256 ppm) and larger residual Northern Hemisphere ice sheets.",
+          links: [
+            { label: "PAGES Past Interglacials (2016) · Reviews of Geophysics", url: "https://doi.org/10.1002/2015RG000482" }
+          ]
+        },
+        {
+          yrBP: -620000,
+          shortLabel: "MIS 15",
+          title: "MIS 15 Interglacial (~620,000 BP)",
+          priority: 2,
+          note: "Mid-Pleistocene interglacial preceding the severe MIS 16 glacial maximum, documented in both EPICA Dome C ice cores and the LR04 benthic stack.",
+          links: [
+            { label: "Jouzel et al. (2007) · Science (EPICA Dome C 800 kyr)", url: "https://doi.org/10.1126/science.1141038" },
+            { label: "Lisiecki & Raymo (2005) · Paleoceanography (LR04 Stack)", url: "https://doi.org/10.1029/2004PA001071" }
+          ]
+        },
+        {
+          yrBP: -790000,
+          shortLabel: "MIS 19",
+          title: "MIS 19 Interglacial (~790,000 BP)",
+          priority: 1,
+          note: "Closest orbital analogue to our current Holocene interglacial (low eccentricity, similar precession phasing), coinciding with the Brunhes–Matuyama magnetic reversal.",
+          links: [
+            { label: "Tzedakis et al. (2012) · Nature Geoscience (MIS 19 Analogue)", url: "https://doi.org/10.1038/ngeo1358" },
+            { label: "PAGES Past Interglacials (2016) · Reviews of Geophysics", url: "https://doi.org/10.1002/2015RG000482" }
+          ]
+        },
+        {
+          yrBP: -960000,
+          shortLabel: "MIS 25",
+          title: "MIS 25 Interglacial (~960,000 BP)",
+          priority: 2,
+          note: "Early Mid-Pleistocene Transition interglacial occurring during the shift from 41,000-year obliquity cycles to 100,000-year glacial cycles.",
+          links: [
+            { label: "Lisiecki & Raymo (2005) · Paleoceanography (LR04 Stack)", url: "https://doi.org/10.1029/2004PA001071" },
+            { label: "Clark et al. (2006) · Quaternary Science Reviews (MPT)", url: "https://doi.org/10.1016/j.quascirev.2006.07.008" }
+          ]
+        }
+      ];
+
+      const paleoPeakPopoverEl = document.getElementById("paleoPeakPopover");
+      const paleoPeakTitleEl = document.getElementById("paleoPeakTitle");
+      const paleoPeakStatsEl = document.getElementById("paleoPeakStats");
+      const paleoPeakNoteEl = document.getElementById("paleoPeakNote");
+      const paleoPeakLinksEl = document.getElementById("paleoPeakLinks");
+      const paleoPeakCloseBtn = document.getElementById("paleoPeakCloseBtn");
+
+      function closePaleoPeakPopover() {
+        if (paleoPeakPopoverEl) paleoPeakPopoverEl.style.display = "none";
+      }
+      if (paleoPeakCloseBtn) {
+        paleoPeakCloseBtn.addEventListener("click", closePaleoPeakPopover);
+      }
+
+      function openPaleoPeakPopover(hb, clientX, clientY) {
+        if (!paleoPeakPopoverEl || !hb) return;
+        const pk = hb.peak;
+        if (paleoPeakTitleEl) paleoPeakTitleEl.textContent = `☀️ ${pk.title}`;
+        const tSign = hb.tPeakIpcc >= 0 ? "+" : "";
+        const t1750Sign = hb.tPeak1750 >= 0 ? "+" : "";
+        const dSign = hb.deltaT100 >= 0 ? "+" : "";
+        if (paleoPeakStatsEl) {
+          paleoPeakStatsEl.innerHTML = `
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px; gap: 8px;">
+              <span>Peak T: <strong style="color: #fbbf24;">${tSign}${hb.tPeakIpcc.toFixed(2)} °C</strong></span>
+              <span style="color: #94a3b8;">CO₂: <strong style="color: #c084fc;">${Math.round(hb.co2Peak)} ppm</strong></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted); gap: 8px;">
+              <span>ΔT (100 yrs pre-peak): <strong style="color: #38bdf8;">${dSign}${hb.deltaT100.toFixed(3)} °C</strong></span>
+              <span>rel. 1750: ${t1750Sign}${hb.tPeak1750.toFixed(2)} °C</span>
+            </div>
+          `;
+        }
+        if (paleoPeakNoteEl) paleoPeakNoteEl.textContent = pk.note;
+        if (paleoPeakLinksEl) {
+          paleoPeakLinksEl.innerHTML = pk.links.map(lk =>
+            `<a href="${lk.url}" target="_blank" rel="noopener noreferrer" class="s350-link-btn" style="text-decoration: none; text-align: left; display: block; border-color: rgba(245, 158, 11, 0.4); color: #fbbf24; background: rgba(245, 158, 11, 0.09); font-size: 0.72rem; padding: 6px 9px;">📄 ${lk.label} ↗</a>`
+          ).join("");
+        }
+
+        paleoPeakPopoverEl.style.display = "block";
+        const popW = Math.min(340, window.innerWidth - 20);
+        const popH = paleoPeakPopoverEl.offsetHeight || 220;
+        let left = clientX - popW / 2;
+        left = Math.max(10, Math.min(window.innerWidth - popW - 10, left));
+        let top = clientY + 14;
+        if (top + popH > window.innerHeight - 10) {
+          top = Math.max(10, clientY - popH - 14);
+        }
+        paleoPeakPopoverEl.style.left = `${Math.round(left)}px`;
+        paleoPeakPopoverEl.style.top = `${Math.round(top)}px`;
+      }
+
+      document.addEventListener("click", e => {
+        if (paleoPeakPopoverEl && paleoPeakPopoverEl.style.display === "block" && !paleoPeakPopoverEl.contains(e.target) && e.target !== canvas) {
+          closePaleoPeakPopover();
+        }
+      });
       let paleoChartTpHitboxes = [];
 
       // Measured Temperature Line Interactive Tooltip & Guide Link
@@ -9148,6 +9339,13 @@
           }
           return;
         }
+        for (const hb of paleoPeakHitboxes) {
+          if (mx >= hb.x1 && mx <= hb.x2 && my >= hb.y1 && my <= hb.y2) {
+            openPaleoPeakPopover(hb, e.clientX, e.clientY);
+            return;
+          }
+        }
+        closePaleoPeakPopover();
         for (const hb of mainChartTpHitboxes) {
           if (mx >= hb.x1 && mx <= hb.x2 && my >= hb.y1 && my <= hb.y2) {
             openTippingPointCard(hb.grp, hb.crossYr, rect.left + hb.anchorX, rect.top + hb.anchorY, true, hb.itemIdx);
@@ -10021,18 +10219,112 @@
           }
           ctx.stroke();
 
-          // Subtle landmark callout for Last Glacial Maximum when in view
+          // Subtle landmark callout for Last Glacial Maximum when in view (clamped inside chart bounds)
           const lgmCalYr = 1750 - 21000;
-          if (lgmCalYr > yrStart + yrSpan * 0.06 && lgmCalYr < 1750 - yrSpan * 0.06) {
-            const lgmX = yrToX(lgmCalYr);
+          if (lgmCalYr > yrStart + yrSpan * 0.05 && lgmCalYr < 1750 - yrSpan * 0.05) {
+            const lgmTxt = "❄ LGM (~21k BP · -6.0°C)";
+            ctx.font = "bold 9px ui-monospace, monospace";
+            const lgmW = ctx.measureText(lgmTxt).width;
+            const lgmX = Math.max(tGridLeft + lgmW / 2 + 6, Math.min(tGridRight - lgmW / 2 - 6, yrToX(lgmCalYr)));
             const lgmY = dtToY(-6.0 - OFFSET_1850_1900);
             ctx.fillStyle = "rgba(245, 158, 11, 0.90)";
-            ctx.font = "bold 9px ui-monospace, monospace";
             ctx.textAlign = "center";
-            ctx.fillText("❄ Last Glacial Maximum (~21k BP · -6.0°C)", lgmX, Math.max(tGridTop + 14, lgmY - 8));
+            ctx.fillText(lgmTxt, lgmX, Math.max(tGridTop + 14, lgmY - 8));
             ctx.textAlign = "left";
           }
+
+          // Clickable Paleoclimate Interglacial Peak Badges (Peak T, ΔT over preceding 100 yrs, & research popover)
+          paleoPeakHitboxes = [];
+          const visiblePeaks = PALEO_PEAKS
+            .map(pk => {
+              const calYr = 1750 + pk.yrBP;
+              if (calYr < yrStart + yrSpan * 0.02 || calYr > 1750 - yrSpan * 0.015) return null;
+              const pNow = getPaleoAtYear(pk.yrBP);
+              const pPrev100 = getPaleoAtYear(pk.yrBP - 100);
+              const tPeak1750 = pNow.dt;
+              const tPeakIpcc = pNow.dt - OFFSET_1850_1900;
+              const deltaT100 = pNow.dt - pPrev100.dt;
+              return { peak: pk, calYr, tPeak1750, tPeakIpcc, deltaT100, co2Peak: pNow.co2, px: yrToX(calYr), py: dtToY(tPeakIpcc) };
+            })
+            .filter(Boolean)
+            .sort((a, b) => (a.peak.priority - b.peak.priority) || (b.tPeakIpcc - a.tPeakIpcc));
+
+          const placedPeakBoxes = [];
+          const compactPeak = tGridW < 520;
+          visiblePeaks.forEach(item => {
+            const tSign = item.tPeakIpcc >= 0 ? "+" : "";
+            const dSign = item.deltaT100 >= 0 ? "+" : "";
+            const line1 = `${item.peak.shortLabel} · ${tSign}${item.tPeakIpcc.toFixed(1)}°C`;
+            const line2 = `Δ100y: ${dSign}${item.deltaT100.toFixed(2)}°C ↗`;
+            ctx.font = compactPeak ? "bold 8.5px ui-monospace, monospace" : "bold 9px ui-monospace, monospace";
+            const bw = Math.max(ctx.measureText(line1).width, ctx.measureText(line2).width) + 12;
+            const bh = compactPeak ? 24 : 26;
+
+            // Try placing badge above peak (shifted slightly left per convention), then slightly higher if needed
+            let bx = Math.max(tGridLeft + 4, Math.min(tGridRight - bw - 4, item.px - bw * 0.55));
+            let by = Math.max(tGridTop + 4, item.py - bh - 12);
+
+            let overlaps = placedPeakBoxes.some(b => bx < b.bx + b.bw + 5 && bx + bw + 5 > b.bx && by < b.by + b.bh + 4 && by + bh + 4 > b.by);
+            if (overlaps) {
+              // Try stacking cleanly one tier above
+              const altBy = by - bh - 6;
+              if (altBy >= tGridTop + 4) {
+                const altOverlaps = placedPeakBoxes.some(b => bx < b.bx + b.bw + 5 && bx + bw + 5 > b.bx && altBy < b.by + b.bh + 4 && altBy + bh + 4 > b.by);
+                if (!altOverlaps) {
+                  by = altBy;
+                  overlaps = false;
+                }
+              }
+            }
+            if (overlaps) return;
+
+            placedPeakBoxes.push({ bx, by, bw, bh });
+
+            // Thin leader line from badge bottom to peak dot
+            ctx.strokeStyle = "rgba(245, 158, 11, 0.72)";
+            ctx.lineWidth = 1.1;
+            ctx.beginPath();
+            ctx.moveTo(Math.max(bx + 4, Math.min(bx + bw - 4, item.px)), by + bh);
+            ctx.lineTo(item.px, item.py);
+            ctx.stroke();
+
+            // Glowing dot right on the peak tip
+            ctx.fillStyle = "rgba(245, 158, 11, 0.32)";
+            ctx.beginPath(); ctx.arc(item.px, item.py, 6, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = "#f59e0b";
+            ctx.beginPath(); ctx.arc(item.px, item.py, 3.2, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath(); ctx.arc(item.px, item.py, 1.4, 0, Math.PI * 2); ctx.fill();
+
+            // Solid opaque clickable badge
+            ctx.fillStyle = "rgba(7, 13, 23, 0.94)";
+            ctx.strokeStyle = "rgba(245, 158, 11, 0.82)";
+            ctx.lineWidth = 1.1;
+            ctx.beginPath();
+            ctx.roundRect(bx, by, bw, bh, 4);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = "#fbbf24";
+            ctx.fillText(line1, bx + 6, by + (compactPeak ? 10 : 11));
+            ctx.fillStyle = "#7dd3fc";
+            ctx.fillText(line2, bx + 6, by + (compactPeak ? 20 : 22));
+
+            paleoPeakHitboxes.push({
+              peak: item.peak,
+              tPeak1750: item.tPeak1750,
+              tPeakIpcc: item.tPeakIpcc,
+              deltaT100: item.deltaT100,
+              co2Peak: item.co2Peak,
+              x1: Math.min(bx - 2, item.px - 8),
+              x2: Math.max(bx + bw + 2, item.px + 8),
+              y1: Math.min(by - 2, item.py - 8),
+              y2: Math.max(by + bh + 2, item.py + 8)
+            });
+          });
           ctx.restore();
+        } else {
+          paleoPeakHitboxes = [];
         }
 
         // Plot Accumulated History: Static Historical Baseline vs Dynamic Simulation
@@ -10525,6 +10817,12 @@
         const iy2026 = dtVal2026 !== null ? dtToY(dtVal2026) : -999;
 
         if (mousePos.active && mousePos.x >= tGridLeft && mousePos.x <= tGridRight && mousePos.y >= tGridTop && mousePos.y <= tGridBottom) {
+          for (const hb of paleoPeakHitboxes) {
+            if (mousePos.x >= hb.x1 && mousePos.x <= hb.x2 && mousePos.y >= hb.y1 && mousePos.y <= hb.y2) {
+              isPointerHover = true;
+              break;
+            }
+          }
           for (const hb of mainChartTpHitboxes) {
             if (mousePos.x >= hb.x1 && mousePos.x <= hb.x2 && mousePos.y >= hb.y1 && mousePos.y <= hb.y2) {
               hoveredMainTp = hb;
