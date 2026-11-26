@@ -2225,6 +2225,39 @@
       box-shadow: 0 0 12px rgba(16, 185, 129, 0.45);
     }
 
+    /* Universal Mobile-Safe Scrolling & Viewport Cap for All Floating Popups */
+    .tipping-point-card,
+    .measured-temp-popover,
+    .safe-350-popover,
+    .sources-sector-popover,
+    .sol-method-popover,
+    .emitter-dropdown-menu,
+    .pwa-anchor-popover,
+    .bubble-popup-card {
+      max-height: calc(100vh - 20px);
+      max-height: calc(100dvh - 20px);
+      max-width: calc(100vw - 20px);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      touch-action: pan-y;
+      box-sizing: border-box;
+    }
+    .snowball-foote-popover,
+    .rest-world-popover {
+      max-height: min(540px, calc(100vh - 20px));
+      max-height: min(540px, calc(100dvh - 20px));
+      max-width: calc(100vw - 20px);
+      overscroll-behavior: contain;
+    }
+    .snowball-foote-popover .sf-body,
+    .rest-world-popover .rw-popover-list {
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      touch-action: pan-y;
+    }
+
     /* Modal Documentation & Tabs */
     .modal-overlay {
       display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.88);
@@ -2785,7 +2818,7 @@
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <div class="brand-title" id="headerTitle">Earth's Energy Imbalance</div>
-              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v7.3.3</span>
+              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v7.3.4</span>
             </div>
             <div style="font-size: 0.75rem; color: var(--text-muted);" id="headerSubtitle">How greenhouse gases trap heat and warm the planet</div>
           </div>
@@ -4403,7 +4436,7 @@
         <span>·</span>
         <button type="button" id="btnFeedbackFooter" onclick="openFeedbackModal()" style="background: rgba(56, 189, 248, 0.12); color: var(--cyan); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 6px; padding: 2px 10px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">💬 Send Feedback</button>
         <span>·</span>
-        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v7.3.3</span>
+        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v7.3.4</span>
       </div>
       <div style="font-size: 0.76rem; color: #64748b; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
         <span>&copy; 2026 Earth Energy Balance Simulator Project</span>
@@ -4877,7 +4910,7 @@
           <div class="toc-card">
             <h3 style="margin-top: 0; border: none; color: #fff; display: flex; align-items: center; justify-content: space-between;">
               <span>Documentation Overview</span>
-              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v7.3.3</span>
+              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v7.3.4</span>
             </h3>
             
             <!-- User Commentary & Context Note -->
@@ -8648,6 +8681,18 @@
         paleoPeakCloseBtn.addEventListener("click", closePaleoPeakPopover);
       }
 
+      function clampPopoverToViewport(el, left, top, pad = 10) {
+        if (!el) return;
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const w = Math.min(el.offsetWidth || 340, vw - pad * 2);
+        const h = Math.min(el.offsetHeight || 220, vh - pad * 2);
+        const clampedLeft = Math.max(pad, Math.min(vw - w - pad, left));
+        const clampedTop = Math.max(pad, Math.min(vh - h - pad, top));
+        el.style.left = `${Math.round(clampedLeft)}px`;
+        el.style.top = `${Math.round(clampedTop)}px`;
+      }
+
       function openPaleoPeakPopover(hb, clientX, clientY) {
         if (!paleoPeakPopoverEl || !hb) return;
         const pk = hb.peak;
@@ -8670,21 +8715,19 @@
         if (paleoPeakNoteEl) paleoPeakNoteEl.textContent = pk.note;
         if (paleoPeakLinksEl) {
           paleoPeakLinksEl.innerHTML = pk.links.map(lk =>
-            `<a href="${lk.url}" target="_blank" rel="noopener noreferrer" class="s350-link-btn" style="text-decoration: none; text-align: left; display: block; border-color: rgba(245, 158, 11, 0.4); color: #fbbf24; background: rgba(245, 158, 11, 0.09); font-size: 0.72rem; padding: 6px 9px;">📄 ${lk.label} ↗</a>`
+            `<a href="${lk.url}" target="_blank" rel="noopener noreferrer" class="s350-link-btn" style="text-decoration: none; text-align: left; display: block; border-color: rgba(245, 158, 11, 0.4); color: #fbbf24; background: rgba(245, 158, 11, 0.09); font-size: 0.72rem; padding: 6px 9px; white-space: normal;">📄 ${lk.label} ↗</a>`
           ).join("");
         }
 
         paleoPeakPopoverEl.style.display = "block";
+        paleoPeakPopoverEl.scrollTop = 0;
         const popW = Math.min(340, window.innerWidth - 20);
-        const popH = paleoPeakPopoverEl.offsetHeight || 220;
-        let left = clientX - popW / 2;
-        left = Math.max(10, Math.min(window.innerWidth - popW - 10, left));
+        const popH = Math.min(paleoPeakPopoverEl.offsetHeight || 220, window.innerHeight - 20);
         let top = clientY + 14;
         if (top + popH > window.innerHeight - 10) {
-          top = Math.max(10, clientY - popH - 14);
+          top = clientY - popH - 14;
         }
-        paleoPeakPopoverEl.style.left = `${Math.round(left)}px`;
-        paleoPeakPopoverEl.style.top = `${Math.round(top)}px`;
+        clampPopoverToViewport(paleoPeakPopoverEl, clientX - popW / 2, top, 10);
       }
 
       document.addEventListener("click", e => {
@@ -8730,34 +8773,34 @@
         const diff = simVal !== null ? (simVal - measVal) : 0;
         const diffSign = diff >= 0 ? "+" : "";
         const roundYr = Math.round(yr);
+        const prev100Yr = roundYr - 100;
+        const prev100Pt = STATIC_HISTORICAL_RUN.find(p => Math.round(p.year) === prev100Yr);
+        const prev100Dt = prev100Pt ? (prev100Pt.deltaTs - OFFSET_1850_1900) : 0;
+        const deltaT100 = measVal - prev100Dt;
+        const d100Sign = deltaT100 >= 0 ? "+" : "";
 
         measTempStatsEl.innerHTML = `
           <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
             <span>Year: <strong style="color: #fff;">${roundYr} CE</strong></span>
             <span style="color: var(--amber);">Measured: <strong>+${measVal.toFixed(2)} °C</strong></span>
           </div>
-          <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted);">
+          <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 4px;">
             <span>CO₂ Model: +${simVal !== null ? simVal.toFixed(2) : "--"} °C</span>
             <span>Diff: <strong style="color: ${diff > 0.05 ? '#00e5ff' : '#fff'};">${diffSign}${diff.toFixed(2)} °C</strong></span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.08); padding-top: 4px;">
+            <span>ΔT (100 yrs pre-${roundYr}):</span>
+            <strong style="color: #38bdf8;">${d100Sign}${deltaT100.toFixed(2)} °C / 100 yr</strong>
           </div>
         `;
 
         measTempPopoverEl.style.display = "block";
+        measTempPopoverEl.scrollTop = 0;
         const cardW = measTempPopoverEl.offsetWidth || 360;
-        const cardH = measTempPopoverEl.offsetHeight || 190;
-        const pad = 12;
-
-        let left = clientX - cardW / 2;
+        const cardH = Math.min(measTempPopoverEl.offsetHeight || 210, window.innerHeight - 20);
         let top = clientY - cardH - 14;
-
-        if (left < pad) left = pad;
-        if (left + cardW > window.innerWidth - pad) left = window.innerWidth - cardW - pad;
-        if (top < pad) {
-          top = clientY + 16;
-        }
-
-        measTempPopoverEl.style.left = `${Math.round(left)}px`;
-        measTempPopoverEl.style.top = `${Math.round(top)}px`;
+        if (top < 10) top = clientY + 16;
+        clampPopoverToViewport(measTempPopoverEl, clientX - cardW / 2, top, 10);
       }
 
       if (measTempPopoverEl) {
@@ -8822,21 +8865,12 @@
         if (!safe350PopoverEl) return;
 
         safe350PopoverEl.style.display = "block";
+        safe350PopoverEl.scrollTop = 0;
         const cardW = safe350PopoverEl.offsetWidth || 365;
-        const cardH = safe350PopoverEl.offsetHeight || 195;
-        const pad = 12;
-
-        let left = clientX - cardW / 2;
+        const cardH = Math.min(safe350PopoverEl.offsetHeight || 195, window.innerHeight - 20);
         let top = clientY - cardH - 14;
-
-        if (left < pad) left = pad;
-        if (left + cardW > window.innerWidth - pad) left = window.innerWidth - cardW - pad;
-        if (top < pad) {
-          top = clientY + 16;
-        }
-
-        safe350PopoverEl.style.left = `${Math.round(left)}px`;
-        safe350PopoverEl.style.top = `${Math.round(top)}px`;
+        if (top < 10) top = clientY + 16;
+        clampPopoverToViewport(safe350PopoverEl, clientX - cardW / 2, top, 10);
       }
 
       if (safe350PopoverEl) {
@@ -8949,22 +8983,16 @@
         }
 
         zeffPopoverEl.style.display = "block";
+        zeffPopoverEl.scrollTop = 0;
         const cardW = zeffPopoverEl.offsetWidth || 365;
-        const cardH = zeffPopoverEl.offsetHeight || 195;
-        const pad = 12;
-
+        const cardH = Math.min(zeffPopoverEl.offsetHeight || 195, window.innerHeight - 20);
         const r = anchorRect || (zeffBriefTooltipEl ? zeffBriefTooltipEl.getBoundingClientRect() : null);
-        let left = r ? (r.left + r.width / 2 - cardW / 2) : (lastZeffData.clientX - cardW / 2);
+        const left = r ? (r.left + r.width / 2 - cardW / 2) : (lastZeffData.clientX - cardW / 2);
         let top = r ? (r.top - cardH - 4) : (lastZeffData.clientY - cardH - 14);
-
-        if (left < pad) left = pad;
-        if (left + cardW > window.innerWidth - pad) left = window.innerWidth - cardW - pad;
-        if (top < pad) {
+        if (top < 10) {
           top = r ? (r.bottom + 4) : (lastZeffData.clientY + 16);
         }
-
-        zeffPopoverEl.style.left = `${Math.round(left)}px`;
-        zeffPopoverEl.style.top = `${Math.round(top)}px`;
+        clampPopoverToViewport(zeffPopoverEl, left, top, 10);
       }
 
       if (zeffBriefTooltipEl) {
@@ -9226,27 +9254,19 @@
 
         tpCardYearEl.textContent = `Reached: ~${Math.round(crossYr)} CE`;
         tpCardEl.style.display = "block";
+        tpCardEl.scrollTop = 0;
 
         const vw = window.innerWidth;
         const vh = window.innerHeight;
-        const cardW = Math.min(350, vw - 24);
-        const cardH = tpCardEl.offsetHeight || 310;
+        const cardW = Math.min(350, vw - 20);
+        const cardH = Math.min(tpCardEl.offsetHeight || 310, vh - 20);
 
-        let left, top;
-        if (vw < 600) {
-          left = Math.max(12, (vw - cardW) / 2);
-          top = anchorViewportY - cardH - 16;
-          if (top < 12) top = Math.min(vh - cardH - 72, anchorViewportY + 24);
-        } else {
-          left = anchorViewportX - cardW / 2;
-          left = Math.max(12, Math.min(vw - cardW - 12, left));
-          top = anchorViewportY - cardH - 14;
-          if (top < 12) {
-            top = Math.min(vh - cardH - 72, anchorViewportY + 22);
-          }
+        const left = vw < 600 ? ((vw - cardW) / 2) : (anchorViewportX - cardW / 2);
+        let top = anchorViewportY - cardH - 14;
+        if (top < 10) {
+          top = anchorViewportY + 22;
         }
-        tpCardEl.style.left = `${Math.round(left)}px`;
-        tpCardEl.style.top = `${Math.round(top)}px`;
+        clampPopoverToViewport(tpCardEl, left, top, 10);
       }
 
       function cancelHideTippingPointCard() {
@@ -10600,6 +10620,10 @@
               const err = simDt - measDt;
               const errSign = err >= 0 ? "+" : "";
               labelStr = `${targetYr}: +${measDt.toFixed(2)}°C (Err: ${errSign}${err.toFixed(2)}°C)`;
+            } else if (activeSpan > 2000 && targetYr === 2026) {
+              const p1926 = STATIC_HISTORICAL_RUN.find(p => Math.round(p.year) === 1926);
+              const d100 = dtVal - (p1926 ? (p1926.deltaTs - OFFSET_1850_1900) : 0);
+              labelStr = `+${dtVal.toFixed(2)}°C · Δ100y: +${d100.toFixed(2)}°C`;
             } else {
               labelStr = `+${dtVal.toFixed(2)}°C`;
             }
@@ -11062,7 +11086,7 @@
             active350Hitbox = false;
             isPointerHover = true;
             activeTip = {
-              text: "Present-day observational benchmark (+1.14°C anomaly rel. 1850–1900 / +1.26°C rel. 1750, 427 ppm CO2), dividing instrumental history from future warming trajectories.",
+              text: "Present-day observational benchmark (+1.14°C anomaly rel. 1850–1900 / +1.26°C rel. 1750, 427 ppm CO2, ΔT₁₀₀y: +1.13°C over preceding 100 yrs), dividing instrumental history from future warming trajectories.",
               stroke: "#f59e0b"
             };
           } else if (isOverActiveYr) {
