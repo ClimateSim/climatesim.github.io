@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What's New — ClimateSim Changelog</title>
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#0b1120">
+  <style>
+    :root {
+      --bg-dark: #060b16;
+      --card-bg: rgba(15, 23, 42, 0.88);
+      --card-border: rgba(56, 189, 248, 0.22);
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --cyan: #38bdf8;
+      --rose: #f43f5e;
+      --amber: #f59e0b;
+      --amber-light: #fcd34d;
+      --emerald: #10b981;
+      --emerald-light: #6ee7b7;
+      --purple: #c084fc;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { max-width: 100%; overflow-x: hidden; }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text);
+      font-family: var(--font-main);
+      line-height: 1.6;
+      padding: 20px 16px 64px;
+      min-height: 100vh;
+      background-image:
+        radial-gradient(circle at 15% 10%, rgba(16, 185, 129, 0.11) 0%, transparent 45%),
+        radial-gradient(circle at 85% 18%, rgba(56, 189, 248, 0.09) 0%, transparent 45%),
+        radial-gradient(circle at 50% 85%, rgba(245, 158, 11, 0.06) 0%, transparent 50%);
+    }
+
+    .container { max-width: 980px; width: 100%; margin: 0 auto; }
+
+    .header-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 24px;
+    }
+
+    .header-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .badge-wrap { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+    .badge-pill {
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.14);
+      color: var(--emerald-light);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .version-tag {
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--cyan);
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .nav-links-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+    .nav-btn {
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-decoration: none;
+      padding: 5px 11px;
+      border-radius: 6px;
+      background: rgba(23, 36, 63, 0.9);
+      color: #cbd5e1;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      transition: all 0.15s ease;
+    }
+    .nav-btn:hover { background: rgba(56, 189, 248, 0.16); color: #fff; border-color: var(--cyan); }
+
+    h1 {
+      font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #f8fafc;
+    }
+
+    .subtitle { color: var(--text-muted); font-size: 0.92rem; max-width: 760px; }
+
+    .day-group {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+    }
+
+    .day-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .day-date {
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: #f8fafc;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .day-ver {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--cyan);
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      border-radius: 5px;
+      padding: 2px 8px;
+    }
+
+    .entry-list { display: flex; flex-direction: column; gap: 10px; list-style: none; }
+
+    .entry-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 11px 14px;
+      border-radius: 8px;
+      background: rgba(8, 15, 30, 0.72);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.16s ease;
+    }
+    .entry-link:hover {
+      border-color: var(--cyan);
+      background: rgba(14, 28, 52, 0.92);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+    }
+
+    .entry-title {
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: #f8fafc;
+      margin-bottom: 3px;
+    }
+
+    .entry-desc {
+      font-size: 0.81rem;
+      color: var(--text-muted);
+      line-height: 1.48;
+    }
+
+    .entry-cta {
+      flex-shrink: 0;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--cyan);
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 5px;
+      padding: 4px 8px;
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+
+    @media (max-width: 600px) {
+      .day-group { padding: 14px 14px; }
+      .entry-link { flex-direction: column; gap: 8px; }
+    }
+
+    footer {
+      margin-top: 32px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 8px 12px; justify-content: center; }
+    .footer-link { color: var(--cyan); text-decoration: none; font-weight: 600; }
+    .footer-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header-bar">
+      <div class="header-top-row">
+        <div class="badge-wrap">
+          <span class="badge-pill">✨ Recent Updates</span>
+          <span class="version-tag">v7.5.1</span>
+        </div>
+        <nav class="nav-links-row" aria-label="Site navigation">
+          <a href="index.html" class="nav-btn">🔬 Warming Simulator</a>
+          <a href="uk_climate_impacts_500_years.html" class="nav-btn">📊 UK Impacts</a>
+          <a href="what_can_i_do.html" class="nav-btn">🌱 What Can I Do?</a>
+        </nav>
+      </div>
+      <h1>What's New on ClimateSim</h1>
+      <p class="subtitle">
+        A rolling 10-day summary of new interactive charts, Met Office &amp; peer-reviewed datasets, and usability improvements (16–26 November 2026). Tap any entry to jump straight to the updated page or section.
+      </p>
+    </header>
+
+    <!-- 26 NOV 2026 -->
+    <section class="day-group" style="border-top: 3px solid var(--emerald);">
+      <div class="day-header">
+        <div class="day-date">📅 26 November 2026</div>
+        <span class="day-ver">v7.4.0 – v7.5.1</span>
+      </div>
+      <ul class="entry-list">
+        <li>
+          <a class="entry-link" href="uk_climate_impacts_500_years.html#frost-days-stripes">
+            <div>
+              <div class="entry-title">❄️ UK Air Frost Days Climate Stripes (1931–2025)</div>
+              <div class="entry-desc">Added official Met Office HadUK-Grid UK annual air frost days to Climate Stripes—showing frost days falling 26% from 64.5 days/yr (1961–1990) to 47.5 days/yr (2016–2025), complete with 5-year spline and 30-year trend lines.</div>
+            </div>
+            <span class="entry-cta">Open Stripes →</span>
+          </a>
+        </li>
+        <li>
+          <a class="entry-link" href="uk_climate_impacts_500_years.html#hot-30c-stripes">
+            <div>
+              <div class="entry-title">🔥 Central England Days ≥ 30°C Climate Stripes (1878–2025)</div>
+              <div class="entry-desc">Added official Met Office HadCET daily maximum counts for days reaching 30.0°C or above—showing frequency jumping 6.3× from 0.27 days/yr (1878–1990) to 1.70 days/yr (2016–2025), peaking at 7 days in 2022 and 9 in 1976.</div>
+            </div>
+            <span class="entry-cta">Open Stripes →</span>
+          </a>
+        </li>
+        <li>
+          <a class="entry-link" href="index.html#WarmingSim">
+            <div>
+              <div class="entry-title">⏳ 1,000,000-Year Time Span Slider &amp; Paleoclimate Peak Badges</div>
+              <div class="entry-desc">Added quick-preset buttons (500y to 1My) and a 500-year increment slider below the main warming chart, seamless orange paleoclimate curves, clickable interglacial peak badges showing Peak T, preceding 100-year ΔT, and peer-reviewed DOI links, plus matching ΔT₁₀₀y on the 2026 badge and mobile-scrollable popups across the app.</div>
+            </div>
+            <span class="entry-cta">Open Simulator →</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 25 NOV 2026 -->
+    <section class="day-group" style="border-top: 3px solid var(--amber);">
+      <div class="day-header">
+        <div class="day-date">📅 25 November 2026</div>
+        <span class="day-ver">v7.3.0</span>
+      </div>
+      <ul class="entry-list">
+        <li>
+          <a class="entry-link" href="index.html#EnergySolutions">
+            <div>
+              <div class="entry-title">⚙️ Fundamental Thermodynamic Ceiling Note (Combustion vs. Electrification)</div>
+              <div class="entry-desc">Added the Carnot / thermodynamic efficiency ceiling explanation across fossil combustion vs. clean electrification sections, clarifying why direct electrification delivers ~2–3× more useful work per unit of primary energy.</div>
+            </div>
+            <span class="entry-cta">Energy Solutions →</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 24 NOV 2026 -->
+    <section class="day-group" style="border-top: 3px solid var(--cyan);">
+      <div class="day-header">
+        <div class="day-date">📅 24 November 2026</div>
+        <span class="day-ver">v6.5.0 – v7.2.0</span>
+      </div>
+      <ul class="entry-list">
+        <li>
+          <a class="entry-link" href="uk_climate_impacts_500_years.html#snow-in-scotland">
+            <div>
+              <div class="entry-title">❄️ Snow in Scotland — Interactive Map (351 Towns) &amp; Snowfall Climate Stripes</div>
+              <div class="entry-desc">Launched the interactive Snow in Scotland map covering 351 Scottish villages, towns, and cities with altitude (m), historical snow days, annual snowfall accumulation (cm/yr), peak snow depth (1950–2025), Scotland-wide Snowfall Climate Stripes (1940–2025), and Met Office / MWIS links.</div>
+            </div>
+            <span class="entry-cta">Snow in Scotland →</span>
+          </a>
+        </li>
+        <li>
+          <a class="entry-link" href="uk_climate_impacts_500_years.html">
+            <div>
+              <div class="entry-title">🏔️ Glacier Melting Panel &amp; WWA Attribution Studies</div>
+              <div class="entry-desc">Added an expandable Glacier Melting card to the UK &amp; Global Impacts page along with World Weather Attribution (WWA) studies covering UK 2023/24 winter storms and Italy/Alps extreme events.</div>
+            </div>
+            <span class="entry-cta">UK Impacts →</span>
+          </a>
+        </li>
+        <li>
+          <a class="entry-link" href="what_can_i_do.html">
+            <div>
+              <div class="entry-title">🌱 Local Action: WLCAN Links on What Can I Do?</div>
+              <div class="entry-desc">Added West Lothian Climate Action Network (WLCAN) community links alongside individual, civic, and clean-energy action pathways.</div>
+            </div>
+            <span class="entry-cta">What Can I Do? →</span>
+          </a>
+        </li>
+        <li>
+          <a class="entry-link" href="climate_podcasts.html">
+            <div>
+              <div class="entry-title">🎙️ New Climate Podcasts: Climate Actually &amp; Nature Podcast</div>
+              <div class="entry-desc">Added Dr. Kimberly Nicholas's <em>Climate Actually</em> and the <em>Nature Podcast</em> episode "How to make climate anxiety your superpower" with its companion Nature article.</div>
+            </div>
+            <span class="entry-cta">Podcasts →</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 22 NOV 2026 -->
+    <section class="day-group" style="border-top: 3px solid var(--purple);">
+      <div class="day-header">
+        <div class="day-date">📅 22 November 2026</div>
+        <span class="day-ver">v6.0.0 – v6.4.0</span>
+      </div>
+      <ul class="entry-list">
+        <li>
+          <a class="entry-link" href="arctic_sea_ice.html">
+            <div>
+              <div class="entry-title">🧊 Arctic Sea Ice &amp; Ice–Albedo Feedback Page</div>
+              <div class="entry-desc">Added a dedicated interactive page tracking 1979–2025 NSIDC September sea-ice extent and PIOMAS volume, an interactive ice–albedo feedback lab, 4× Arctic amplification, and ice-free projections.</div>
+            </div>
+            <span class="entry-cta">Arctic Sea Ice →</span>
+          </a>
+        </li>
+        <li>
+          <a class="entry-link" href="index.html#Intro">
+            <div>
+              <div class="entry-title">🌈 ROYGBIV Solar Spectrum Diagram &amp; Full-Text Site Search</div>
+              <div class="entry-desc">Added an inbound ROYGBIV solar spectrum diagram to Pin 1 on the Introduction view, fixed mobile speech-bubble truncation, and upgraded site search to full-text indexing across every page and section.</div>
+            </div>
+            <span class="entry-cta">Introduction →</span>
+          </a>
+        </li>
+        <li>
+          <a class="entry-link" href="index.html#DataCentres">
+            <div>
+              <div class="entry-title">🖥️ Data Centres &amp; AI Emissions Deep-Links (#DataCentres)</div>
+              <div class="entry-desc">Added direct hash anchors for Data Centres &amp; AI power trajectories and all GHG sector/subsector popups.</div>
+            </div>
+            <span class="entry-cta">GHG Sources →</span>
+          </a>
+        </li>
+        <li>
+          <a class="entry-link" href="index.html#page-transfer">
+            <div>
+              <div class="entry-title">🛰️ NASA CERES Satellite Energy Absorption Measurements</div>
+              <div class="entry-desc">Expanded Guide &amp; Proofs Page 2 with direct NASA CERES satellite observations of rising atmospheric energy absorption and Earth's Energy Imbalance.</div>
+            </div>
+            <span class="entry-cta">Guide &amp; Proofs →</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 18–21 NOV 2026 -->
+    <section class="day-group" style="border-top: 3px solid var(--rose);">
+      <div class="day-header">
+        <div class="day-date">📅 18–21 November 2026</div>
+        <span class="day-ver">v5.0.0 – v5.3.0</span>
+      </div>
+      <ul class="entry-list">
+        <li>
+          <a class="entry-link" href="denialism.html">
+            <div>
+              <div class="entry-title">🗣️ Climate Denialism, Delay &amp; The Unreported Emergency</div>
+              <div class="entry-desc">Published a dedicated evidence-based page examining media silence, delay narratives, polycrisis dynamics, petro-state disinformation, and why 60 years of verified physical reality still govern our trajectory.</div>
+            </div>
+            <span class="entry-cta">Denialism Page →</span>
+          </a>
+        </li>
+        <li>
+          <a class="entry-link" href="index.html#page-methodology">
+            <div>
+              <div class="entry-title">🌐 Met Office Climate Data Portal &amp; Unified "More Facts" Menu</div>
+              <div class="entry-desc">Added <code>climate.metoffice.cloud</code> and curated science-based climate portals to Guide &amp; References, plus standardized the "More Facts" hamburger menu identically across every page.</div>
+            </div>
+            <span class="entry-cta">References →</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 16–17 NOV 2026 -->
+    <section class="day-group" style="border-top: 3px solid var(--cyan);">
+      <div class="day-header">
+        <div class="day-date">📅 16–17 November 2026</div>
+        <span class="day-ver">v3.1.0 – v3.5.2</span>
+      </div>
+      <ul class="entry-list">
+        <li>
+          <a class="entry-link" href="uk_climate_impacts_500_years.html#temperature-stripes">
+            <div>
+              <div class="entry-title">📈 Cubic Spline Trend Lines &amp; Interactive Event Popups on Climate Stripes</div>
+              <div class="entry-desc">Added smooth Catmull-Rom 5-year and 30-year trend overlays across all Climate Stripes charts, and moved landmark UK &amp; global extreme-weather attributions (including the Oct 2024 Valencia floods WWA study) into clean click-to-open popups.</div>
+            </div>
+            <span class="entry-cta">Climate Stripes →</span>
+          </a>
+        </li>
+        <li>
+          <a class="entry-link" href="index.html#EnergySolutions">
+            <div>
+              <div class="entry-title">🔋 Sodium-Ion &amp; Flow Batteries, MacKay Tribute, CCPI &amp; Project Drawdown</div>
+              <div class="entry-desc">Added site-wide search, separated Sodium-ion and Flow battery storage estimates, amortized cost popups, the Prof. Sir David MacKay tribute, CCPI country rankings, and the Project Drawdown Solutions Explorer.</div>
+            </div>
+            <span class="entry-cta">Energy Solutions →</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <footer>
+      <div class="footer-links">
+        <a href="index.html" class="footer-link">🔬 Warming Simulator</a>
+        <span>·</span>
+        <a href="earth_heat_trap.html" class="footer-link">⚡ Earth's Heat Trap</a>
+        <span>·</span>
+        <a href="uk_climate_impacts_500_years.html" class="footer-link">📊 UK Impacts</a>
+        <span>·</span>
+        <a href="what_can_i_do.html" class="footer-link">🌱 What Can I Do?</a>
+      </div>
+      <div>
+        <span>ClimateSim Changelog · <strong style="color: var(--cyan); font-family: var(--font-mono);">v7.5.1</strong></span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- PWA Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(err => {
+          console.warn('PWA ServiceWorker registration failed:', err);
+        });
+      });
+    }
+  </script>
+  <script src="site-search.js" defer></script>
+</body>
+</html>

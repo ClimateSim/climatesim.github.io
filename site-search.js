@@ -5,6 +5,20 @@
 
   const SITE_SEARCH_INDEX = [
     {
+      title: "What's New on ClimateSim (Recent 10-Day Changelog)",
+      page: "What's New",
+      url: "whats_new.html",
+      tags: "whats new changelog updates releases frost days 30c stripes million year slider snow scotland arctic sea ice denialism",
+      desc: "Rolling 10-day summary of new ClimateSim charts, Met Office datasets, and interactive features with direct links."
+    },
+    {
+      title: "UK Air Frost Days Stripes (1931–2025) & CET Days ≥ 30°C Stripes (1878–2025)",
+      page: "UK Impacts",
+      url: "uk_climate_impacts_500_years.html#frost-days-stripes",
+      tags: "frost days air frost haduk-grid met office 30c hot days hadcet climate stripes bbc",
+      desc: "Official Met Office Climate Stripes showing UK air frost days falling 26% since 1961–1990 and Central England ≥30°C days rising 6.3×."
+    },
+    {
       title: "NASA CERES Satellite Measurements (Rising Atmospheric Absorption & EEI)",
       page: "Guide & Proofs (Page 2)",
       url: "index.html#page-transfer",
@@ -795,7 +809,8 @@
           { label: "🌱 What Can I Do?", href: "what_can_i_do.html", color: "#34d399" },
           { label: "🧊 Arctic Sea Ice", href: "arctic_sea_ice.html", color: "#7dd3fc" },
           { label: "❄️ Snow in Scotland", href: "uk_climate_impacts_500_years.html#snow-in-scotland", color: "#7dd3fc" },
-          { label: "🗣️ Denialism & Silence", href: "denialism.html", color: "#fda4af" }
+          { label: "🗣️ Denialism & Silence", href: "denialism.html", color: "#fda4af" },
+          { label: "✨ What's New", href: "whats_new.html", color: "#34d399" }
         ];
 
         const grid = document.createElement("div");
