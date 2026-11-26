@@ -2785,7 +2785,7 @@
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <div class="brand-title" id="headerTitle">Earth's Energy Imbalance</div>
-              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v7.3.1</span>
+              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v7.3.2</span>
             </div>
             <div style="font-size: 0.75rem; color: var(--text-muted);" id="headerSubtitle">How greenhouse gases trap heat and warm the planet</div>
           </div>
@@ -2990,7 +2990,7 @@
           </div>
         </div>
 
-        <!-- Time Span Selector Bar (500 yr to 100,000 yr in 500-yr increments) -->
+        <!-- Time Span Selector Bar (500 yr to 1,000,000 yr in 500-yr increments) -->
         <div class="chart-span-bar" id="chartSpanBar">
           <div class="chart-span-label">
             <span>⏳ Span:</span>
@@ -3002,14 +3002,14 @@
             <button type="button" class="span-preset-btn" data-span="1500" title="1,500-year span (750–2250 CE)">1,500y</button>
             <button type="button" class="span-preset-btn" data-span="2000" title="2,000-year span (250–2250 CE)">2,000y</button>
             <button type="button" class="span-preset-btn" data-span="10000" title="10,000-year Holocene span (7,750 BCE–2250 CE)">10ky</button>
-            <button type="button" class="span-preset-btn" data-span="25000" title="25,000-year Last Glacial Maximum span (22,750 BCE–2250 CE)">25ky</button>
-            <button type="button" class="span-preset-btn" data-span="100000" title="100,000-year full glacial cycle span (97,750 BCE–2250 CE)">100ky</button>
+            <button type="button" class="span-preset-btn" data-span="100000" title="100,000-year glacial cycle span (97,750 BCE–2250 CE)">100ky</button>
+            <button type="button" class="span-preset-btn" data-span="1000000" title="1,000,000-year Pleistocene ice age cycles (997,750 BCE–2250 CE)">1My</button>
           </div>
-          <div class="span-slider-wrap" title="Adjust chart time span in 500-year increments (500 to 100,000 years)">
+          <div class="span-slider-wrap" title="Adjust chart time span in 500-year increments (500 to 1,000,000 years)">
             <button type="button" class="span-step-btn" id="btnSpanMinus" title="Decrease span by 500 years" aria-label="Decrease span by 500 years">−</button>
             <span class="span-bound-lbl">500y</span>
-            <input type="range" id="chartSpanSlider" min="500" max="100000" step="500" value="500" aria-label="Chart time span in years">
-            <span class="span-bound-lbl">100ky</span>
+            <input type="range" id="chartSpanSlider" min="500" max="1000000" step="500" value="500" aria-label="Chart time span in years">
+            <span class="span-bound-lbl">1My</span>
             <button type="button" class="span-step-btn" id="btnSpanPlus" title="Increase span by 500 years" aria-label="Increase span by 500 years">+</button>
           </div>
         </div>
@@ -4403,7 +4403,7 @@
         <span>·</span>
         <button type="button" id="btnFeedbackFooter" onclick="openFeedbackModal()" style="background: rgba(56, 189, 248, 0.12); color: var(--cyan); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 6px; padding: 2px 10px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">💬 Send Feedback</button>
         <span>·</span>
-        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v7.3.1</span>
+        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v7.3.2</span>
       </div>
       <div style="font-size: 0.76rem; color: #64748b; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
         <span>&copy; 2026 Earth Energy Balance Simulator Project</span>
@@ -4877,7 +4877,7 @@
           <div class="toc-card">
             <h3 style="margin-top: 0; border: none; color: #fff; display: flex; align-items: center; justify-content: space-between;">
               <span>Documentation Overview</span>
-              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v7.3.1</span>
+              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v7.3.2</span>
             </h3>
             
             <!-- User Commentary & Context Note -->
@@ -9585,6 +9585,10 @@
           if (r > 0) return compact ? `${r}` : `${r} CE`;
           if (r === 0) return compact ? "0" : "1 BCE";
           const absYr = Math.abs(r);
+          if (compact && absYr >= 1000000) {
+            const mVal = absYr / 1000000;
+            return `${Number.isInteger(mVal) ? mVal : mVal.toFixed(1)}M BCE`;
+          }
           if (compact && absYr >= 10000) {
             const kVal = absYr / 1000;
             return `${Number.isInteger(kVal) ? kVal : kVal.toFixed(1)}k BCE`;
@@ -9626,16 +9630,16 @@
         } else {
           let curLegX = legLeft;
           if (isExtendedSpan) {
-            ctx.fillStyle = "#10b981";
-            const paleoLbl = "■ Paleoclimate Proxy (Ice Cores)";
+            ctx.fillStyle = "#f59e0b";
+            const paleoLbl = "■ Paleoclimate & Observed Temp";
             ctx.fillText(paleoLbl, curLegX, legY);
             curLegX += ctx.measureText(paleoLbl).width + 12;
+          } else {
+            ctx.fillStyle = "#f59e0b";
+            const obsLbl = "■ Actual Observed History (1750–2026, 5-yr smoothed)";
+            ctx.fillText(obsLbl, curLegX, legY);
+            curLegX += ctx.measureText(obsLbl).width + 12;
           }
-
-          ctx.fillStyle = "#f59e0b";
-          const obsLbl = isExtendedSpan ? "■ Observed (1750–2026)" : "■ Actual Observed History (1750–2026, 5-yr smoothed)";
-          ctx.fillText(obsLbl, curLegX, legY);
-          curLegX += ctx.measureText(obsLbl).width + 12;
 
           ctx.fillStyle = "#f43f5e";
           const simLbl = "■ Simulated Warming (1958–2250)";
@@ -9833,9 +9837,9 @@
             }
           }
         } else {
-          // Adaptive X-axis ticks for extended historical spans (1,000 yr to 100,000 yr)
+          // Adaptive X-axis ticks for extended historical spans (1,000 yr to 1,000,000 yr)
           const maxLabels = Math.max(4, Math.floor(tGridW / (yrSpan >= 10000 ? 84 : 68)));
-          const niceSteps = [100, 200, 250, 500, 1000, 2000, 2500, 5000, 10000, 20000, 25000];
+          const niceSteps = [100, 200, 250, 500, 1000, 2000, 2500, 5000, 10000, 20000, 25000, 50000, 100000, 200000, 250000];
           let majorStep = niceSteps[niceSteps.length - 1];
           for (const s of niceSteps) {
             if (yrSpan / s <= maxLabels) { majorStep = s; break; }
@@ -9886,7 +9890,7 @@
           if (isParis) ctx.setLineDash([3, 3]);
           ctx.beginPath(); ctx.moveTo(tGridLeft, y); ctx.lineTo(tGridRight, y); ctx.stroke();
           if (isParis) ctx.setLineDash([]);
-          ctx.fillStyle = th === 0.0 ? "#94a3b8" : (isParis ? "#f59e0b" : (th < 0 ? "#6ee7b7" : "#94a3b8"));
+          ctx.fillStyle = th === 0.0 ? "#94a3b8" : (isParis ? "#f59e0b" : "#94a3b8");
           ctx.font = "bold 9px ui-monospace, monospace";
           const label = th === 0.0 ? "0.0°C (Baseline)" : (isParis ? "+1.5°C (Paris)" : `${th > 0 ? "+" : ""}${th.toFixed(1)}°C`);
           ctx.fillText(label, tGridLeft + 3, y - 2);
@@ -9981,7 +9985,7 @@
         // 0. Pre-1750 Paleoclimate Proxy Curves (when span > 500 years)
         if (hasPaleoData) {
           const bpStart = yrStart - 1750;
-          const nSamples = Math.min(600, Math.max(160, Math.round(tGridW * 0.75)));
+          const nSamples = Math.min(1000, Math.max(200, Math.round(tGridW * 1.1)));
 
           // 0a. Paleoclimate Ice-Core CO2 Curve (Dashed Purple, seamlessly joining 1750 CE at 278 ppm)
           ctx.save();
@@ -10001,9 +10005,9 @@
           ctx.stroke();
           ctx.setLineDash([]);
 
-          // 0b. Paleoclimate Surface Temperature Curve (Emerald #10b981, seamlessly joining 1750 CE)
-          ctx.strokeStyle = "#10b981";
-          ctx.lineWidth = 2.0;
+          // 0b. Paleoclimate Surface Temperature Curve (Amber #f59e0b, matching 1958 observed temperature curve)
+          ctx.strokeStyle = "#f59e0b";
+          ctx.lineWidth = 2.2;
           ctx.beginPath();
           for (let i = 0; i <= nSamples; i++) {
             const frac = i / nSamples;
@@ -10022,7 +10026,7 @@
           if (lgmCalYr > yrStart + yrSpan * 0.06 && lgmCalYr < 1750 - yrSpan * 0.06) {
             const lgmX = yrToX(lgmCalYr);
             const lgmY = dtToY(-6.0 - OFFSET_1850_1900);
-            ctx.fillStyle = "rgba(16, 185, 129, 0.88)";
+            ctx.fillStyle = "rgba(245, 158, 11, 0.90)";
             ctx.font = "bold 9px ui-monospace, monospace";
             ctx.textAlign = "center";
             ctx.fillText("❄ Last Glacial Maximum (~21k BP · -6.0°C)", lgmX, Math.max(tGridTop + 14, lgmY - 8));
@@ -10681,7 +10685,7 @@
               const dtSign = hoverDt >= 0 ? "+" : "";
               const co2Str = hoverCo2 !== null ? ` · CO₂: ${Math.round(hoverCo2)} ppm` : "";
               tipText = `${formatSimYear(hoverYr, false)} · Paleo ΔT: ${dtSign}${hoverDt.toFixed(2)}°C${co2Str}`;
-              tipStroke = "#10b981";
+              tipStroke = "#f59e0b";
             } else if (hoverYr > 2026 && simDt !== null) {
               tipText = `${Math.round(hoverYr)} CE · Projected ΔT: +${simDt.toFixed(2)}°C`;
               tipStroke = "#f43f5e";
@@ -15767,7 +15771,7 @@
       }
 
       function setChartSpan(years) {
-        const clamped = Math.max(500, Math.min(100000, Math.round(years / 500) * 500));
+        const clamped = Math.max(500, Math.min(1000000, Math.round(years / 500) * 500));
         state.chartSpanYears = clamped;
 
         // Exit Keeling instrumental zoom if active so the selected span is immediately visible
