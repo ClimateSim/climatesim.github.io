@@ -110,6 +110,40 @@
 
     .subtitle { color: var(--text-muted); font-size: 0.92rem; max-width: 760px; }
 
+    .share-url-bar {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      width: fit-content;
+      max-width: 100%;
+    }
+    .share-url-text {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--cyan);
+      word-break: break-all;
+      user-select: all;
+    }
+    .share-url-btn {
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #e0f2fe;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+    .share-url-btn:hover { background: rgba(56, 189, 248, 0.28); color: #fff; }
+
     .day-group {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -227,7 +261,7 @@
       <div class="header-top-row">
         <div class="badge-wrap">
           <span class="badge-pill">✨ Recent Updates</span>
-          <span class="version-tag">v7.7.1</span>
+          <span class="version-tag">v7.7.2</span>
         </div>
         <nav class="nav-links-row" aria-label="Site navigation">
           <a href="index.html" class="nav-btn">🔬 Warming Simulator</a>
@@ -239,13 +273,19 @@
       <p class="subtitle">
         A running changelog of new interactive charts, Met Office &amp; peer-reviewed datasets, and usability improvements (starting from 16 November 2026). Tap any entry to jump straight to the updated page or section.
       </p>
+      <div class="share-url-bar">
+        <span style="font-size: 0.78rem; color: var(--text-muted);">🔗 Direct URL:</span>
+        <span class="share-url-text" id="whatsNewDirectUrl">https://climatesim.org/whats_new.html</span>
+        <button type="button" class="share-url-btn" id="btnCopyWhatsNewUrl">📋 Copy URL</button>
+        <button type="button" class="share-url-btn" id="btnShareWhatsNewUrl" style="display: none;">↗ Share</button>
+      </div>
     </header>
 
     <!-- 26 NOV 2026 -->
     <section class="day-group" style="border-top: 3px solid var(--emerald);">
       <div class="day-header">
         <div class="day-date">📅 26 November 2026</div>
-        <span class="day-ver">v7.4.0 – v7.7.1</span>
+        <span class="day-ver">v7.4.0 – v7.7.2</span>
       </div>
       <ul class="entry-list">
         <li>
@@ -465,13 +505,34 @@
         <a href="what_can_i_do.html" class="footer-link">🌱 What Can I Do?</a>
       </div>
       <div>
-        <span>ClimateSim Changelog · <strong style="color: var(--cyan); font-family: var(--font-mono);">v7.7.1</strong></span>
+        <span>ClimateSim Changelog · <strong style="color: var(--cyan); font-family: var(--font-mono);">v7.7.2</strong></span>
       </div>
     </footer>
   </div>
 
-  <!-- PWA Service Worker Registration -->
+  <!-- Direct URL Copy & Share + PWA Service Worker Registration -->
   <script>
+    (function initWhatsNewShareUrl() {
+      const shareUrl = 'https://climatesim.org/whats_new.html';
+      const btnCopy = document.getElementById('btnCopyWhatsNewUrl');
+      const btnShare = document.getElementById('btnShareWhatsNewUrl');
+      if (btnCopy) {
+        btnCopy.addEventListener('click', () => {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(shareUrl).then(() => {
+              btnCopy.textContent = '✓ Copied!';
+              setTimeout(() => { btnCopy.textContent = '📋 Copy URL'; }, 1800);
+            }).catch(() => {});
+          }
+        });
+      }
+      if (btnShare && navigator.share) {
+        btnShare.style.display = 'inline-block';
+        btnShare.addEventListener('click', () => {
+          navigator.share({ title: "What's New on ClimateSim", url: shareUrl }).catch(() => {});
+        });
+      }
+    })();
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js').catch(err => {
