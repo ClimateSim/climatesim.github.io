@@ -12,6 +12,13 @@
       desc: "Running changelog of new ClimateSim charts, Met Office datasets, and interactive features with direct links."
     },
     {
+      title: "Local Community Action (ANTIDOTE & WLCAN · #local-community-action)",
+      page: "What Can I Do?",
+      url: "what_can_i_do.html#local-community-action",
+      tags: "local community action antidote antidotelive.studio wlcan west lothian scotland climate hub civic square cooperation hull grassroots",
+      desc: "Grassroots UK & Scottish community climate action links including ANTIDOTE (antidotelive.studio), WLCAN, and Scottish Climate Action Hubs."
+    },
+    {
       title: "UK Air Frost Days Stripes (1931–2025) & CET Days ≥ 30°C Stripes (1878–2025)",
       page: "UK Impacts",
       url: "uk_climate_impacts_500_years.html#frost-days-stripes",
