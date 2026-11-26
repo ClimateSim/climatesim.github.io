@@ -447,7 +447,11 @@
       z-index: 25500;
       width: min(460px, calc(100vw - 24px));
       max-height: calc(100vh - 80px);
+      max-height: calc(100dvh - 80px);
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      touch-action: pan-y;
       background: rgba(11, 19, 34, 0.98);
       border: 1.5px solid rgba(56, 189, 248, 0.5);
       border-radius: 12px;
@@ -767,15 +771,17 @@
         if (!navPanel.classList.contains("open")) return;
         const rect = hamBtn.getBoundingClientRect();
         const vw = window.innerWidth;
-        const vh = window.innerHeight;
+        const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
         const w = Math.min(460, vw - 24);
         navPanel.style.width = w + "px";
         let left = rect.right - w;
         if (left < 12) left = 12;
         if (left + w > vw - 12) left = vw - w - 12;
-        const top = Math.min(vh - 120, rect.bottom + 8);
+        const top = Math.max(12, Math.min(vh - 180, rect.bottom + 8));
+        const availH = Math.max(160, Math.floor(vh - top - 16));
         navPanel.style.left = Math.round(left) + "px";
         navPanel.style.top = Math.round(top) + "px";
+        navPanel.style.maxHeight = availH + "px";
       }
 
       function closeHamburger() {

@@ -1,6 +1,6 @@
 // ClimateSim Progressive Web App (PWA) Service Worker
-// Version: v7.6.1
-const CACHE_NAME = 'climatesim-v7.6.1';
+// Version: v7.6.2
+const CACHE_NAME = 'climatesim-v7.6.2';
 
 const PRECACHE_ASSETS = [
   './',
@@ -84,7 +84,21 @@ self.addEventListener('fetch', event => {
       return;
     }
 
-    // Cache-First for static assets
+    // Network-First for JavaScript assets (ensures site-search.js menu/index updates take effect immediately)
+    if (url.pathname.endsWith('.js')) {
+      event.respondWith(
+        fetch(req).then(networkResponse => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseClone = networkResponse.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(req, responseClone));
+          }
+          return networkResponse;
+        }).catch(() => caches.match(req))
+      );
+      return;
+    }
+
+    // Cache-First for static assets (icons, manifest, images)
     event.respondWith(
       caches.match(req).then(cachedResponse => {
         if (cachedResponse) return cachedResponse;
