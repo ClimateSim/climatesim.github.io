@@ -2818,7 +2818,7 @@
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <div class="brand-title" id="headerTitle">Earth's Energy Imbalance</div>
-              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v7.3.4</span>
+              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v7.3.5</span>
             </div>
             <div style="font-size: 0.75rem; color: var(--text-muted);" id="headerSubtitle">How greenhouse gases trap heat and warm the planet</div>
           </div>
@@ -4436,7 +4436,7 @@
         <span>·</span>
         <button type="button" id="btnFeedbackFooter" onclick="openFeedbackModal()" style="background: rgba(56, 189, 248, 0.12); color: var(--cyan); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 6px; padding: 2px 10px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">💬 Send Feedback</button>
         <span>·</span>
-        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v7.3.4</span>
+        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v7.3.5</span>
       </div>
       <div style="font-size: 0.76rem; color: #64748b; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
         <span>&copy; 2026 Earth Energy Balance Simulator Project</span>
@@ -4910,7 +4910,7 @@
           <div class="toc-card">
             <h3 style="margin-top: 0; border: none; color: #fff; display: flex; align-items: center; justify-content: space-between;">
               <span>Documentation Overview</span>
-              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v7.3.4</span>
+              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v7.3.5</span>
             </h3>
             
             <!-- User Commentary & Context Note -->
@@ -10613,6 +10613,7 @@
             const iy = dtToY(dtVal);
 
             let labelStr = "";
+            let subLabelStr = "";
             let bx = 0;
             let by = 0;
 
@@ -10620,18 +10621,24 @@
               const err = simDt - measDt;
               const errSign = err >= 0 ? "+" : "";
               labelStr = `${targetYr}: +${measDt.toFixed(2)}°C (Err: ${errSign}${err.toFixed(2)}°C)`;
-            } else if (activeSpan > 2000 && targetYr === 2026) {
+            } else if (isExtendedSpan && targetYr === 2026) {
               const p1926 = STATIC_HISTORICAL_RUN.find(p => Math.round(p.year) === 1926);
               const d100 = dtVal - (p1926 ? (p1926.deltaTs - OFFSET_1850_1900) : 0);
-              labelStr = `+${dtVal.toFixed(2)}°C · Δ100y: +${d100.toFixed(2)}°C`;
+              labelStr = `2026 · +${dtVal.toFixed(2)}°C`;
+              subLabelStr = `Δ100y: +${d100.toFixed(2)}°C`;
             } else {
               labelStr = `+${dtVal.toFixed(2)}°C`;
             }
 
-            ctx.font = "bold 10px ui-monospace, monospace";
-            const tw = ctx.measureText(labelStr).width;
-            const bw = tw + 10;
-            const bh = 17;
+            const isCompactTwoLine = !!subLabelStr && tGridW < 520;
+            ctx.font = subLabelStr
+              ? (isCompactTwoLine ? "bold 8.5px ui-monospace, monospace" : "bold 9px ui-monospace, monospace")
+              : "bold 10px ui-monospace, monospace";
+            const tw = subLabelStr
+              ? Math.max(ctx.measureText(labelStr).width, ctx.measureText(subLabelStr).width)
+              : ctx.measureText(labelStr).width;
+            const bw = tw + (subLabelStr ? 12 : 10);
+            const bh = subLabelStr ? (isCompactTwoLine ? 24 : 26) : 17;
 
             if (state.isZoomed) {
               // In zoomed view: 1958 is at left margin (place to right), 2026 is at right margin (place to left)
@@ -10651,8 +10658,8 @@
                 bx = ix - bw - 8; by = iy - 22;
               }
             } else {
-              // Main chart: place 2050 or wide-span 2026 badge to the LEFT of the curve so it never clips or obscures rising trajectories
-              if (targetYr === 2050 || activeSpan > 2000) {
+              // Main chart: place 2050 or extended-span 2026 badge to the LEFT of the curve so it never clips or obscures rising trajectories
+              if (targetYr === 2050 || (isExtendedSpan && targetYr === 2026)) {
                 bx = Math.max(tGridLeft + 4, ix - bw - 10);
                 by = Math.min(tGridBottom - bh - 6, iy + 20);
               } else {
@@ -10663,7 +10670,7 @@
               }
             }
 
-            markerBadgeBoxes.push({ yr: targetYr, ix, iy, bx, by, bw, bh, labelStr });
+            markerBadgeBoxes.push({ yr: targetYr, ix, iy, bx, by, bw, bh, labelStr, subLabelStr, isCompactTwoLine });
           }
         });
 
@@ -10780,17 +10787,25 @@
           ctx.arc(mb.ix, mb.iy, 2.0, 0, Math.PI * 2);
           ctx.fill();
 
-          ctx.fillStyle = "#070d17";
-          ctx.strokeStyle = badgeColor;
-          ctx.lineWidth = 1.2;
+          ctx.fillStyle = mb.subLabelStr ? "rgba(7, 13, 23, 0.94)" : "#070d17";
+          ctx.strokeStyle = mb.subLabelStr ? "rgba(245, 158, 11, 0.82)" : badgeColor;
+          ctx.lineWidth = mb.subLabelStr ? 1.1 : 1.2;
           ctx.beginPath();
-          ctx.roundRect(mb.bx, mb.by, mb.bw, mb.bh, 3);
+          ctx.roundRect(mb.bx, mb.by, mb.bw, mb.bh, mb.subLabelStr ? 4 : 3);
           ctx.fill();
           ctx.stroke();
 
-          ctx.fillStyle = badgeColor;
-          ctx.font = "bold 10px ui-monospace, monospace";
-          ctx.fillText(mb.labelStr, mb.bx + 5, mb.by + 12);
+          if (mb.subLabelStr) {
+            ctx.font = mb.isCompactTwoLine ? "bold 8.5px ui-monospace, monospace" : "bold 9px ui-monospace, monospace";
+            ctx.fillStyle = "#fbbf24";
+            ctx.fillText(mb.labelStr, mb.bx + 6, mb.by + (mb.isCompactTwoLine ? 10 : 11));
+            ctx.fillStyle = "#7dd3fc";
+            ctx.fillText(mb.subLabelStr, mb.bx + 6, mb.by + (mb.isCompactTwoLine ? 20 : 22));
+          } else {
+            ctx.fillStyle = badgeColor;
+            ctx.font = "bold 10px ui-monospace, monospace";
+            ctx.fillText(mb.labelStr, mb.bx + 5, mb.by + 12);
+          }
         });
 
         // Active Simulation Year Playhead Line & Floating Boxed Label (Clear of X-axis)
